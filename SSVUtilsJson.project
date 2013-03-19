@@ -9,6 +9,8 @@
     </VirtualDirectory>
     <File Name="SSVUtilsJson.h"/>
   </VirtualDirectory>
+  <Dependencies Name="Debug"/>
+  <Dependencies Name="Release"/>
   <Settings Type="Dynamic Library">
     <GlobalSettings>
       <Compiler Options="" C_Options="">
@@ -57,18 +59,18 @@
       </Completion>
     </Configuration>
     <Configuration Name="Release" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Dynamic Library" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-W;-s;-pedantic;-O3;-Wextra;-std=c++11;-Wall" C_Options="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
+      <Compiler Options="-O3;-Wextra;-pedantic;-W;-Wall;-std=c++11" C_Options="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
         <IncludePath Value="../SSVUtils"/>
-        <IncludePath Value="D:/Vee/Software/GitHub/OHWorkspace/jsoncpp/include"/>
+        <IncludePath Value="../jsoncpp/include"/>
       </Compiler>
-      <Linker Options="-O2" Required="yes">
+      <Linker Options="" Required="yes">
         <LibraryPath Value="../SSVUtils/_RELEASE"/>
-        <LibraryPath Value="D:/Vee/Software/GitHub/OHWorkspace/jsoncpp/libs/mingw"/>
+        <LibraryPath Value="../jsoncpp/libs/mingw"/>
         <Library Value="SSVUtils"/>
         <Library Value="json_mingw_libmt"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="./_RELEASE/$(ProjectName).dll" IntermediateDirectory="./INTERMEDIATE" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="./_RELEASE" PauseExecWhenProcTerminates="yes"/>
+      <General OutputFile="./_RELEASE/$(ProjectName).dll" IntermediateDirectory="./_INTERMEDIATE" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="./_RELEASE" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>

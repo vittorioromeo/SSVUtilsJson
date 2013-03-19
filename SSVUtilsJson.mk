@@ -7,13 +7,13 @@ ProjectName            :=SSVUtilsJson
 ConfigurationName      :=Release
 WorkspacePath          := "D:\Vee\Software\GitHub\OHWorkspace"
 ProjectPath            := "D:\Vee\Software\GitHub\OHWorkspace\SSVUtilsJson"
-IntermediateDirectory  :=./INTERMEDIATE
+IntermediateDirectory  :=./_INTERMEDIATE
 OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=vittorio.romeo
-Date                   :=18/03/2013
+Date                   :=19/03/2013
 CodeLitePath           :="C:\Program Files (x86)\CodeLite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -37,13 +37,13 @@ PCHCompileFlags        :=
 MakeDirCommand         :=makedir
 RcCmpOptions           := 
 RcCompilerName         :=windres
-LinkOptions            :=  -O2
-IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch)../SSVUtils $(IncludeSwitch)D:/Vee/Software/GitHub/OHWorkspace/jsoncpp/include 
+LinkOptions            :=  
+IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch)../SSVUtils $(IncludeSwitch)../jsoncpp/include 
 IncludePCH             := 
 RcIncludePath          := 
 Libs                   := $(LibrarySwitch)SSVUtils $(LibrarySwitch)json_mingw_libmt 
 ArLibs                 :=  "SSVUtils" "json_mingw_libmt" 
-LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)../SSVUtils/_RELEASE $(LibraryPathSwitch)D:/Vee/Software/GitHub/OHWorkspace/jsoncpp/libs/mingw 
+LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)../SSVUtils/_RELEASE $(LibraryPathSwitch)../jsoncpp/libs/mingw 
 
 ##
 ## Common variables
@@ -52,7 +52,7 @@ LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)../SSVUtils/
 AR       := ar rcus
 CXX      := g++
 CC       := gcc
-CXXFLAGS :=  -W -s -pedantic -O3 -Wextra -std=c++11 -Wall $(Preprocessors)
+CXXFLAGS :=  -O3 -Wextra -pedantic -W -Wall -std=c++11 $(Preprocessors)
 CFLAGS   :=   $(Preprocessors)
 
 
@@ -82,7 +82,7 @@ $(OutputFile): $(IntermediateDirectory)/.d $(Objects)
 	@echo rebuilt > "D:\Vee\Software\GitHub\OHWorkspace/.build-release/SSVUtilsJson"
 
 $(IntermediateDirectory)/.d:
-	@$(MakeDirCommand) "./INTERMEDIATE"
+	@$(MakeDirCommand) "./_INTERMEDIATE"
 
 PreBuild:
 
