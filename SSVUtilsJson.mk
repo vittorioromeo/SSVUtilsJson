@@ -7,7 +7,7 @@ ProjectName            :=SSVUtilsJson
 ConfigurationName      :=Release
 WorkspacePath          := "D:\Vee\Software\GitHub\OHWorkspace"
 ProjectPath            := "D:\Vee\Software\GitHub\OHWorkspace\SSVUtilsJson"
-IntermediateDirectory  :=./_INTERMEDIATE
+IntermediateDirectory  :=./_INTERMEDIATE/
 OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
@@ -41,8 +41,8 @@ LinkOptions            :=
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch)./include/ $(IncludeSwitch)../jsoncpp/include/ $(IncludeSwitch)../SSVUtils/include/ 
 IncludePCH             := 
 RcIncludePath          := 
-Libs                   := $(LibrarySwitch)SSVUtils $(LibrarySwitch)json_mingw_libmt 
-ArLibs                 :=  "SSVUtils" "json_mingw_libmt" 
+Libs                   := $(LibrarySwitch)json_mingw_libmt $(LibrarySwitch)SSVUtils 
+ArLibs                 :=  "json_mingw_libmt" "SSVUtils" 
 LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)../jsoncpp/libs/mingw/ $(LibraryPathSwitch)../SSVUtils/_RELEASE/ 
 
 ##
@@ -82,7 +82,7 @@ $(OutputFile): $(IntermediateDirectory)/.d $(Objects)
 	@echo rebuilt > "D:\Vee\Software\GitHub\OHWorkspace/.build-release/SSVUtilsJson"
 
 $(IntermediateDirectory)/.d:
-	@$(MakeDirCommand) "./_INTERMEDIATE"
+	@$(MakeDirCommand) "./_INTERMEDIATE/"
 
 PreBuild:
 
