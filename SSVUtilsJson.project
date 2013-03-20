@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="SSVUtilsJson" InternalType="Library">
+  <Reconciliation>
+    <Regexes/>
+    <Excludepaths/>
+    <Ignorefiles/>
+    <Extensions>
+      <![CDATA[cpp;c;h;hpp;xrc;wxcp;fbp]]>
+    </Extensions>
+    <Topleveldir>../SSVUtilsJson</Topleveldir>
+  </Reconciliation>
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
-    <VirtualDirectory Name="Utils">
-      <File Name="Utils/UtilsJson.cpp"/>
-      <File Name="Utils/UtilsJson.h"/>
+    <VirtualDirectory Name="SSVUtilsJson">
+      <VirtualDirectory Name="Utils">
+        <File Name="src/SSVUtilsJson/Utils/UtilsJson.cpp"/>
+      </VirtualDirectory>
     </VirtualDirectory>
-    <File Name="SSVUtilsJson.h"/>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>
+  <VirtualDirectory Name="include">
+    <VirtualDirectory Name="SSVUtilsJson">
+      <VirtualDirectory Name="Utils">
+        <File Name="include/SSVUtilsJson/Utils/UtilsJson.h"/>
+      </VirtualDirectory>
+      <File Name="include/SSVUtilsJson/SSVUtilsJson.h"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
   <Settings Type="Dynamic Library">
     <GlobalSettings>
       <Compiler Options="" C_Options="">
@@ -60,12 +77,13 @@
     </Configuration>
     <Configuration Name="Release" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Dynamic Library" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
       <Compiler Options="-O3;-Wextra;-pedantic;-W;-Wall;-std=c++11" C_Options="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
-        <IncludePath Value="../SSVUtils"/>
-        <IncludePath Value="../jsoncpp/include"/>
+        <IncludePath Value="./include/"/>
+        <IncludePath Value="../jsoncpp/include/"/>
+        <IncludePath Value="../SSVUtils/include/"/>
       </Compiler>
       <Linker Options="" Required="yes">
-        <LibraryPath Value="../SSVUtils/_RELEASE"/>
-        <LibraryPath Value="../jsoncpp/libs/mingw"/>
+        <LibraryPath Value="../jsoncpp/libs/mingw/"/>
+        <LibraryPath Value="../SSVUtils/_RELEASE/"/>
         <Library Value="SSVUtils"/>
         <Library Value="json_mingw_libmt"/>
       </Linker>

@@ -5,6 +5,6 @@
 #ifndef SSVUTILSJSON
 #define SSVUTILSJSON
 
-#include "Utils/UtilsJson.h"
+#include "SSVUtilsJson/Utils/UtilsJson.h"
 
 #endif

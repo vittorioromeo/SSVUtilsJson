@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=vittorio.romeo
-Date                   :=19/03/2013
+Date                   :=20/03/2013
 CodeLitePath           :="C:\Program Files (x86)\CodeLite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -38,12 +38,12 @@ MakeDirCommand         :=makedir
 RcCmpOptions           := 
 RcCompilerName         :=windres
 LinkOptions            :=  
-IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch)../SSVUtils $(IncludeSwitch)../jsoncpp/include 
+IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch)./include/ $(IncludeSwitch)../jsoncpp/include/ $(IncludeSwitch)../SSVUtils/include/ 
 IncludePCH             := 
 RcIncludePath          := 
 Libs                   := $(LibrarySwitch)SSVUtils $(LibrarySwitch)json_mingw_libmt 
 ArLibs                 :=  "SSVUtils" "json_mingw_libmt" 
-LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)../SSVUtils/_RELEASE $(LibraryPathSwitch)../jsoncpp/libs/mingw 
+LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)../jsoncpp/libs/mingw/ $(LibraryPathSwitch)../SSVUtils/_RELEASE/ 
 
 ##
 ## Common variables
@@ -90,13 +90,13 @@ PreBuild:
 ##
 ## Objects
 ##
-$(IntermediateDirectory)/Utils_UtilsJson$(ObjectSuffix): Utils/UtilsJson.cpp $(IntermediateDirectory)/Utils_UtilsJson$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/Vee/Software/GitHub/OHWorkspace/SSVUtilsJson/Utils/UtilsJson.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Utils_UtilsJson$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/Utils_UtilsJson$(DependSuffix): Utils/UtilsJson.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Utils_UtilsJson$(ObjectSuffix) -MF$(IntermediateDirectory)/Utils_UtilsJson$(DependSuffix) -MM "Utils/UtilsJson.cpp"
+$(IntermediateDirectory)/Utils_UtilsJson$(ObjectSuffix): src/SSVUtilsJson/Utils/UtilsJson.cpp $(IntermediateDirectory)/Utils_UtilsJson$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/Vee/Software/GitHub/OHWorkspace/SSVUtilsJson/src/SSVUtilsJson/Utils/UtilsJson.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Utils_UtilsJson$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Utils_UtilsJson$(DependSuffix): src/SSVUtilsJson/Utils/UtilsJson.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Utils_UtilsJson$(ObjectSuffix) -MF$(IntermediateDirectory)/Utils_UtilsJson$(DependSuffix) -MM "src/SSVUtilsJson/Utils/UtilsJson.cpp"
 
-$(IntermediateDirectory)/Utils_UtilsJson$(PreprocessSuffix): Utils/UtilsJson.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Utils_UtilsJson$(PreprocessSuffix) "Utils/UtilsJson.cpp"
+$(IntermediateDirectory)/Utils_UtilsJson$(PreprocessSuffix): src/SSVUtilsJson/Utils/UtilsJson.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Utils_UtilsJson$(PreprocessSuffix) "src/SSVUtilsJson/Utils/UtilsJson.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
