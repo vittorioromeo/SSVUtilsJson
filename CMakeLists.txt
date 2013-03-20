@@ -3,6 +3,7 @@ project(SSVUtilsJson)
 
 set(SSVUTILSJSON_BUILD_SHARED_LIB FALSE CACHE BOOL "Build shared libraries.")
 set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type." FORCE)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11" CACHE STRING "" FORCE)
 
 set(JSONCPP_INCLUDE_DIR "" CACHE STRING "JSONCpp include directory")
 set(SSVUTILS_INCLUDE_DIR "" CACHE STRING "SSVUtils include directory")
