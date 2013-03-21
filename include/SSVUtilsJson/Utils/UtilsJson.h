@@ -22,6 +22,11 @@ namespace ssvuj
 		for(unsigned int i{0}; i < array.size(); ++i) result.push_back(getArrayValue<T>(array, i));
 		return result;
 	}
+	template<typename T> std::vector<T> getArrayOrDefault(const Json::Value& mRoot, const std::string& mValue, std::vector<T> mDefault)
+	{
+		if(!mRoot.isMember(mValue)) return mDefault;
+		return getArray<T>(mRoot, mValue);
+	}
 	Json::Value getRootFromString(const std::string& mString);
 	Json::Value getRootFromFile(const std::string& mPath);
 }
