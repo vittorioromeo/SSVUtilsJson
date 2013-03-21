@@ -6,8 +6,8 @@ set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type." FORCE)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11" CACHE STRING "" FORCE)
 
 set(JSONCPP_INCLUDE_DIR "" CACHE STRING "JSONCpp include directory")
-set(SSVUTILS_INCLUDE_DIR "" CACHE STRING "SSVUtils include directory")
 set(JSONCPP_LIBRARY "" CACHE STRING "JSONCpp library file")
+set(SSVUTILS_INCLUDE_DIR "" CACHE STRING "SSVUtils include directory")
 set(SSVUTILS_LIBRARY "" CACHE STRING "SSVUtils library file")
 
 if(SSVUTILSJSON_BUILD_SHARED_LIB)
