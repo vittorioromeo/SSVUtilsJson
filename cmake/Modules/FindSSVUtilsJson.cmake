@@ -11,8 +11,9 @@
 
 FIND_PATH(SSVUTILSJSON_INCLUDE_DIR
   NAMES SSVUtilsJson/SSVUtilsJson.h
-  PATH_SUFFIXES include
-  PATHS "${PROJECT_SOURCE_DIR}/extlibs/SSVUtilsJson/"
+  PATH_SUFFIXES include/
+  PATHS "${PROJECT_SOURCE_DIR}/../SSVUtilsJson/"
+  "${PROJECT_SOURCE_DIR}/extlibs/SSVUtilsJson/"
   ${SSVUTILSJSON_ROOT}
   $ENV{SSVUTILSJSON_ROOT}
   /usr/local/
@@ -28,7 +29,8 @@ message("\nFound SSVUtilsJson include at: ${SSVUTILSJSON_INCLUDE_DIR}.\n")
 FIND_LIBRARY(SSVUTILSJSON_LIBRARY
   NAMES SSVUtilsJson libSSVUtilsJson SSVUtilsJson-s libSSVUtilsJson-s ssvutilsjson libssvutilsjson ssvutilsjson-s libssvutilsjson-s
   PATH_SUFFIXES lib/ lib64/
-  PATHS "${PROJECT_SOURCE_DIR}/extlibs/SSVUtilsJson/"
+  PATHS "${PROJECT_SOURCE_DIR}/../SSVUtilsJson/"
+  "${PROJECT_SOURCE_DIR}/extlibs/SSVUtilsJson/"
   ${SSVUTILSJSON_ROOT}
   $ENV{SSVUTILSJSON_ROOT}
   /usr/local/
