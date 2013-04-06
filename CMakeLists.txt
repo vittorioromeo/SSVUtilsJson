@@ -1,29 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
+
+set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type.")
 project(SSVUtilsJson)
 
-set(SSVUTILSJSON_BUILD_SHARED_LIB FALSE CACHE BOOL "Build shared libraries.")
-set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type." FORCE)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -W -pedantic" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_DEBUG "-fno-omit-frame-pointer -g3 -gdwarf-2 -O3" CACHE STRING "" FORCE)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules/;${CMAKE_MODULE_PATH}")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/extlibs/SSVUtils/cmake/Modules/;${CMAKE_MODULE_PATH}")
-
-find_package(JsonCpp REQUIRED)
-if(JSONCPP_FOUND)
-	include_directories(${JSONCPP_INCLUDE_DIR})
-	message("\nJsonCpp found and included\n")
-else()
-	set(JSONCPP_ROOT "" CACHE PATH "JsonCpp top-level directory")
-	message("\n-> JsonCpp directory not found. Set SSVUTILS_ROOT to SSVUtils' top-level path (containing both \"include\" and \"lib\" directories).")
-endif()
-
-find_package(SSVUtils REQUIRED)
-if(SSVUTILS_FOUND)
-	include_directories(${SSVUTILS_INCLUDE_DIR})
-	message("\nSSVUtils found and included\n")
-else()
-	set(SSVUTILS_ROOT "" CACHE PATH "SSVUtils top-level directory")
-	message("\n-> SSVUtils directory not found. Set SSVUTILS_ROOT to SSVUtils' top-level path (containing both \"include\" and \"lib\" directories).")
-endif()
+set(SSVUTILSJSON_BUILD_SHARED_LIB FALSE CACHE BOOL "Build shared libraries.")
 
 if(SSVUTILSJSON_BUILD_SHARED_LIB)
 	set(LIB_TYPE SHARED)
@@ -31,18 +15,23 @@ else()
 	set(LIB_TYPE STATIC)
 endif()
 
+find_package(JsonCpp REQUIRED)
+find_package(SSVUtils REQUIRED)
+
 set(SRC_DIR "src")
 set(INC_DIR "include")
 
-set(
-	SOURCES
-	${INC_DIR}/${PROJECT_NAME}/Utils/UtilsJson.h
-	${SRC_DIR}/${PROJECT_NAME}/Utils/UtilsJson.cpp
+file(GLOB SRC_LIST
+	"${INC_DIR}/${PROJECT_NAME}/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/Utils/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/Utils/*.cpp"
 )
 
 include_directories(${INC_DIR})
-
-add_library(${PROJECT_NAME} ${LIB_TYPE} ${SOURCES})
+include_directories(${JSONCPP_INCLUDE_DIR})
+include_directories(${SSVUTILS_INCLUDE_DIR})
+add_library(${PROJECT_NAME} ${LIB_TYPE} ${SRC_LIST})
 target_link_libraries(SSVUtilsJson ${JSONCPP_LIBRARY})
 target_link_libraries(SSVUtilsJson ${SSVUTILS_LIBRARY})
 
@@ -54,16 +43,9 @@ else()
 endif()
 
 if(WIN32)
-	install(TARGETS ${PROJECT_NAME}
-		RUNTIME DESTINATION bin
-		LIBRARY DESTINATION lib
-		ARCHIVE DESTINATION lib)
+	install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 else()
-	install(TARGETS ${PROJECT_NAME}
-		RUNTIME DESTINATION lib
-		LIBRARY DESTINATION lib
-		ARCHIVE DESTINATION lib)
+	install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION lib LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 endif()
 
-install(DIRECTORY ${INC_DIR}
-	DESTINATION .)
+install(DIRECTORY ${INC_DIR} DESTINATION .)
