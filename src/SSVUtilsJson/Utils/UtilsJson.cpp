@@ -2,7 +2,6 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#include <SSVUtils/SSVUtils.h>
 #include "SSVUtilsJson/Utils/UtilsJson.h"
 
 using namespace std;
@@ -12,19 +11,12 @@ using namespace ssvu::FileSystem;
 
 namespace ssvuj
 {
-	template<> int getValue(const Value& mRoot, const string& mValue) 			{ return mRoot[mValue].asInt(); }
-	template<> float getValue(const Value& mRoot, const string& mValue) 		{ return mRoot[mValue].asFloat(); }
-	template<> double getValue(const Value& mRoot, const string& mValue) 		{ return mRoot[mValue].asDouble(); }
-	template<> bool getValue(const Value& mRoot, const string& mValue) 			{ return mRoot[mValue].asBool(); }
-	template<> string getValue(const Value& mRoot, const string& mValue) 		{ return mRoot[mValue].asString(); }
-	template<> char const* getValue(const Value& mRoot, const string& mValue)	{ return mRoot[mValue].asCString(); }
-
-	template<> int getArrayValue(const Value& mArray, int mIndex)				{ return mArray[mIndex].asInt(); }
-	template<> float getArrayValue(const Value& mArray, int mIndex)				{ return mArray[mIndex].asFloat(); }
-	template<> double getArrayValue(const Value& mArray, int mIndex)			{ return mArray[mIndex].asDouble(); }
-	template<> bool getArrayValue(const Value& mArray, int mIndex)				{ return mArray[mIndex].asBool(); }
-	template<> string getArrayValue(const Value& mArray, int mIndex)			{ return mArray[mIndex].asString(); }
-	template<> char const* getArrayValue(const Value& mArray, int mIndex)		{ return mArray[mIndex].asCString(); }
+	template<> int as(const Value& mRoot)			{ return mRoot.asInt(); }
+	template<> float as(const Value& mRoot)			{ return mRoot.asFloat(); }
+	template<> double as(const Value& mRoot)		{ return mRoot.asDouble(); }
+	template<> bool as(const Value& mRoot)			{ return mRoot.asBool(); }
+	template<> string as(const Value& mRoot)		{ return mRoot.asString(); }
+	template<> char const* as(const Value& mRoot)	{ return mRoot.asCString(); }
 
 	Value getRootFromString(const string& mString)
 	{
