@@ -15,18 +15,23 @@ namespace ssvuj
 {
 	template<typename T> T as(const Json::Value& mRoot);
 	template<typename T> T getValue(const Json::Value& mRoot, const std::string& mValue) { return as<T>(mRoot[mValue]); }
+	template<typename T> T getValue(const Json::Value& mArray, unsigned int mIndex) { return as<T>(mArray[mIndex]); }
 	template<typename T> T getValueOrDefault(const Json::Value& mRoot, const std::string& mValue, T mDefault) { return mRoot.isMember(mValue) ? getValue<T>(mRoot, mValue) : mDefault; }
-	template<typename T> T getArrayValue(const Json::Value& mArray, int mIndex) { return as<T>(mArray[mIndex]); }
+	template<typename T> T getValueOrDefault(const Json::Value& mArray, unsigned int mIndex, T mDefault) { return mArray.isValidIndex(mIndex) ? getValue<T>(mArray, mIndex) : mDefault; }
 
-	template<typename TContainer> TContainer asContainer(const Json::Value& mRoot)
+	template<typename T> T asContainer(const Json::Value& mRoot)
 	{
-		typedef typename TContainer::value_type Item;
-		typedef ssvu::Traits::Container<TContainer, Item> ContainerTraits;
+		typedef typename T::value_type Item;
+		typedef ssvu::Traits::Container<T, Item> ContainerTraits;
 
-		TContainer result; Json::Value array(mRoot);
-		for(unsigned int i{0}; i < array.size(); ++i) ContainerTraits::add(result, getArrayValue<Item>(array, i));
+		T result;
+		for(unsigned int i{0}; i < mRoot.size(); ++i) ContainerTraits::add(result, getValue<Item>(mRoot, i));
 		return result;
 	}
+	template<typename T> T getContainer(const Json::Value& mRoot, const std::string& mValue) { return asContainer<T>(mRoot[mValue]); }
+	template<typename T> T getContainer(const Json::Value& mArray, unsigned int mIndex) { return asContainer<T>(mArray[mIndex]); }
+	template<typename T> T getContainerOrDefault(const Json::Value& mRoot, const std::string& mValue, T mDefault) { return mRoot.isMember(mValue) ? getContainer<T>(mRoot, mValue) : mDefault; }
+	template<typename T> T getContainerOrDefault(const Json::Value& mArray, unsigned int mIndex, T mDefault) { return mArray.isValidIndex(mIndex) ? getContainer<T>(mArray, mIndex) : mDefault; }
 
 	Json::Value getRootFromString(const std::string& mString);
 	Json::Value getRootFromFile(const std::string& mPath);

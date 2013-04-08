@@ -11,6 +11,7 @@ using namespace ssvu::FileSystem;
 
 namespace ssvuj
 {
+	template<> Value as(const Value& mRoot)			{ return mRoot; }
 	template<> int as(const Value& mRoot)			{ return mRoot.asInt(); }
 	template<> float as(const Value& mRoot)			{ return mRoot.asFloat(); }
 	template<> double as(const Value& mRoot)		{ return mRoot.asDouble(); }
