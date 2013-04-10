@@ -12,14 +12,6 @@ using namespace ssvu::FileSystem;
 
 namespace ssvuj
 {
-	template<> Value as(const Value& mRoot)			{ return mRoot; }
-	template<> int as(const Value& mRoot)			{ return mRoot.asInt(); }
-	template<> float as(const Value& mRoot)			{ return mRoot.asFloat(); }
-	template<> double as(const Value& mRoot)		{ return mRoot.asDouble(); }
-	template<> bool as(const Value& mRoot)			{ return mRoot.asBool(); }
-	template<> string as(const Value& mRoot)		{ return mRoot.asString(); }
-	template<> char const* as(const Value& mRoot)	{ return mRoot.asCString(); }
-
 	Value getRootFromString(const string& mString)
 	{
 		Value result; Reader reader;
