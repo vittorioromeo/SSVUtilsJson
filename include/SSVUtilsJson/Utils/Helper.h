@@ -7,8 +7,6 @@
 
 #include <vector>
 #include <string>
-#include <jsoncpp/json.h>
-#include <jsoncpp/reader.h>
 
 namespace ssvuj
 {
