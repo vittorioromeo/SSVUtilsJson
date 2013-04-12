@@ -16,7 +16,7 @@ FIND_PATH(SSVUTILSJSON_INCLUDE_DIR
 message("\nFound SSVUtilsJson include at: ${SSVUTILSJSON_INCLUDE_DIR}.\n")
 
 FIND_LIBRARY(SSVUTILSJSON_LIBRARY
-  NAMES SSVUtilsJson libSSVUtilsJson SSVUtilsJson-s libSSVUtilsJson-s ssvutilsjson libssvutilsjson ssvutilsjson-s libssvutilsjson-s
+  NAMES SSVUtilsJson SSVUtilsJson-s
   PATH_SUFFIXES lib/ lib64/
   PATHS "${PROJECT_SOURCE_DIR}/../SSVUtilsJson/"
   "${PROJECT_SOURCE_DIR}/extlibs/SSVUtilsJson/"
