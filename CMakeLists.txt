@@ -17,7 +17,6 @@ else()
 	set(LIB_TYPE STATIC)
 endif()
 
-find_package(JsonCpp REQUIRED)
 find_package(SSVUtils REQUIRED)
 
 set(SRC_DIR "src")
@@ -28,11 +27,13 @@ file(GLOB SRC_LIST
 	"${SRC_DIR}/${PROJECT_NAME}/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/Utils/*.h"
 	"${SRC_DIR}/${PROJECT_NAME}/Utils/*.cpp"
+	"${CMAKE_SOURCE_DIR}/extlibs/jsoncpp/jsoncpp.cpp"
 )
 
 include_directories(${INC_DIR})
 include_directories(${JSONCPP_INCLUDE_DIR})
 include_directories(${SSVUTILS_INCLUDE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/extlibs/jsoncpp)
 add_library(${PROJECT_NAME} ${LIB_TYPE} ${SRC_LIST})
 target_link_libraries(SSVUtilsJson ${JSONCPP_LIBRARY})
 target_link_libraries(SSVUtilsJson ${SSVUTILS_LIBRARY})
