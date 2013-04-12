@@ -7,8 +7,7 @@
 
 #include <vector>
 #include <string>
-#include <jsoncpp/json.h>
-#include <jsoncpp/reader.h>
+#include "json/json.h"
 #include "SSVUtilsJson/Utils/Helper.h"
 
 namespace ssvuj
