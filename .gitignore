@@ -182,4 +182,4 @@ SSVOpenHexagon.txt
 *.exe
 *.ttf
 *.i
-*.a
+*.a/CMakeLists.txt.user.7626ec3
