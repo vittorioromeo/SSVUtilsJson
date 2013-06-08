@@ -28,6 +28,8 @@ file(GLOB SRC_LIST
 	"${SRC_DIR}/${PROJECT_NAME}/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/Utils/*.h"
 	"${SRC_DIR}/${PROJECT_NAME}/Utils/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/Utils/Internal/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/Utils/Internal/*.cpp"
 )
 
 include_directories(${INC_DIR})

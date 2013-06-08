@@ -2,17 +2,17 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVS_UTILSJSON
-#define SSVS_UTILSJSON
+#ifndef SSVUJ_UTILSJSON
+#define SSVUJ_UTILSJSON
 
 #include <vector>
 #include <string>
 #include <SSVJsonCpp/SSVJsonCpp.h>
-#include "SSVUtilsJson/Utils/Helper.h"
+#include "SSVUtilsJson/Utils/Internal/Helper.h"
 
 namespace ssvuj
 {
-	template<typename T> T as(const Json::Value& mRoot) { return AsHelper<T>::as(mRoot); }
+	template<typename T> T as(const Json::Value& mRoot) { return Internal::AsHelper<T>::as(mRoot); }
 	template<typename T> T as(const Json::Value& mRoot, const std::string& mValue) { return as<T>(mRoot[mValue]); }
 	template<typename T> T as(const Json::Value& mArray, unsigned int mIndex) { return as<T>(mArray[mIndex]); }
 	template<typename T> T as(const Json::Value& mRoot, const std::string& mValue, T mDefault) { return mRoot.isMember(mValue) ? as<T>(mRoot, mValue) : mDefault; }
