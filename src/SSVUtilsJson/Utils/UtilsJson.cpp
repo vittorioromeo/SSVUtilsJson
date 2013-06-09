@@ -15,13 +15,13 @@ namespace ssvuj
 	Value getRootFromString(const string& mString)
 	{
 		Value result; Reader reader;
-		if(!reader.parse(mString, result, false)) log(reader.getFormatedErrorMessages() + "\n" + "From: [" + mString + "]", "JSON Error");
+		if(!reader.parse(mString, result, false)) log(reader.getFormatedErrorMessages() + "\n" + "From: [" + mString + "]", "ssvuj::getRootFromString");
 		return result;
 	}
 	Value getRootFromFile(const string& mPath)
 	{
 		Value result; Reader reader;
-		if(!reader.parse(getFileContents(mPath), result, false)) log(reader.getFormatedErrorMessages() + "\n" + "From: [" + mPath + "]", "JSON Error");
+		if(!reader.parse(getFileContents(mPath), result, false)) log(reader.getFormatedErrorMessages() + "\n" + "From: [" + mPath + "]", "ssvuj::getRootFromString");
 		return result;
 	}
 }
