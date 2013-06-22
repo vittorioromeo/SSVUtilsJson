@@ -6,5 +6,6 @@
 #define SSVUTILSJSON
 
 #include "SSVUtilsJson/Utils/UtilsJson.h"
+#include "SSVUtilsJson/LinkedValue/LinkedValue.h"
 
 #endif

@@ -26,6 +26,8 @@ set(INC_DIR "include")
 file(GLOB SRC_LIST
 	"${INC_DIR}/${PROJECT_NAME}/*.h"
 	"${SRC_DIR}/${PROJECT_NAME}/*.cpp"
+	"${INC_DIR}/${PROJECT_NAME}/LinkedValue/*.h"
+	"${SRC_DIR}/${PROJECT_NAME}/LinkedValue/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/Utils/*.h"
 	"${SRC_DIR}/${PROJECT_NAME}/Utils/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/Utils/Internal/*.h"
