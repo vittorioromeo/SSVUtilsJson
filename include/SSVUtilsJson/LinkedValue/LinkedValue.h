@@ -11,27 +11,31 @@
 
 namespace ssvuj
 {
-	struct LinkedValueBase
+	class LinkedValueBase
 	{
-		std::string linkedName;
+		protected:
+			std::string linkedName;
 
-		LinkedValueBase(const std::string& mLinkedName) : linkedName{mLinkedName} { }
+		public:
+			LinkedValueBase(const std::string& mLinkedName) : linkedName{mLinkedName} { }
 
-		virtual void syncFrom(const Json::Value& mRoot) = 0;
-		virtual void syncTo(Json::Value& mRoot) = 0;
+			virtual void syncFrom(const Json::Value& mRoot) = 0;
+			virtual void syncTo(Json::Value& mRoot) = 0;
 	};
 
-	template<typename T> struct LinkedValue : LinkedValueBase
+	template<typename T> class LinkedValue : public LinkedValueBase
 	{
-		T value;
+		private:
+			T value;
 
-		LinkedValue(const std::string& mLinkedName) : LinkedValueBase{mLinkedName} { }
+		public:
+			LinkedValue(const std::string& mLinkedName) : LinkedValueBase{mLinkedName} { }
 
-		inline operator T() { return value; }
-		inline LinkedValue& operator=(T mValue) { value = mValue; return *this; }
+			inline operator T() { return value; }
+			inline LinkedValue& operator=(T mValue) { value = mValue; return *this; }
 
-		void syncFrom(const Json::Value& mRoot) override { value = ssvuj::as<T>(mRoot, linkedName); }
-		void syncTo(Json::Value& mRoot) override { mRoot[linkedName] = value; }
+			void syncFrom(const Json::Value& mRoot) override { value = ssvuj::as<T>(mRoot, linkedName); }
+			void syncTo(Json::Value& mRoot) override { mRoot[linkedName] = value; }
 	};
 }
 
