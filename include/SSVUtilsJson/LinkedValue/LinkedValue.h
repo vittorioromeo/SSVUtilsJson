@@ -48,7 +48,7 @@ namespace ssvuj
 			ssvu::MemoryManager<LinkedValueBase> memoryManager;
 
 		public:
-			LinkedValueManager(Json::Value& mLinkedRoot) : linkedRoot{mLinkedRoot} { }
+			LinkedValueManager(Json::Value& mLinkedRoot) : linkedRoot(mLinkedRoot) { }
 
 			template<typename T> LinkedValue<T>& create(const std::string& mLinkedName) { return memoryManager.create<LinkedValue<T>>(mLinkedName); }
 
