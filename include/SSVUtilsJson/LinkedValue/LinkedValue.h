@@ -21,8 +21,8 @@ namespace ssvuj
 			LinkedValueBase(const std::string& mLinkedName) : linkedName{mLinkedName} { }
 			virtual ~LinkedValueBase() { }
 
-			inline virtual void syncFrom(const Json::Value& mRoot) = 0;
-			inline virtual void syncTo(Json::Value& mRoot) const = 0;
+			virtual void syncFrom(const Json::Value& mRoot) = 0;
+			virtual void syncTo(Json::Value& mRoot) const = 0;
 	};
 
 	template<typename T> class LinkedValue : public LinkedValueBase
