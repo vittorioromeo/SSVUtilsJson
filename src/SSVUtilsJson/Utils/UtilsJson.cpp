@@ -4,24 +4,24 @@
 
 #include <SSVUtils/SSVUtils.h>
 #include "SSVUtilsJson/Utils/UtilsJson.h"
+#include "SSVUtilsJson/Utils/Internal/Typedefs.h"
 
 using namespace std;
-using namespace Json;
 using namespace ssvu;
 using namespace ssvu::FileSystem;
 
 namespace ssvuj
 {
-	Value getRootFromString(const string& mString)
+	Document getRootFromString(const string& mString)
 	{
-		Value result; Reader reader;
-		if(!reader.parse(mString, result, false)) log(reader.getFormatedErrorMessages() + "\n" + "From: [" + mString + "]", "ssvuj::getRootFromString");
+		Document result; result.Parse<0>(mString.c_str());
+		if(result.HasParseError()) log(toStr(result.GetParseError()) + "\n" + "From: [" + mString + "]", "ssvuj::getRootFromString");
 		return result;
 	}
-	Value getRootFromFile(const string& mPath)
+	Document getRootFromFile(const string& mPath)
 	{
-		Value result; Reader reader;
-		if(!reader.parse(getFileContents(mPath), result, false)) log(reader.getFormatedErrorMessages() + "\n" + "From: [" + mPath + "]", "ssvuj::getRootFromString");
+		Document result; result.Parse<0>(getFileContents(mPath).c_str());
+		if(result.HasParseError()) log(toStr(result.GetParseError()) + "\n" + "From: [" + mPath + "]", "ssvuj::getRootFromString");
 		return result;
 	}
 }

@@ -5,6 +5,7 @@
 #ifndef SSVUTILSJSON
 #define SSVUTILSJSON
 
+#include "SSVUtilsJson/Utils/Internal/Typedefs.h"
 #include "SSVUtilsJson/Utils/UtilsJson.h"
 #include "SSVUtilsJson/LinkedValue/LinkedValue.h"
 

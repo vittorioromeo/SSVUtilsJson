@@ -9,6 +9,7 @@
 #include <string>
 #include <SSVUtils/SSVUtils.h>
 #include "SSVUtilsJson/Utils/UtilsJson.h"
+#include "SSVUtilsJson/Utils/Internal/Typedefs.h"
 
 namespace ssvuj
 {
@@ -38,7 +39,7 @@ namespace ssvuj
 			inline LinkedValue& operator=(T mValue) { value = mValue; return *this; }
 
 			inline void syncFrom(const Json::Value& mRoot) override { value = ssvuj::as<T>(mRoot, linkedName); }
-			inline void syncTo(Json::Value& mRoot) const override { mRoot[linkedName] = value; }
+			inline void syncTo(Json::Value& mRoot) const override { set(mRoot, linkedName, value); }
 	};
 
 	class LinkedValueManager
