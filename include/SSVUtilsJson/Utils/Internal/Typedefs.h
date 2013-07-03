@@ -5,11 +5,14 @@
 #ifndef SSVUJ_INTERNAL_TYPEDEFS
 #define SSVUJ_INTERNAL_TYPEDEFS
 
+#include <string>
 #include <SSVJsonCpp/SSVJsonCpp.h>
 
 namespace ssvuj
 {
-	using Value = Json::Value;
+	using Impl = Json::Value;
+	using Value = Impl;
+	using String = std::string;
 }
 
 #endif
