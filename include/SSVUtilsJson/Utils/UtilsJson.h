@@ -26,7 +26,7 @@ namespace ssvuj
 	template<typename T> inline static T as(const Value& mRoot) { return Internal::AsHelper<T>::as(mRoot); }
 	template<typename T> inline static T as(const Value& mRoot, const std::string& mValue) { return as<T>(mRoot[mValue]); }
 	template<typename T> inline static T as(const Value& mArray, unsigned int mIndex) { return as<T>(mArray[mIndex]); }
-	template<typename T> inline static T as(const Value& mRoot, const std::string& mValue, T mDefault) { return mRoot.isMember(mValue) ? as<T>(mRoot, mValue) : mDefault; }
+	template<typename T> inline static T as(const Value& mRoot, const std::string& mValue, T mDefault) { return has(mRoot, mValue) ? as<T>(mRoot, mValue) : mDefault; }
 	template<typename T> inline static T as(const Value& mArray, unsigned int mIndex, T mDefault) { return mArray.isValidIndex(mIndex) ? as<T>(mArray, mIndex) : mDefault; }
 
 	inline static Value getRootFromString(const std::string& mString)
