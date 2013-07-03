@@ -14,46 +14,51 @@
 #include "SSVUtilsJson/Utils/Internal/Helper.h"
 #include "SSVUtilsJson/Utils/Internal/Typedefs.h"
 
+namespace rapidjson
+{
+	template<typename T> typename GenericValue<T>::ValueIterator begin(GenericValue<T>& mRoot) { return mRoot.Begin(); }
+	template<typename T> typename GenericValue<T>::ConstValueIterator begin(const GenericValue<T>& mRoot) { return mRoot.Begin(); }
+
+	template<typename T> typename GenericValue<T>::ValueIterator end(GenericValue<T>& mRoot) { return mRoot.End(); }
+	template<typename T> typename GenericValue<T>::ConstValueIterator end(const GenericValue<T>& mRoot) { return mRoot.End(); }
+
+	template<typename T> typename GenericValue<T>::MemberIterator mbegin(GenericValue<T>& mRoot) { return mRoot.MemberBegin(); }
+	template<typename T> typename GenericValue<T>::ConstMemberIterator mbegin(const GenericValue<T>& mRoot) { return mRoot.MemberBegin(); }
+
+	template<typename T> typename GenericValue<T>::MemberIterator mend(GenericValue<T>& mRoot) { return mRoot.MemberEnd(); }
+	template<typename T> typename GenericValue<T>::ConstMemberIterator mend(const GenericValue<T>& mRoot) { return mRoot.MemberEnd(); }
+}
+
 namespace ssvuj
 {
-	inline static unsigned int size(const Value& mArray) { return mArray.size(); }
-	inline static unsigned int size(const Value& mRoot, const std::string& mValue) { return mRoot[mValue].size(); }
+	inline static unsigned int size(const Value& mArray) { return mArray.Size(); }
+	inline static unsigned int size(const Value& mRoot, const std::string& mValue) { return mRoot[mValue.c_str()].Size(); }
 
-	inline static bool has(const Value& mRoot, const std::string& mValue) { return mRoot.isMember(mValue); }
+	inline static bool has(const Value& mRoot, const std::string& mValue) { return mRoot.HasMember(mValue.c_str()); }
 
-	template<typename T> inline static void set(Value& mRoot, const std::string& mValue, T mValueToSet) { mRoot[mValue] = mValueToSet; }
+	template<typename T> inline static void set(Value& mRoot, const std::string& mValue, T mValueToSet) { mRoot[mValue.c_str()] = mValueToSet; }
 
-	template<typename T> inline static T as(const Value& mRoot) { return Internal::AsHelper<T>::as(mRoot); }
-	template<typename T> inline static T as(const Value& mRoot, const std::string& mValue) { return as<T>(mRoot[mValue]); }
-	template<typename T> inline static T as(const Value& mArray, unsigned int mIndex) { return as<T>(mArray[mIndex]); }
-	template<typename T> inline static T as(const Value& mRoot, const std::string& mValue, T mDefault) { return mRoot.isMember(mValue) ? as<T>(mRoot, mValue) : mDefault; }
-	template<typename T> inline static T as(const Value& mArray, unsigned int mIndex, T mDefault) { return mArray.isValidIndex(mIndex) ? as<T>(mArray, mIndex) : mDefault; }
+	template<typename T> inline static T as(const rapidjson::Value& mRoot) { return Internal::AsHelper<T>::as(mRoot); }
+	template<typename T> inline static T as(const rapidjson::Value& mRoot, const std::string& mValue) { return as<T>(mRoot[mValue.c_str()]); }
+	template<typename T> inline static T as(const rapidjson::Value& mArray, unsigned int mIndex) { return as<T>(mArray[mIndex]); }
+	template<typename T> inline static T as(const rapidjson::Value& mRoot, const std::string& mValue, T mDefault) { return mRoot.HasMember(mValue.c_str()) ? as<T>(mRoot, mValue) : mDefault; }
+	template<typename T> inline static T as(const rapidjson::Value& mArray, unsigned int mIndex, T mDefault) { return mArray.Size() > mIndex ? as<T>(mArray, mIndex) : mDefault; }
 
 	inline static Value getRootFromString(const std::string& mString)
 	{
-		Value result; Json::Reader reader;
-		if(!reader.parse(mString, result, false)) ssvu::log(reader.getFormatedErrorMessages() + "\n" + "From: [" + mString + "]", "ssvuj::getRootFromString");
-		return result;
+
 	}
 	inline static Value getRootFromFile(const std::string& mPath)
 	{
-		Value result; Json::Reader reader;
-		if(!reader.parse(ssvu::FileSystem::getFileContents(mPath), result, false)) ssvu::log(reader.getFormatedErrorMessages() + "\n" + "From: [" + mPath + "]", "ssvuj::getRootFromString");
-		return result;
+
 	}
 	inline static void writeRootToString(const Value& mRoot, std::string& mString)
 	{
-		std::ostringstream o;
-		Json::StyledStreamWriter writer;
-		writer.write(o, mRoot);
-		o.flush(); mString = o.str();
+
 	}
 	inline static void writeRootToFile(const Value& mRoot, const std::string& mPath)
 	{
-		std::ofstream o{mPath};
-		Json::StyledStreamWriter writer;
-		writer.write(o, mRoot);
-		o.flush(); o.close();
+
 	}
 }
 

@@ -5,11 +5,16 @@
 #ifndef SSVUJ_INTERNAL_TYPEDEFS
 #define SSVUJ_INTERNAL_TYPEDEFS
 
-#include <SSVJsonCpp/SSVJsonCpp.h>
+#include <rapidjson/rapidjson.h>
+#include <rapidjson/document.h>
+#include <rapidjson/writer.h>
+#include <rapidjson/reader.h>
+#include <rapidjson/filestream.h>
 
 namespace ssvuj
 {
-	using Value = Json::Value;
+	using Document = rapidjson::Document;
+	using Value = rapidjson::Value;
 }
 
 #endif

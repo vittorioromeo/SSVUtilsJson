@@ -39,7 +39,7 @@ namespace ssvuj
 			inline LinkedValue& operator=(T mValue) { value = mValue; return *this; }
 
 			inline void syncFrom(const Value& mRoot) override { value = ssvuj::as<T>(mRoot, linkedName); }
-			inline void syncTo(Value& mRoot) const override { mRoot[linkedName] = value; }
+			inline void syncTo(Value& mRoot) const override { mRoot[linkedName.c_str()] = value; }
 	};
 
 	class LinkedValueManager
