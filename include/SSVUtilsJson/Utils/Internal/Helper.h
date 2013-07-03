@@ -15,6 +15,7 @@ namespace ssvuj
 		template<typename T> struct AsHelper	{ inline static T as(const Json::Value& Value); };
 		template<> struct AsHelper<Json::Value>	{ inline static Json::Value as(const Json::Value& mValue)	{ return mValue; } };
 		template<> struct AsHelper<int>			{ inline static int as(const Json::Value& mValue)			{ return mValue.asInt(); } };
+		template<> struct AsHelper<unsigned int>{ inline static int as(const Json::Value& mValue)			{ return static_cast<unsigned int>(mValue.asInt()); } };
 		template<> struct AsHelper<float>		{ inline static float as(const Json::Value& mValue)			{ return mValue.asFloat(); } };
 		template<> struct AsHelper<double>		{ inline static double as(const Json::Value& mValue)		{ return mValue.asDouble(); } };
 		template<> struct AsHelper<bool>		{ inline static bool as(const Json::Value& mValue)			{ return mValue.asBool(); } };
