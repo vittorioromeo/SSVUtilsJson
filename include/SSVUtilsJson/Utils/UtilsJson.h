@@ -7,26 +7,37 @@
 
 #include <vector>
 #include <string>
+#include <SSVUtils/SSVUtils.h>
 #include <SSVJsonCpp/SSVJsonCpp.h>
 #include "SSVUtilsJson/Utils/Internal/Helper.h"
 
 namespace ssvuj
 {
-	unsigned int size(const Json::Value& mArray) { return mArray.size(); }
-	unsigned int size(const Json::Value& mRoot, const std::string& mValue) { return mRoot[mValue].size(); }
+	inline static unsigned int size(const Json::Value& mArray) { return mArray.size(); }
+	inline static unsigned int size(const Json::Value& mRoot, const std::string& mValue) { return mRoot[mValue].size(); }
 
-	bool has(const Json::Value& mRoot, const std::string& mValue) { return mRoot.isMember(mValue); }
+	inline static bool has(const Json::Value& mRoot, const std::string& mValue) { return mRoot.isMember(mValue); }
 
-	template<typename T> void set(Json::Value& mRoot, const std::string& mValue, T mValueToSet) { mRoot[mValue] = mValueToSet; }
+	template<typename T> inline static void set(Json::Value& mRoot, const std::string& mValue, T mValueToSet) { mRoot[mValue] = mValueToSet; }
 
-	template<typename T> T as(const Json::Value& mRoot) { return Internal::AsHelper<T>::as(mRoot); }
-	template<typename T> T as(const Json::Value& mRoot, const std::string& mValue) { return as<T>(mRoot[mValue]); }
-	template<typename T> T as(const Json::Value& mArray, unsigned int mIndex) { return as<T>(mArray[mIndex]); }
-	template<typename T> T as(const Json::Value& mRoot, const std::string& mValue, T mDefault) { return mRoot.isMember(mValue) ? as<T>(mRoot, mValue) : mDefault; }
-	template<typename T> T as(const Json::Value& mArray, unsigned int mIndex, T mDefault) { return mArray.isValidIndex(mIndex) ? as<T>(mArray, mIndex) : mDefault; }
+	template<typename T> inline static T as(const Json::Value& mRoot) { return Internal::AsHelper<T>::as(mRoot); }
+	template<typename T> inline static T as(const Json::Value& mRoot, const std::string& mValue) { return as<T>(mRoot[mValue]); }
+	template<typename T> inline static T as(const Json::Value& mArray, unsigned int mIndex) { return as<T>(mArray[mIndex]); }
+	template<typename T> inline static T as(const Json::Value& mRoot, const std::string& mValue, T mDefault) { return mRoot.isMember(mValue) ? as<T>(mRoot, mValue) : mDefault; }
+	template<typename T> inline static T as(const Json::Value& mArray, unsigned int mIndex, T mDefault) { return mArray.isValidIndex(mIndex) ? as<T>(mArray, mIndex) : mDefault; }
 
-	Json::Value getRootFromString(const std::string& mString);
-	Json::Value getRootFromFile(const std::string& mPath);
+	inline static Json::Value getRootFromString(const std::string& mString)
+	{
+		Json::Value result; Json::Reader reader;
+		if(!reader.parse(mString, result, false)) ssvu::log(reader.getFormatedErrorMessages() + "\n" + "From: [" + mString + "]", "ssvuj::getRootFromString");
+		return result;
+	}
+	inline static Json::Value getRootFromFile(const std::string& mPath)
+	{
+		Json::Value result; Json::Reader reader;
+		if(!reader.parse(ssvu::FileSystem::getFileContents(mPath), result, false)) ssvu::log(reader.getFormatedErrorMessages() + "\n" + "From: [" + mPath + "]", "ssvuj::getRootFromString");
+		return result;
+	}
 }
 
 #endif

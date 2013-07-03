@@ -9,49 +9,17 @@ set(CMAKE_CXX_FLAGS_DEBUG "-fno-omit-frame-pointer -g3 -gdwarf-2 -O0" CACHE STRI
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/;${CMAKE_MODULE_PATH}")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/extlibs/SSVJsonCpp/cmake/modules/;${CMAKE_MODULE_PATH}")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/extlibs/SSVUtils/cmake/modules/;${CMAKE_MODULE_PATH}")
-set(SSVUTILSJSON_BUILD_SHARED_LIB TRUE CACHE BOOL "Build shared libraries.")
-
-if(SSVUTILSJSON_BUILD_SHARED_LIB)
-	set(LIB_TYPE SHARED)
-else()
-	set(LIB_TYPE STATIC)
-endif()
 
 find_package(SSVJsonCpp REQUIRED)
 find_package(SSVUtils REQUIRED)
 
-set(SRC_DIR "src")
 set(INC_DIR "include")
 
 file(GLOB SRC_LIST
 	"${INC_DIR}/${PROJECT_NAME}/*.h"
-	"${SRC_DIR}/${PROJECT_NAME}/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/LinkedValue/*.h"
-	"${SRC_DIR}/${PROJECT_NAME}/LinkedValue/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/Utils/*.h"
-	"${SRC_DIR}/${PROJECT_NAME}/Utils/*.cpp"
 	"${INC_DIR}/${PROJECT_NAME}/Utils/Internal/*.h"
-	"${SRC_DIR}/${PROJECT_NAME}/Utils/Internal/*.cpp"
 )
-
-include_directories(${INC_DIR})
-include_directories(${SSVJSONCPP_INCLUDE_DIR})
-include_directories(${SSVUTILS_INCLUDE_DIR})
-add_library(${PROJECT_NAME} ${LIB_TYPE} ${SRC_LIST})
-target_link_libraries(SSVUtilsJson ${SSVJSONCPP_LIBRARY})
-target_link_libraries(SSVUtilsJson ${SSVUTILS_LIBRARY})
-
-if(SSVUTILSJSON_BUILD_SHARED_LIB)
-	set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX -d)
-else()
-	set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX -s-d)
-	set_target_properties(${PROJECT_NAME} PROPERTIES RELEASE_POSTFIX -s)
-endif()
-
-if(WIN32)
-	install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
-else()
-	install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION lib LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
-endif()
 
 install(DIRECTORY ${INC_DIR} DESTINATION .)
