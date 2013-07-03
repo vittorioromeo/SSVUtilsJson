@@ -11,7 +11,6 @@
 namespace ssvuj
 {
 	using Impl = Json::Value;
-	using Value = Impl;
 	using String = std::string;
 }
 

@@ -24,7 +24,7 @@ namespace ssvuj
 		template<> struct AsHelper<unsigned int>	{ inline static unsigned int as(const Impl& mValue)	{ return static_cast<unsigned int>(mValue.asInt()); } };
 		template<typename T> struct AsHelper<std::vector<T>>
 		{
-			inline static std::vector<T> as(const Value& mValue)
+			inline static std::vector<T> as(const Impl& mValue)
 			{
 				std::vector<T> result;
 				for(unsigned int i{0}; i < mValue.size(); ++i) result.push_back(AsHelper<T>::as(mValue[i]));
