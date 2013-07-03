@@ -9,6 +9,7 @@
 #include <string>
 #include <SSVUtils/SSVUtils.h>
 #include "SSVUtilsJson/Utils/UtilsJson.h"
+#include "SSVUtilsJson/Utils/Internal/Typedefs.h"
 
 namespace ssvuj
 {
@@ -21,8 +22,8 @@ namespace ssvuj
 			LinkedValueBase(const std::string& mLinkedName) : linkedName{mLinkedName} { }
 			virtual ~LinkedValueBase() { }
 
-			virtual void syncFrom(const Json::Value& mRoot) = 0;
-			virtual void syncTo(Json::Value& mRoot) const = 0;
+			virtual void syncFrom(const Value& mRoot) = 0;
+			virtual void syncTo(Value& mRoot) const = 0;
 	};
 
 	template<typename T> class LinkedValue : public LinkedValueBase
@@ -37,18 +38,18 @@ namespace ssvuj
 			inline operator T() { return value; }
 			inline LinkedValue& operator=(T mValue) { value = mValue; return *this; }
 
-			inline void syncFrom(const Json::Value& mRoot) override { value = ssvuj::as<T>(mRoot, linkedName); }
-			inline void syncTo(Json::Value& mRoot) const override { mRoot[linkedName] = value; }
+			inline void syncFrom(const Value& mRoot) override { value = ssvuj::as<T>(mRoot, linkedName); }
+			inline void syncTo(Value& mRoot) const override { mRoot[linkedName] = value; }
 	};
 
 	class LinkedValueManager
 	{
 		private:
-			Json::Value& linkedRoot;
+			Value& linkedRoot;
 			ssvu::MemoryManager<LinkedValueBase> memoryManager;
 
 		public:
-			LinkedValueManager(Json::Value& mLinkedRoot) : linkedRoot(mLinkedRoot) { }
+			LinkedValueManager(Value& mLinkedRoot) : linkedRoot(mLinkedRoot) { }
 
 			template<typename T> LinkedValue<T>& create(const std::string& mLinkedName) { return memoryManager.create<LinkedValue<T>>(mLinkedName); }
 
