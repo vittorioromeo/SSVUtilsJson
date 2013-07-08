@@ -13,14 +13,9 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/extlibs/SSVUtils/cmake/modules/;${CMA
 find_package(SSVJsonCpp REQUIRED)
 find_package(SSVUtils REQUIRED)
 
+set(SRC_DIR "src")
 set(INC_DIR "include")
-
-file(GLOB SRC_LIST
-	"${INC_DIR}/${PROJECT_NAME}/*.h"
-	"${INC_DIR}/${PROJECT_NAME}/LinkedValue/*.h"
-	"${INC_DIR}/${PROJECT_NAME}/Utils/*.h"
-	"${INC_DIR}/${PROJECT_NAME}/Utils/Internal/*.h"
-)
+file(GLOB_RECURSE SRC_LIST "${INC_DIR}/*" "${SRC_DIR}/*")
 
 add_library(HEADER_ONLY_TARGET STATIC ${SRC_LIST})
 set_target_properties(HEADER_ONLY_TARGET PROPERTIES LINKER_LANGUAGE CXX)
