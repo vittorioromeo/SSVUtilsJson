@@ -6,6 +6,7 @@
 #define SSVUJ_INTERNAL_TYPEDEFS
 
 #include <string>
+#include <memory>
 #include <SSVJsonCpp/SSVJsonCpp.h>
 
 namespace ssvuj
@@ -13,6 +14,7 @@ namespace ssvuj
 	using Impl = Json::Value;
 	using Value = Impl;
 	using String = std::string;
+	template<typename T> using Uptr = std::unique_ptr<T>;
 }
 
 #endif

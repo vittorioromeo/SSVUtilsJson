@@ -7,7 +7,6 @@
 
 #include <vector>
 #include <string>
-#include <SSVUtils/SSVUtils.h>
 #include "SSVUtilsJson/Utils/UtilsJson.h"
 #include "SSVUtilsJson/Utils/Internal/Typedefs.h"
 
@@ -46,17 +45,22 @@ namespace ssvuj
 	{
 		private:
 			Impl& linkedRoot;
-			ssvu::MemoryManager<LinkedValueBase> memoryManager;
+			std::vector<Uptr<LinkedValueBase>> linkedValues;
 
 		public:
 			LinkedValueManager(Impl& mLinkedRoot) : linkedRoot(mLinkedRoot) { }
 
-			template<typename T> LinkedValue<T>& create(const String& mLinkedName) { return memoryManager.create<LinkedValue<T>>(mLinkedName); }
+			template<typename T> LinkedValue<T>& create(const String& mLinkedName)
+			{
+				auto result(new LinkedValue<T>{mLinkedName});
+				linkedValues.push_back(Uptr<LinkedValueBase>{result});
+				return *result;
+			}
 
-			inline void syncFromRoot() { for(auto& lv : memoryManager) lv->syncFrom(linkedRoot); }
-			inline void syncToRoot() { for(const auto& lv : memoryManager) lv->syncTo(linkedRoot); }
+			inline void syncFromRoot()	{ for(auto& lv : linkedValues) lv->syncFrom(linkedRoot); }
+			inline void syncToRoot()	{ for(const auto& lv : linkedValues) lv->syncTo(linkedRoot); }
 
-			inline const std::vector<LinkedValueBase*>& getLinkedValues() { return memoryManager.getItems(); }
+			inline const std::vector<Uptr<LinkedValueBase>>& getLinkedValues() { return linkedValues; }
 	};
 }
 
