@@ -21,7 +21,9 @@ namespace ssvuj
 
 	inline static bool has(const Value& mRoot, const String& mValue) { return mRoot.isMember(mValue); }
 
-	template<typename T> inline static void set(Impl& mRoot, const String& mValue, T mValueToSet) { mRoot[mValue] = mValueToSet; }
+	template<typename T> inline static void set(Impl& mRoot, const T& mValueToSet) { mRoot = mValueToSet; }
+	template<typename T> inline static void set(Impl& mRoot, const String& mValue, const T& mValueToSet) { set(mRoot[mValue], mValueToSet); }
+	template<typename T> inline static void set(Impl& mRoot, unsigned int mIndex, const T& mValueToSet) { set(mRoot[mIndex], mValueToSet); }
 
 	template<typename T> inline static T as(const Impl& mRoot) { return Internal::AsHelper<T>::as(mRoot); }
 	template<typename T> inline static T as(const Impl& mRoot, const String& mValue) { return as<T>(mRoot[mValue]); }
