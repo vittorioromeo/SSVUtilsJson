@@ -34,13 +34,13 @@ namespace ssvuj
 	inline static Value getRootFromString(const String& mString)
 	{
 		Value result; Json::Reader reader;
-		if(!reader.parse(mString, result, false)) ssvu::log(reader.getFormatedErrorMessages() + "\n" + "From: [" + mString + "]", "ssvuj::getRootFromString");
+		if(!reader.parse(mString, result, false)) ssvu::lo << ssvu::lt("ssvuj::getRootFromString") << reader.getFormatedErrorMessages() << std::endl << "From: [" << mString << "]";
 		return result;
 	}
 	inline static Value getRootFromFile(const String& mPath)
 	{
 		Value result; Json::Reader reader;
-		if(!reader.parse(ssvu::FileSystem::getFileContents(mPath), result, false)) ssvu::log(reader.getFormatedErrorMessages() + "\n" + "From: [" + mPath + "]", "ssvuj::getRootFromString");
+		if(!reader.parse(ssvu::FileSystem::getFileContents(mPath), result, false)) ssvu::lo << ssvu::lt("ssvuj::getRootFromFile") << reader.getFormatedErrorMessages() << std::endl << "From: [" << mPath << "]";
 		return result;
 	}
 	inline static void writeRootToString(const Value& mRoot, String& mString)
