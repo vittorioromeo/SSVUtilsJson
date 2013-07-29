@@ -23,33 +23,7 @@ namespace ssvuj
 
 	template<typename T> inline static void set(Impl& mRoot, const T& mValueToSet) { mRoot = mValueToSet; }
 	template<typename T> inline static void set(Impl& mRoot, const String& mValue, const T& mValueToSet) { set(mRoot[mValue], mValueToSet); }
-	template<typename T> inline static void set(Impl& mRoot, unsigned int mIndex, const T& mValueToSet) { set(mRoot[mIndex], mValueToSet); }
-
-	template<typename T> inline static void append(Impl& mRoot, const T& mValue) { mRoot.append(mValue); }
-	template<typename T> inline static void insert(Impl& mArray, unsigned int mIndex, const T& mValue)
-	{
-		std::vector<Value> temp;
-		for(unsigned int i{mIndex}; i < size(mArray); ++i) temp.push_back(mArray[i]);
-		set(mArray, mIndex, mValue);
-		for(const auto& v : temp)
-		{
-			++mIndex;
-			mArray[mIndex] = v;
-		}
-	}
-	inline static void erase(Impl& mArray, unsigned int mIndex)
-	{
-		const auto& oldSize(size(mArray));
-		const auto& newSize(oldSize - 1);
-		std::vector<Value> temp;
-		for(unsigned int i{mIndex + 1}; i < oldSize; ++i) temp.push_back(mArray[i]);
-		for(const auto& v : temp)
-		{
-			mArray[mIndex] = v;
-			++mIndex;
-		}
-		mArray.resize(newSize);
-	}
+	template<typename T> inline static void set(Impl& mRoot, unsigned int mIndex, const T& mValueToSet)	{ set(mRoot[mIndex], mValueToSet); }
 
 	template<typename T> inline static T as(const Impl& mRoot) { return Internal::AsHelper<T>::as(mRoot); }
 	template<typename T> inline static T as(const Impl& mRoot, const String& mValue) { return as<T>(mRoot[mValue]); }
