@@ -14,14 +14,16 @@ namespace ssvuj
 	namespace Internal
 	{
 		template<typename T> struct AsHelper		{ inline static T as(const Impl& Value); };
-		template<> struct AsHelper<Impl>			{ inline static Impl as(const Impl& mValue)			{ return mValue; } };
-		template<> struct AsHelper<int>				{ inline static int as(const Impl& mValue)			{ return mValue.asInt(); } };
-		template<> struct AsHelper<float>			{ inline static float as(const Impl& mValue)		{ return mValue.asFloat(); } };
-		template<> struct AsHelper<double>			{ inline static double as(const Impl& mValue)		{ return mValue.asDouble(); } };
-		template<> struct AsHelper<bool>			{ inline static bool as(const Impl& mValue)			{ return mValue.asBool(); } };
-		template<> struct AsHelper<String>			{ inline static String as(const Impl& mValue)		{ return mValue.asString(); } };
-		template<> struct AsHelper<char const*>		{ inline static char const* as(const Impl& mValue)	{ return mValue.asCString(); } };
-		template<> struct AsHelper<unsigned int>	{ inline static unsigned int as(const Impl& mValue)	{ return static_cast<unsigned int>(mValue.asInt()); } };
+		template<> struct AsHelper<Impl>			{ inline static Impl as(const Impl& mValue)				{ return mValue; } };
+		template<> struct AsHelper<int>				{ inline static int as(const Impl& mValue)				{ return mValue.asInt(); } };
+		template<> struct AsHelper<long>			{ inline static long as(const Impl& mValue)				{ return mValue.asLargestInt(); } };
+		template<> struct AsHelper<float>			{ inline static float as(const Impl& mValue)			{ return mValue.asFloat(); } };
+		template<> struct AsHelper<double>			{ inline static double as(const Impl& mValue)			{ return mValue.asDouble(); } };
+		template<> struct AsHelper<bool>			{ inline static bool as(const Impl& mValue)				{ return mValue.asBool(); } };
+		template<> struct AsHelper<String>			{ inline static String as(const Impl& mValue)			{ return mValue.asString(); } };
+		template<> struct AsHelper<char const*>		{ inline static char const* as(const Impl& mValue)		{ return mValue.asCString(); } };
+		template<> struct AsHelper<unsigned int>	{ inline static unsigned int as(const Impl& mValue)		{ return mValue.asUInt(); } };
+		template<> struct AsHelper<unsigned long>	{ inline static unsigned long as(const Impl& mValue)	{ return mValue.asLargestUInt(); } };
 		template<typename T> struct AsHelper<std::vector<T>>
 		{
 			inline static std::vector<T> as(const Value& mValue)
