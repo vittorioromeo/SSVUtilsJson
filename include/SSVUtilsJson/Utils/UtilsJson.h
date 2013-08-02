@@ -57,6 +57,12 @@ namespace ssvuj
 		writer.write(o, mRoot);
 		o.flush(); o.close();
 	}
+	inline static String getWriteRootToString(const Value& mRoot)
+	{
+		String result;
+		writeRootToString(mRoot, result);
+		return result;
+	}
 }
 
 #endif
