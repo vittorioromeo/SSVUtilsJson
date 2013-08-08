@@ -15,48 +15,90 @@ namespace ssvuj
 {
 	namespace Internal
 	{
-		template<typename T> struct FromJson		{ inline static T conv(const Obj& mObj); };
-		template<> struct FromJson<Obj>				{ inline static Obj conv(const Obj& mObj)			{ return mObj; } };
-		template<> struct FromJson<int>				{ inline static int conv(const Obj& mObj)			{ return mObj.asInt(); } };
-		template<> struct FromJson<long>			{ inline static long conv(const Obj& mObj)			{ return mObj.asLargestInt(); } };
-		template<> struct FromJson<float>			{ inline static float conv(const Obj& mObj)			{ return mObj.asFloat(); } };
-		template<> struct FromJson<double>			{ inline static double conv(const Obj& mObj)		{ return mObj.asDouble(); } };
-		template<> struct FromJson<bool>			{ inline static bool conv(const Obj& mObj)			{ return mObj.asBool(); } };
-		template<> struct FromJson<std::string>		{ inline static std::string conv(const Obj& mObj)	{ return mObj.asString(); } };
-		template<> struct FromJson<char const*>		{ inline static char const* conv(const Obj& mObj)	{ return mObj.asCString(); } };
-		template<> struct FromJson<unsigned int>	{ inline static unsigned int conv(const Obj& mObj)	{ return mObj.asUInt(); } };
-		template<> struct FromJson<unsigned long>	{ inline static unsigned long conv(const Obj& mObj)	{ return mObj.asLargestUInt(); } };
-		template<typename T> struct FromJson<std::vector<T>>
-		{
-			inline static std::vector<T> conv(const Obj& mObj)
-			{
-				std::vector<T> result;
-				for(auto i(0u); i < mObj.size(); ++i) result.push_back(FromJson<T>::conv(mObj[i]));
-				return result;
-			}
-		};
+		template<typename T> struct Converter;
+		template<typename T> inline static T getFromObj(const Obj& mObj) { T result; Converter<T>::fromObj(result, mObj); return result; }
+		template<typename T> inline static Obj getToObj(const T& mValue) { Obj result; Converter<T>::toObj(result, mValue); return result; }
 
-		template<typename T> struct ToJson			{ inline static Obj conv(const T& mValue) { return mValue; } };
-		template<typename T> struct ToJson<std::vector<T>>
+		template<typename T> struct Converter
 		{
-			inline static Obj conv(const std::vector<T>& mValue)
-			{
-				Obj result;
-				for(auto i(0u); i < mValue.size(); ++i) result[i] = ToJson<T>::conv(mValue[i]);
-				return result;
-			}
+			inline static void fromObj(T& mValue, const Obj& mObj);
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = mValue; }
+		};
+		template<> struct Converter<Obj>
+		{
+			using T = Obj;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = mObj; }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = mValue; }
+		};
+		template<> struct Converter<int>
+		{
+			using T = int;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = mObj.asInt(); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = mValue; }
+		};
+		template<> struct Converter<long>
+		{
+			using T = long;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = mObj.asLargestInt(); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = static_cast<Json::Value::Int64>(mValue); }
+		};
+		template<> struct Converter<float>
+		{
+			using T = float;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = mObj.asFloat(); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = mValue; }
+		};
+		template<> struct Converter<double>
+		{
+			using T = double;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = mObj.asDouble(); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = mValue; }
+		};
+		template<> struct Converter<bool>
+		{
+			using T = bool;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = mObj.asBool(); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = mValue; }
+		};
+		template<> struct Converter<std::string>
+		{
+			using T = std::string;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = mObj.asString(); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = mValue; }
+		};
+		template<> struct Converter<const char*>
+		{
+			using T = const char*;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = mObj.asCString(); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = mValue; }
+		};
+		template<> struct Converter<unsigned int>
+		{
+			using T = unsigned int;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = mObj.asUInt(); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = static_cast<Json::Value::UInt>(mValue); }
+		};
+		template<> struct Converter<unsigned long>
+		{
+			using T = unsigned long;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = mObj.asLargestUInt(); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = static_cast<Json::Value::UInt64>(mValue); }
+		};
+		template<typename TItem> struct Converter<std::vector<TItem>>
+		{
+			using T = std::vector<TItem>;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ for(auto i(0u); i < mObj.size(); ++i) mValue.push_back(getFromObj<TItem>(mObj[i])); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ for(auto i(0u); i < mValue.size(); ++i) mObj[i] = getToObj<TItem>(mValue[i]); }
 		};
 
 		inline static void logReadError(const Reader& mReader, const std::string& mFrom)
 		{
 			ssvu::lo << ssvu::lt("ssvuj::logReadError") << mReader.getFormatedErrorMessages() << std::endl << "From: [" << mFrom << "]" << std::endl;
 		}
-
 		inline static bool tryParse(Obj& mObj, Reader& mReader, const std::string& mSrc)
 		{
 			if(mReader.parse(mSrc, mObj, false)) return true;
-			logReadError(mReader, mSrc);
-			return false;
+			logReadError(mReader, mSrc); return false;
 		}
 	}
 
@@ -66,11 +108,14 @@ namespace ssvuj
 	inline static bool has(const Obj& mObj, const Key& mKey) { return mObj.isMember(mKey); }
 	inline static bool hasIndex(const Obj& mObj, Idx mIndex) { return size(mObj) > mIndex; }
 
-	template<typename T> inline static void set(Obj& mObj, const T& mValue)						{ mObj = Internal::ToJson<T>::conv(mValue); }
+
+	template<typename T> inline static void set(Obj& mObj, const T& mValue)						{ Internal::Converter<T>::toObj(mObj, mValue); } // TODO: ToJson<T> shouldn't return anything but set an existing Obj
 	template<typename T> inline static void set(Obj& mObj, const Key& mKey, const T& mValue)	{ set(mObj[mKey], mValue); }
 	template<typename T> inline static void set(Obj& mObj, Idx mIndex, const T& mValue)			{ set(mObj[mIndex], mValue); }
 
-	template<typename T> inline static T as(const Obj& mObj)										{ return Internal::FromJson<T>::conv(mObj); }
+	template<typename T> inline static Obj create(const T& mValue)								{ Obj result; set(result, mValue); return result; }
+
+	template<typename T> inline static T as(const Obj& mObj)										{ return Internal::getFromObj<T>(mObj); }
 	template<typename T> inline static T as(const Obj& mObj, const Key& mKey)						{ return as<T>(mObj[mKey]); }
 	template<typename T> inline static T as(const Obj& mObj, Idx mIndex)							{ return as<T>(mObj[mIndex]); }
 	template<typename T> inline static T as(const Obj& mObj, const Key& mKey, const T& mDefault)	{ return has(mObj, mKey) ? as<T>(mObj, mKey) : mDefault; }
