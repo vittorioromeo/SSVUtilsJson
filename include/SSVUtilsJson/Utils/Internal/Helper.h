@@ -29,7 +29,7 @@ namespace ssvuj
 			inline static std::vector<T> as(const Value& mValue)
 			{
 				std::vector<T> result;
-				for(unsigned int i{0}; i < mValue.size(); ++i) result.push_back(AsHelper<T>::as(mValue[i]));
+				for(auto i(0u); i < mValue.size(); ++i) result.push_back(AsHelper<T>::as(mValue[i]));
 				return result;
 			}
 		};
