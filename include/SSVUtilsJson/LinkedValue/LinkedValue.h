@@ -6,61 +6,59 @@
 #define SSVUJ_LINKEDVALUE
 
 #include <vector>
-#include <string>
+#include <SSVUtils/SSVUtils.h>
 #include "SSVUtilsJson/Utils/UtilsJson.h"
-#include "SSVUtilsJson/Utils/Internal/Typedefs.h"
+#include "SSVUtilsJson/Global/Typedefs.h"
 
 namespace ssvuj
 {
-	class LinkedValueBase
+	namespace Internal
 	{
-		protected:
-			String linkedName;
+		class LinkedValueBase
+		{
+			protected:
+				std::string name;
 
-		public:
-			LinkedValueBase(const String& mLinkedName) : linkedName{mLinkedName} { }
-			virtual ~LinkedValueBase() { }
+			public:
+				LinkedValueBase(const std::string& mLinkedName) : name{mLinkedName} { }
+				virtual ~LinkedValueBase() { }
 
-			virtual void syncFrom(const Impl& mRoot) = 0;
-			virtual void syncTo(Impl& mRoot) const = 0;
-	};
+				virtual void syncFrom(const Obj& mRoot) = 0;
+				virtual void syncTo(Obj& mRoot) const = 0;
+		};
+	}
 
-	template<typename T> class LinkedValue : public LinkedValueBase
+	template<typename T> class LinkedValue : public Internal::LinkedValueBase
 	{
 		private:
 			T value;
 
 		public:
-			LinkedValue(const String& mLinkedName) : LinkedValueBase{mLinkedName} { }
-			~LinkedValue() { }
+			LinkedValue(const std::string& mLinkedName) : Internal::LinkedValueBase{mLinkedName} { }
 
 			inline operator T() { return value; }
-			inline LinkedValue& operator=(T mValue) { value = mValue; return *this; }
+			inline LinkedValue& operator=(const T& mValue) { value = mValue; return *this; }
 
-			inline void syncFrom(const Impl& mRoot) override { value = ssvuj::as<T>(mRoot, linkedName); }
-			inline void syncTo(Impl& mRoot) const override { set(mRoot, linkedName, value); }
+			inline void syncFrom(const Obj& mObj) override { value = ssvuj::as<T>(mObj, name); }
+			inline void syncTo(Obj& mObj) const override { set(mObj, name, value); }
 	};
 
 	class LinkedValueManager
 	{
 		private:
-			Impl& linkedRoot;
-			std::vector<Uptr<LinkedValueBase>> linkedValues;
+			using Container = std::vector<ssvu::Uptr<Internal::LinkedValueBase>>;
+			Obj& obj;
+			Container values;
 
 		public:
-			LinkedValueManager(Impl& mLinkedRoot) : linkedRoot(mLinkedRoot) { }
+			LinkedValueManager(Obj& mObj) : obj(mObj) { }
 
-			template<typename T> LinkedValue<T>& create(const String& mLinkedName)
-			{
-				auto result(new LinkedValue<T>{mLinkedName});
-				linkedValues.push_back(Uptr<LinkedValueBase>{result});
-				return *result;
-			}
+			template<typename T> inline LinkedValue<T>& create(const std::string& mName) { auto result(new LinkedValue<T>{mName}); values.emplace_back(result); return *result; }
 
-			inline void syncFromRoot()	{ for(auto& lv : linkedValues) lv->syncFrom(linkedRoot); }
-			inline void syncToRoot()	{ for(const auto& lv : linkedValues) lv->syncTo(linkedRoot); }
+			inline void syncFromObj()	{ for(auto& lv : values) lv->syncFrom(obj); }
+			inline void syncToObj()		{ for(const auto& lv : values) lv->syncTo(obj); }
 
-			inline const std::vector<Uptr<LinkedValueBase>>& getLinkedValues() { return linkedValues; }
+			inline const Container& getValues() { return values; }
 	};
 }
 

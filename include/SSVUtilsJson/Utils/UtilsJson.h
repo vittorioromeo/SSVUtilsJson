@@ -6,63 +6,83 @@
 #define SSVUJ_UTILSJSON
 
 #include <vector>
-#include <string>
 #include <fstream>
 #include <sstream>
 #include <SSVUtils/SSVUtils.h>
-#include <SSVJsonCpp/SSVJsonCpp.h>
-#include "SSVUtilsJson/Utils/Internal/Helper.h"
-#include "SSVUtilsJson/Utils/Internal/Typedefs.h"
+#include "SSVUtilsJson/Global/Typedefs.h"
 
 namespace ssvuj
 {
-	inline static unsigned int size(const Impl& mArray) { return mArray.size(); }
-	inline static unsigned int size(const Impl& mRoot, const String& mValue) { return mRoot[mValue].size(); }
+	namespace Internal
+	{
+		template<typename T> struct FromJson		{ inline static T conv(const Obj& mObj); };
+		template<> struct FromJson<Obj>				{ inline static Obj conv(const Obj& mObj)			{ return mObj; } };
+		template<> struct FromJson<int>				{ inline static int conv(const Obj& mObj)			{ return mObj.asInt(); } };
+		template<> struct FromJson<long>			{ inline static long conv(const Obj& mObj)			{ return mObj.asLargestInt(); } };
+		template<> struct FromJson<float>			{ inline static float conv(const Obj& mObj)			{ return mObj.asFloat(); } };
+		template<> struct FromJson<double>			{ inline static double conv(const Obj& mObj)		{ return mObj.asDouble(); } };
+		template<> struct FromJson<bool>			{ inline static bool conv(const Obj& mObj)			{ return mObj.asBool(); } };
+		template<> struct FromJson<std::string>		{ inline static std::string conv(const Obj& mObj)	{ return mObj.asString(); } };
+		template<> struct FromJson<char const*>		{ inline static char const* conv(const Obj& mObj)	{ return mObj.asCString(); } };
+		template<> struct FromJson<unsigned int>	{ inline static unsigned int conv(const Obj& mObj)	{ return mObj.asUInt(); } };
+		template<> struct FromJson<unsigned long>	{ inline static unsigned long conv(const Obj& mObj)	{ return mObj.asLargestUInt(); } };
+		template<typename T> struct FromJson<std::vector<T>>
+		{
+			inline static std::vector<T> conv(const Obj& mObj)
+			{
+				std::vector<T> result;
+				for(auto i(0u); i < mObj.size(); ++i) result.push_back(FromJson<T>::conv(mObj[i]));
+				return result;
+			}
+		};
 
-	inline static bool has(const Value& mRoot, const String& mValue) { return mRoot.isMember(mValue); }
+		template<typename T> struct ToJson			{ inline static Obj conv(const T& mValue) { return mValue; } };
+		template<typename T> struct ToJson<std::vector<T>>
+		{
+			inline static Obj conv(const std::vector<T>& mValue)
+			{
+				Obj result;
+				for(auto i(0u); i < mValue.size(); ++i) result[i] = ToJson<T>::conv(mValue[i]);
+				return result;
+			}
+		};
 
-	template<typename T> inline static void set(Impl& mRoot, const T& mValueToSet) { mRoot = mValueToSet; }
-	template<typename T> inline static void set(Impl& mRoot, const String& mValue, const T& mValueToSet) { set(mRoot[mValue], mValueToSet); }
-	template<typename T> inline static void set(Impl& mRoot, unsigned int mIndex, const T& mValueToSet)	{ set(mRoot[mIndex], mValueToSet); }
+		inline static void logReadError(const Reader& mReader, const std::string& mFrom)
+		{
+			ssvu::lo << ssvu::lt("ssvuj::logReadError") << mReader.getFormatedErrorMessages() << std::endl << "From: [" << mFrom << "]" << std::endl;
+		}
 
-	template<typename T> inline static T as(const Impl& mRoot) { return Internal::AsHelper<T>::as(mRoot); }
-	template<typename T> inline static T as(const Impl& mRoot, const String& mValue) { return as<T>(mRoot[mValue]); }
-	template<typename T> inline static T as(const Impl& mArray, unsigned int mIndex) { return as<T>(mArray[mIndex]); }
-	template<typename T> inline static T as(const Impl& mRoot, const String& mValue, T mDefault) { return has(mRoot, mValue) ? as<T>(mRoot, mValue) : mDefault; }
-	template<typename T> inline static T as(const Impl& mArray, unsigned int mIndex, T mDefault) { return mArray.isValidIndex(mIndex) ? as<T>(mArray, mIndex) : mDefault; }
+		inline static bool tryParse(Obj& mObj, Reader& mReader, const std::string& mSrc)
+		{
+			if(mReader.parse(mSrc, mObj, false)) return true;
+			logReadError(mReader, mSrc);
+			return false;
+		}
+	}
 
-	inline static Value getRootFromString(const String& mString)
-	{
-		Value result; Json::Reader reader;
-		if(!reader.parse(mString, result, false)) ssvu::lo << ssvu::lt("ssvuj::getRootFromString") << reader.getFormatedErrorMessages() << std::endl << "From: [" << mString << "]" << std::endl;
-		return result;
-	}
-	inline static Value getRootFromFile(const String& mPath)
-	{
-		Value result; Json::Reader reader;
-		if(!reader.parse(ssvu::FileSystem::getFileContents(mPath), result, false)) ssvu::lo << ssvu::lt("ssvuj::getRootFromFile") << reader.getFormatedErrorMessages() << std::endl << "From: [" << mPath << "]" << std::endl;
-		return result;
-	}
-	inline static void writeRootToString(const Value& mRoot, String& mString)
-	{
-		std::ostringstream o;
-		Json::StyledStreamWriter writer;
-		writer.write(o, mRoot);
-		o.flush(); mString = o.str();
-	}
-	inline static void writeRootToFile(const Value& mRoot, const String& mPath)
-	{
-		std::ofstream o{mPath};
-		Json::StyledStreamWriter writer;
-		writer.write(o, mRoot);
-		o.flush(); o.close();
-	}
-	inline static String getWriteRootToString(const Value& mRoot)
-	{
-		String result;
-		writeRootToString(mRoot, result);
-		return result;
-	}
+	inline static unsigned int size(const Obj& mArray)					{ return mArray.size(); }
+	inline static unsigned int size(const Obj& mObj, const Key& mKey)	{ return mObj[mKey].size(); }
+
+	inline static bool has(const Obj& mObj, const Key& mKey) { return mObj.isMember(mKey); }
+	inline static bool hasIndex(const Obj& mObj, Idx mIndex) { return size(mObj) > mIndex; }
+
+	template<typename T> inline static void set(Obj& mObj, const T& mValue)						{ mObj = Internal::ToJson<T>::conv(mValue); }
+	template<typename T> inline static void set(Obj& mObj, const Key& mKey, const T& mValue)	{ set(mObj[mKey], mValue); }
+	template<typename T> inline static void set(Obj& mObj, Idx mIndex, const T& mValue)			{ set(mObj[mIndex], mValue); }
+
+	template<typename T> inline static T as(const Obj& mObj)										{ return Internal::FromJson<T>::conv(mObj); }
+	template<typename T> inline static T as(const Obj& mObj, const Key& mKey)						{ return as<T>(mObj[mKey]); }
+	template<typename T> inline static T as(const Obj& mObj, Idx mIndex)							{ return as<T>(mObj[mIndex]); }
+	template<typename T> inline static T as(const Obj& mObj, const Key& mKey, const T& mDefault)	{ return has(mObj, mKey) ? as<T>(mObj, mKey) : mDefault; }
+	template<typename T> inline static T as(const Obj& mObj, Idx mIndex, const T& mDefault)			{ return hasIndex(mObj, mIndex) ? as<T>(mObj, mIndex) : mDefault; }
+
+	inline static Obj readFromString(const std::string& mString)						{ Obj result; Reader reader; Internal::tryParse(result, reader, mString); return result; }
+	inline static Obj readFromFile(const std::string& mPath)							{ Obj result; Reader reader; Internal::tryParse(result, reader, ssvu::FileSystem::getFileContents(mPath)); return result; }
+
+	template<typename T> inline static void writeToStream(const Obj& mObj, T& mStream)	{ Writer writer; writer.write(mStream, mObj); mStream.flush(); }
+	inline static void writeToString(const Obj& mObj, std::string& mString)				{ std::ostringstream o; writeToStream(mObj, o); mString = o.str(); }
+	inline static void writeToFile(const Obj& mObj, const std::string& mPath)			{ std::ofstream o{mPath}; writeToStream(mObj, o); o.close(); }
+	inline static std::string getWriteToString(const Obj& mObj)							{ std::string result; writeToString(mObj, result); return result; }
 }
 
 #endif
