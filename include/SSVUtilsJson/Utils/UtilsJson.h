@@ -108,12 +108,9 @@ namespace ssvuj
 	inline static bool has(const Obj& mObj, const Key& mKey) { return mObj.isMember(mKey); }
 	inline static bool hasIndex(const Obj& mObj, Idx mIndex) { return size(mObj) > mIndex; }
 
-
-	template<typename T> inline static void set(Obj& mObj, const T& mValue)						{ Internal::Converter<T>::toObj(mObj, mValue); } // TODO: ToJson<T> shouldn't return anything but set an existing Obj
+	template<typename T> inline static void set(Obj& mObj, const T& mValue)						{ Internal::Converter<T>::toObj(mObj, mValue); }
 	template<typename T> inline static void set(Obj& mObj, const Key& mKey, const T& mValue)	{ set(mObj[mKey], mValue); }
 	template<typename T> inline static void set(Obj& mObj, Idx mIndex, const T& mValue)			{ set(mObj[mIndex], mValue); }
-
-	template<typename T> inline static Obj create(const T& mValue)								{ Obj result; set(result, mValue); return result; }
 
 	template<typename T> inline static T as(const Obj& mObj)										{ return Internal::getFromObj<T>(mObj); }
 	template<typename T> inline static T as(const Obj& mObj, const Key& mKey)						{ return as<T>(mObj[mKey]); }
