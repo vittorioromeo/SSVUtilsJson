@@ -8,7 +8,6 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include <SSVUtils/SSVUtils.h>
 #include "SSVUtilsJson/Global/Typedefs.h"
 
 namespace ssvuj
@@ -118,13 +117,13 @@ namespace ssvuj
 	template<typename T> inline static T as(const Obj& mObj, const Key& mKey, const T& mDefault)	{ return has(mObj, mKey) ? as<T>(mObj, mKey) : mDefault; }
 	template<typename T> inline static T as(const Obj& mObj, Idx mIndex, const T& mDefault)			{ return hasIndex(mObj, mIndex) ? as<T>(mObj, mIndex) : mDefault; }
 
-	inline static Obj readFromString(const std::string& mString)						{ Obj result; Reader reader; Internal::tryParse(result, reader, mString); return result; }
-	inline static Obj readFromFile(const ssvu::FileSystem::Path& mPath)					{ Obj result; Reader reader; Internal::tryParse(result, reader, ssvu::FileSystem::getFileContents(mPath)); return result; }
+	inline static Obj readFromString(const std::string& mString)	{ Obj result; Reader reader; Internal::tryParse(result, reader, mString); return result; }
+	inline static Obj readFromFile(const Path& mPath)				{ Obj result; Reader reader; Internal::tryParse(result, reader, ssvu::FileSystem::getFileContents(mPath)); return result; }
 
-	template<typename T> inline static void writeToStream(const Obj& mObj, T& mStream)		{ Writer writer; writer.write(mStream, mObj); mStream.flush(); }
-	inline static void writeToString(const Obj& mObj, std::string& mString)					{ std::ostringstream o; writeToStream(mObj, o); mString = o.str(); }
-	inline static void writeToFile(const Obj& mObj, const ssvu::FileSystem::Path& mPath)	{ std::ofstream o{mPath}; writeToStream(mObj, o); o.close(); }
-	inline static std::string getWriteToString(const Obj& mObj)								{ std::string result; writeToString(mObj, result); return result; }
+	template<typename T> inline static void writeToStream(const Obj& mObj, T& mStream)	{ Writer writer; writer.write(mStream, mObj); mStream.flush(); }
+	inline static void writeToString(const Obj& mObj, std::string& mString)				{ std::ostringstream o; writeToStream(mObj, o); mString = o.str(); }
+	inline static void writeToFile(const Obj& mObj, const Path& mPath)					{ std::ofstream o{mPath}; writeToStream(mObj, o); o.close(); }
+	inline static std::string getWriteToString(const Obj& mObj)							{ std::string result; writeToString(mObj, result); return result; }
 }
 
 #endif

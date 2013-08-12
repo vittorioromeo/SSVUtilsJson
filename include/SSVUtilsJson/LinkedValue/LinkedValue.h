@@ -6,7 +6,6 @@
 #define SSVUJ_LINKEDVALUE
 
 #include <vector>
-#include <SSVUtils/SSVUtils.h>
 #include "SSVUtilsJson/Utils/UtilsJson.h"
 #include "SSVUtilsJson/Global/Typedefs.h"
 

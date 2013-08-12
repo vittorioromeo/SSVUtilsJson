@@ -7,6 +7,7 @@
 
 #include <string>
 #include <SSVJsonCpp/SSVJsonCpp.h>
+#include <SSVUtils/SSVUtils.h>
 
 namespace ssvuj
 {
@@ -15,6 +16,7 @@ namespace ssvuj
 	using Idx = unsigned int;
 	using Writer = Json::StyledStreamWriter;
 	using Reader = Json::Reader;
+	using Path = ssvu::FileSystem::Path;
 }
 
 #endif
