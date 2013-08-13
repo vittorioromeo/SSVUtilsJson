@@ -6,6 +6,7 @@
 #define SSVUJ_UTILSJSON
 
 #include <vector>
+#include <map>
 #include <fstream>
 #include <sstream>
 #include "SSVUtilsJson/Global/Typedefs.h"
@@ -27,6 +28,18 @@ namespace ssvuj
 		{
 			using T = Obj;
 			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = mObj; }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = mValue; }
+		};
+		template<> struct Converter<char>
+		{
+			using T = char;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = static_cast<T>(mObj.asInt()); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = mValue; }
+		};
+		template<> struct Converter<unsigned char>
+		{
+			using T = unsigned char;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = static_cast<T>(mObj.asInt()); }
 			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = mValue; }
 		};
 		template<> struct Converter<int>
@@ -89,6 +102,12 @@ namespace ssvuj
 			inline static void fromObj(T& mValue, const Obj& mObj)	{ for(auto i(0u); i < mObj.size(); ++i) mValue.push_back(getFromObj<TItem>(mObj[i])); }
 			inline static void toObj(Obj& mObj, const T& mValue)	{ for(auto i(0u); i < mValue.size(); ++i) mObj[i] = getToObj<TItem>(mValue[i]); }
 		};
+		template<typename TItem> struct Converter<std::map<Key, TItem>>
+		{
+			using T = std::map<Key, TItem>;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ for(auto itr(mObj.begin()); itr != mObj.end(); ++itr) mValue[itr.key()] = getFromObj<TItem>(*itr); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ for(const auto& p : mValue) mObj[p.first] = p.second; }
+		};
 
 		inline static void logReadError(const Reader& mReader, const std::string& mFrom)
 		{
@@ -101,6 +120,8 @@ namespace ssvuj
 		}
 	}
 
+
+	// Basic json obj manipulation
 	inline static unsigned int size(const Obj& mArray)					{ return mArray.size(); }
 	inline static unsigned int size(const Obj& mObj, const Key& mKey)	{ return mObj[mKey].size(); }
 
@@ -117,6 +138,44 @@ namespace ssvuj
 	template<typename T> inline static T as(const Obj& mObj, const Key& mKey, const T& mDefault)	{ return has(mObj, mKey) ? as<T>(mObj, mKey) : mDefault; }
 	template<typename T> inline static T as(const Obj& mObj, Idx mIndex, const T& mDefault)			{ return hasIndex(mObj, mIndex) ? as<T>(mObj, mIndex) : mDefault; }
 
+
+	// Serialization helpers
+	namespace Internal
+	{
+		template<Idx TIdx, typename TArg> inline static void extractHelper(const Obj& mArray, TArg& mArg) { mArg = as<TArg>(mArray, TIdx); }
+		template<Idx TIdx, typename TArg, typename... TArgs> inline static void extractHelper(const Obj& mArray, TArg& mArg, TArgs&... mArgs)
+		{
+			mArg = as<TArg>(mArray, TIdx); extractHelper<TIdx + 1>(mArray, std::forward<TArgs&>(mArgs)...);
+		}
+
+		template<Idx TIdx, typename TArg> inline static void archiveHelper(Obj& mArray, const TArg& mArg) { set(mArray, TIdx, mArg); }
+		template<Idx TIdx, typename TArg, typename... TArgs> inline static void archiveHelper(Obj& mArray, const TArg& mArg, const TArgs&... mArgs)
+		{
+			set(mArray, TIdx, mArg); archiveHelper<TIdx + 1>(mArray, std::forward<const TArgs&>(mArgs)...);
+		}
+
+		template<typename TArg> inline static void extractMapHelper(const Obj& mObj, const Key& mKey, TArg& mArg) { mArg = as<TArg>(mObj, mKey); }
+		template<typename TArg, typename... TArgs> inline static void extractMapHelper(const Obj& mObj, const Key& mKey, TArg& mArg, TArgs&... mArgs)
+		{
+			mArg = as<TArg>(mObj, mKey); extractMapHelper(mObj, std::forward<TArgs&>(mArgs)...);
+		}
+
+		template<typename TArg> inline static void archiveMapHelper(Obj& mObj, const Key& mKey, const TArg& mArg) { set(mObj, mKey, mArg); }
+		template<typename TArg, typename... TArgs> inline static void archiveMapHelper(Obj& mObj, const Key& mKey, TArg&& mArg, const TArgs&... mArgs)
+		{
+			set(mObj, mKey, mArg); archiveMapHelper(mObj, std::forward<const TArgs&>(mArgs)...);
+		}
+	}
+
+	template<typename... TArgs> inline static void extract(const Obj& mArray, TArgs&... mArgs)	{ Internal::extractHelper<0>(mArray, std::forward<TArgs&>(mArgs)...); }
+	template<typename... TArgs> inline static void archive(Obj& mArray, const TArgs&... mArgs)	{ Internal::archiveHelper<0>(mArray, std::forward<const TArgs&>(mArgs)...); }
+	template<typename... TArgs> inline static Obj getArchived(const TArgs&... mArgs)			{ Obj result; archive(result, std::forward<const TArgs&>(mArgs)...); return result; }
+
+	template<typename... TArgs> inline static void extractMap(const Obj& mObj, TArgs&... mArgs)	{ Internal::extractMapHelper(mObj, std::forward<TArgs&>(mArgs)...); }
+	template<typename... TArgs> inline static void archiveMap(Obj& mObj, const TArgs&... mArgs)	{ Internal::archiveMapHelper(mObj, std::forward<const TArgs&>(mArgs)...); }
+
+
+	// Input/output
 	inline static Obj readFromString(const std::string& mString)	{ Obj result; Reader reader; Internal::tryParse(result, reader, mString); return result; }
 	inline static Obj readFromFile(const Path& mPath)				{ Obj result; Reader reader; Internal::tryParse(result, reader, ssvu::FileSystem::getFileContents(mPath)); return result; }
 
