@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <fstream>
 #include <sstream>
 #include "SSVUtilsJson/Global/Typedefs.h"
@@ -102,11 +103,17 @@ namespace ssvuj
 			inline static void fromObj(T& mValue, const Obj& mObj)	{ for(auto i(0u); i < mObj.size(); ++i) mValue.push_back(getFromObj<TItem>(mObj[i])); }
 			inline static void toObj(Obj& mObj, const T& mValue)	{ for(auto i(0u); i < mValue.size(); ++i) mObj[i] = getToObj<TItem>(mValue[i]); }
 		};
-		template<typename TItem> struct Converter<std::map<Key, TItem>>
+		template<typename TKey, typename TValue> struct Converter<std::map<TKey, TValue>>
 		{
-			using T = std::map<Key, TItem>;
-			inline static void fromObj(T& mValue, const Obj& mObj)	{ for(auto itr(mObj.begin()); itr != mObj.end(); ++itr) mValue[itr.key()] = getFromObj<TItem>(*itr); }
-			inline static void toObj(Obj& mObj, const T& mValue)	{ for(const auto& p : mValue) mObj[p.first] = p.second; }
+			using T = std::map<TKey, TValue>;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ for(auto itr(mObj.begin()); itr != mObj.end(); ++itr) mValue[itr.key().asString()] = getFromObj<TValue>(*itr); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ for(const auto& p : mValue) mObj[ssvu::toStr(p.first)] = getToObj<TValue>(p.second); }
+		};
+		template<typename TKey, typename TValue> struct Converter<std::unordered_map<TKey, TValue>>
+		{
+			using T = std::unordered_map<TKey, TValue>;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ for(auto itr(mObj.begin()); itr != mObj.end(); ++itr) mValue[itr.key().asString()] = getFromObj<TValue>(*itr); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ for(const auto& p : mValue) mObj[ssvu::toStr(p.first)] = getToObj<TValue>(p.second); }
 		};
 
 		inline static void logReadError(const Reader& mReader, const std::string& mFrom)
