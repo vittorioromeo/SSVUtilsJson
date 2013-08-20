@@ -40,18 +40,20 @@ namespace ssvuj
 
 	// extr and arch serialize a value to a single obj
 	template<typename T> inline static void extr(const Obj& mObj, T& mValue)	{ mValue = as<T>(mObj); }
-	template<typename T> inline static void arch(Obj& mObj, const T& mValue)	{ set(mObj, mValue); }
+	template<typename T> inline static void arch(Obj& mObj, const T& mValue)	{ set<T>(mObj, mValue); }
 	template<typename T> inline static T getExtr(const Obj& mObj)				{ T result; extr(mObj, result); return result; }
 	template<typename T> inline static Obj getArch(const T& mValue)				{ Obj result; arch(result, mValue); return result; }
 
 	// extrArray and archArray serialize some values to a json array
 	template<typename... TArgs> inline static void extrArray(const Obj& mArray, TArgs&... mArgs)	{ Internal::extrArrayHelper<0>(mArray, std::forward<TArgs&>(mArgs)...); }
 	template<typename... TArgs> inline static void archArray(Obj& mArray, const TArgs&... mArgs)	{ Internal::archArrayHelper<0>(mArray, std::forward<const TArgs&>(mArgs)...); }
+	// TODO: getExtrArray -> std::tuple
 	template<typename... TArgs> inline static Obj getArchArray(const TArgs&... mArgs)				{ Obj result; archArray(result, std::forward<const TArgs&>(mArgs)...); return result; }
 
 	// extrObj and archObj serialize some keys/values to an obj
 	template<typename... TArgs> inline static void extrObj(const Obj& mObj, TArgs&... mArgs)	{ Internal::extrObjHelper(mObj, std::forward<TArgs&>(mArgs)...); }
 	template<typename... TArgs> inline static void archObj(Obj& mObj, const TArgs&... mArgs)	{ Internal::archObjHelper(mObj, std::forward<const TArgs&>(mArgs)...); }
+	// TODO: getExtrObj -> std::map?
 	template<typename... TArgs> inline static Obj getArchObj(const TArgs&... mArgs)				{ Obj result; archObj(result, std::forward<const TArgs&>(mArgs)...); return result; }
 }
 
