@@ -13,8 +13,8 @@ namespace ssvuj
 	inline static unsigned int size(const Obj& mArray)					{ return mArray.size(); }
 	inline static unsigned int size(const Obj& mObj, const Key& mKey)	{ return mObj[mKey].size(); }
 
-	inline static bool has(const Obj& mObj, const Key& mKey) { return mObj.isMember(mKey); }
-	inline static bool hasIndex(const Obj& mObj, Idx mIndex) { return size(mObj) > mIndex; }
+	inline static bool has(const Obj& mObj, const Key& mKey)	{ return mObj.isMember(mKey); }
+	inline static bool has(const Obj& mObj, Idx mIndex)			{ return size(mObj) > mIndex; }
 
 	template<typename T> inline static void set(Obj& mObj, const T& mValue)						{ Internal::Converter<T>::toObj(mObj, mValue); }
 	template<typename T> inline static void set(Obj& mObj, const Key& mKey, const T& mValue)	{ set(mObj[mKey], mValue); }
@@ -24,7 +24,7 @@ namespace ssvuj
 	template<typename T> inline static T as(const Obj& mObj, const Key& mKey)						{ return as<T>(mObj[mKey]); }
 	template<typename T> inline static T as(const Obj& mArray, Idx mIndex)							{ return as<T>(mArray[mIndex]); }
 	template<typename T> inline static T as(const Obj& mObj, const Key& mKey, const T& mDefault)	{ return has(mObj, mKey) ? as<T>(mObj, mKey) : mDefault; }
-	template<typename T> inline static T as(const Obj& mArray, Idx mIndex, const T& mDefault)		{ return hasIndex(mArray, mIndex) ? as<T>(mArray, mIndex) : mDefault; }
+	template<typename T> inline static T as(const Obj& mArray, Idx mIndex, const T& mDefault)		{ return has(mArray, mIndex) ? as<T>(mArray, mIndex) : mDefault; }
 }
 
 #endif
