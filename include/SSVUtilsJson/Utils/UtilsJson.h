@@ -28,3 +28,5 @@ namespace ssvuj
 }
 
 #endif
+
+// TODO: non-member start/begin for ssvuj::Obj; key getting util; isArray or isObj
