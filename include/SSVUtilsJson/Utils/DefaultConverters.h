@@ -39,19 +39,19 @@ namespace ssvuj
 		{
 			using T = long;
 			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = mObj.asLargestInt(); }
-			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = static_cast<Json::Value::Int64>(mValue); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = static_cast<Json::Int64>(mValue); }
 		};
 		template<> struct Converter<unsigned int>
 		{
 			using T = unsigned int;
 			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = mObj.asUInt(); }
-			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = static_cast<Json::Value::UInt>(mValue); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = static_cast<Json::UInt>(mValue); }
 		};
 		template<> struct Converter<unsigned long>
 		{
 			using T = unsigned long;
 			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue = mObj.asLargestUInt(); }
-			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = static_cast<Json::Value::UInt64>(mValue); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj = static_cast<Json::UInt64>(mValue); }
 		};
 		template<typename TItem> struct Converter<std::vector<TItem>>
 		{
