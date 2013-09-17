@@ -27,16 +27,16 @@
 
 namespace Json
 {
-	typedef unsigned int UInt;
-	typedef long long int Int64;
-	typedef unsigned long long int UInt64;
-	typedef Int64 LargestInt;
-	typedef UInt64 LargestUInt;
+	using UInt = unsigned int;
+	using Int64 = long long int;
+	using UInt64 = unsigned long long int;
+	using LargestInt = Int64;
+	using LargestUInt = UInt64;
+	using ArrayIndex = unsigned int;
 	class FastWriter;
 	class StyledWriter;
 	class Reader;
 	class Features;
-	typedef unsigned int ArrayIndex;
 	class StaticString;
 	class Path;
 	class PathArgument;
@@ -46,16 +46,11 @@ namespace Json
 	class ValueConstIterator;
 	struct Features
 	{
-		bool allowComments_, strictRoot_;
-		inline static Features all() { return Features(); }
-		inline static Features strictMode()
-		{
-			Features features;
-			features.allowComments_ = false;
-			features.strictRoot_ = true;
-			return features;
-		}
-		inline Features() : allowComments_(true), strictRoot_(false) { }
+		bool allowComments_{true}, strictRoot_{false};
+		inline Features() = default;
+		inline Features(bool mAllowComments, bool mStrictRoot) : allowComments_{mAllowComments}, strictRoot_{mStrictRoot} { }
+		inline static Features all() noexcept { return {}; }
+		inline static Features strictMode() noexcept { return {false, true}; }
 	};
 
 	enum ValueType{nullValue = 0, intValue, uintValue, realValue, stringValue, booleanValue, arrayValue, objectValue};
@@ -67,57 +62,55 @@ namespace Json
 
 		public:
 			inline explicit StaticString(const char* czstring) : str_(czstring) { }
-			inline operator const char* () const	{ return str_; }
-			inline const char* c_str() const		{ return str_; }
+			inline operator const char* () const noexcept	{ return str_; }
+			inline const char* c_str() const noexcept		{ return str_; }
 	};
 
 	class Value
 	{
-			friend class ValueIteratorBase;
+		friend class ValueIteratorBase;
 
 		public:
-			typedef std::vector<std::string> Members;
-			typedef ValueIterator iterator;
-			typedef ValueConstIterator const_iterator;
+			using Members = std::vector<std::string>;
+			using iterator = ValueIterator;
+			using const_iterator = ValueConstIterator;
 
-			static const LargestInt minLargestInt = LargestInt (~ (LargestUInt (-1) / 2));
-			static const LargestInt maxLargestInt = LargestInt (LargestUInt (-1) / 2);
-			static const LargestUInt maxLargestUInt = LargestUInt (-1);
-			static const int minInt = int (~ (UInt (-1) / 2));
-			static const int maxInt = int (UInt (-1) / 2);
-			static const UInt maxUInt = UInt (-1);
+			static constexpr LargestInt minLargestInt{LargestInt(~(LargestUInt (-1) / 2))};
+			static constexpr LargestInt maxLargestInt{LargestInt(LargestUInt (-1) / 2)};
+			static constexpr LargestUInt maxLargestUInt{LargestUInt(-1)};
+			static constexpr int minInt{int(~ (UInt (-1) / 2))};
+			static constexpr int maxInt{int(UInt (-1) / 2)};
+			static constexpr UInt maxUInt{UInt(-1)};
 			#ifdef JSON_HAS_INT64
-				static const Int64 minInt64 = Int64 (~ (UInt64 (-1) / 2));
-				static const Int64 maxInt64 = Int64 (UInt64 (-1) / 2);
-				static const UInt64 maxUInt64 = UInt64 (-1);
+				static constexpr Int64 minInt64{Int64(~ (UInt64 (-1) / 2))};
+				static constexpr Int64 maxInt64{Int64(UInt64 (-1) / 2)};
+				static constexpr UInt64 maxUInt64{UInt64(-1)};
 			#endif
+
 		private:
-			#ifndef JSONCPP_DOC_EXCLUDE_IMPLEMENTATION
-				class CZString
-				{
-					public:
-						enum DuplicationPolicy{noDuplication = 0, duplicate, duplicateOnCopy};
-						CZString(ArrayIndex index);
-						CZString(const char* cstr, DuplicationPolicy allocate);
-						CZString(const CZString &other);
-						~CZString();
-						CZString &operator =(const CZString &other);
-						bool operator<(const CZString &other) const;
-						bool operator==(const CZString &other) const;
-						ArrayIndex index() const;
-						const char* c_str() const;
-						bool isStaticString() const;
-
-					private:
-						void swap(CZString &other);
-						const char* cstr_;
-						ArrayIndex index_;
-				};
-
+			class CZString
+			{
 				public:
-					typedef std::map<CZString, Value> ObjectValues;
-			#endif
+					enum DuplicationPolicy{noDuplication = 0, duplicate, duplicateOnCopy};
+					CZString(ArrayIndex index);
+					CZString(const char* cstr, DuplicationPolicy allocate);
+					CZString(const CZString &other);
+					~CZString();
+					CZString &operator =(const CZString &other);
+					bool operator<(const CZString &other) const;
+					bool operator==(const CZString &other) const;
+					ArrayIndex index() const;
+					const char* c_str() const;
+					bool isStaticString() const;
+
+				private:
+					void swap(CZString &other);
+					const char* cstr_;
+					ArrayIndex index_;
+			};
+
 		public:
+			typedef std::map<CZString, Value> ObjectValues;
 			Value(ValueType type = nullValue);
 			Value(int value);
 			Value(UInt value);
@@ -130,23 +123,12 @@ namespace Json
 			Value(const char* beginValue, const char* endValue);
 			Value(const StaticString &value);
 			Value(const std::string& value);
-
 			Value(bool value);
 			Value(const Value& other);
 			~Value();
-			inline Value& operator=(const Value& other)
-			{
-				Value temp(other);
-				swap(temp);
-				return *this;
-			}
-			inline ValueType type() const { return type_; }
-			inline int compare(const Value& other) const
-			{
-				if(*this < other) return -1;
-				if(*this > other) return 1;
-				return 0;
-			}
+			inline Value& operator=(const Value& other) { Value temp(other); swap(temp); return *this; }
+			inline ValueType type() const noexcept { return type_; }
+			inline int compare(const Value& other) const { if(*this < other) return -1; if(*this > other) return 1; return 0; }
 			void swap(Value& other);
 
 			bool operator<(const Value& other) const;
@@ -274,9 +256,9 @@ namespace Json
 	class ValueIteratorBase
 	{
 		public:
-			typedef unsigned int size_t;
-			typedef int difference_type;
-			typedef ValueIteratorBase SelfType;
+			using size_t = unsigned int;
+			using difference_type = int;
+			using SelfType = ValueIteratorBase;
 
 		private:
 			Value::ObjectValues::iterator current_;
@@ -308,11 +290,11 @@ namespace Json
 			explicit ValueConstIterator(const Value::ObjectValues::iterator &current);
 
 		public:
-			typedef unsigned int size_t;
-			typedef int difference_type;
-			typedef const Value& reference;
-			typedef const Value *pointer;
-			typedef ValueConstIterator SelfType;
+			using size_t = unsigned int;
+			using difference_type = int;
+			using reference = const Value&;
+			using pointer = const Value*;
+			using SelfType = ValueConstIterator;
 			ValueConstIterator();
 			SelfType& operator=(const ValueIteratorBase &other);
 			inline SelfType operator++(int)		{ SelfType temp(*this); ++*this; return temp; }
@@ -329,11 +311,11 @@ namespace Json
 			explicit ValueIterator(const Value::ObjectValues::iterator &current);
 
 		public:
-			typedef unsigned int size_t;
-			typedef int difference_type;
-			typedef Value& reference;
-			typedef Value *pointer;
-			typedef ValueIterator SelfType;
+			using size_t = unsigned int;
+			using difference_type = int;
+			using reference = Value&;
+			using pointer = Value*;
+			using SelfType = ValueIterator;
 			ValueIterator();
 			ValueIterator(const ValueConstIterator &other);
 			ValueIterator(const ValueIterator &other);
@@ -348,8 +330,7 @@ namespace Json
 	class Reader
 	{
 		public:
-			typedef char Char;
-			typedef const Char *Location;
+			using Location = const char*;
 			Reader();
 			Reader(const Features &features);
 			bool parse(const std::string& document, Value& root, bool collectComments = true);
@@ -357,7 +338,7 @@ namespace Json
 			bool parse(std::istream &is, Value& root, bool collectComments = true);
 			std::string getFormattedErrorMessages() const;
 		private:
-			enum TokenType {tokenEndOfStream = 0, tokenObjectBegin, tokenObjectEnd, tokenArrayBegin, tokenArrayEnd, tokenString,
+			enum TokenType{tokenEndOfStream = 0, tokenObjectBegin, tokenObjectEnd, tokenArrayBegin, tokenArrayEnd, tokenString,
 				tokenNumber, tokenTrue, tokenFalse, tokenNull, tokenArraySeparator, tokenMemberSeparator, tokenComment, tokenError};
 			struct Token { TokenType type_; Location start_, end_; };
 			struct ErrorInfo { Token token_; std::string message_; Location extra_; };
@@ -386,20 +367,17 @@ namespace Json
 			bool addErrorAndRecover(const std::string& message, Token &token, TokenType skipUntilToken);
 			void skipUntilSpace();
 			Value& currentValue();
-			Char getNextChar();
+			char getNextChar();
 			void getLocationLineAndColumn(Location location, int& line, int& column) const;
 			std::string getLocationLineAndColumn(Location location) const;
 			void addComment(Location begin, Location end, CommentPlacement placement);
 			void skipCommentTokens(Token &token);
-			typedef std::stack<Value *> Nodes;
+			typedef std::stack<Value* > Nodes;
 			Nodes nodes_;
 			Errors errors_;
 			std::string document_;
-			Location begin_;
-			Location end_;
-			Location current_;
-			Location lastValueEnd_;
-			Value *lastValue_;
+			Location begin_, end_, current_, lastValueEnd_;
+			Value* lastValue_;
 			std::string commentsBefore_;
 			Features features_;
 			bool collectComments_;

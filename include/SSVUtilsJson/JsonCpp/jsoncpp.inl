@@ -2,8 +2,8 @@
 // License: Academic Free License("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVJSONCPP_INL
-#define SSVJSONCPP_INL
+#ifndef SSVUJ_JSONCPP_INL
+#define SSVUJ_JSONCPP_INL
 
 #define JSON_ASSERT_UNREACHABLE assert(false)
 
@@ -54,9 +54,8 @@ namespace Json
 		while(value != 0);
 	}
 
-
-	inline static bool in(Reader::Char c, Reader::Char c1, Reader::Char c2, Reader::Char c3, Reader::Char c4) { return c == c1 || c == c2 || c == c3 || c == c4; }
-	inline static bool in(Reader::Char c, Reader::Char c1, Reader::Char c2, Reader::Char c3, Reader::Char c4, Reader::Char c5) { return c == c1 || c == c2 || c == c3 || c == c4 || c == c5; }
+	inline static bool in(char c, char c1, char c2, char c3, char c4) { return c == c1 || c == c2 || c == c3 || c == c4; }
+	inline static bool in(char c, char c1, char c2, char c3, char c4, char c5) { return c == c1 || c == c2 || c == c3 || c == c4 || c == c5; }
 	inline static bool containsNewLine(Reader::Location begin, Reader::Location end)
 	{
 		for(; begin < end; ++begin)
@@ -140,10 +139,7 @@ namespace Json
 	{
 		if(features_.allowComments_)
 		{
-			do
-			{
-				readToken(token);
-			}
+			do { readToken(token); }
 			while(token.type_ == tokenComment);
 		}
 		else readToken(token);
@@ -158,7 +154,7 @@ namespace Json
 	{
 		skipSpaces();
 		token.start_ = current_;
-		Char c{getNextChar()};
+		char c{getNextChar()};
 		bool ok{true};
 		switch(c)
 		{
@@ -185,7 +181,7 @@ namespace Json
 	{
 		while(current_ != end_)
 		{
-			Char c{*current_};
+			char c{*current_};
 			if(c == ' ' || c == '\t' || c == '\r' || c == '\n') ++current_;
 			else break;
 		}
@@ -201,7 +197,7 @@ namespace Json
 	inline bool Reader::readComment()
 	{
 		Location commentBegin = current_ - 1;
-		Char c = getNextChar();
+		char c = getNextChar();
 		bool successful = false;
 		if(c == '*') successful = readCStyleComment();
 		else if(c == '/') successful = readCppStyleComment();
@@ -233,7 +229,7 @@ namespace Json
 	{
 		while(current_ != end_)
 		{
-			Char c = getNextChar();
+			char c = getNextChar();
 			if(c == '*' && *current_ == '/') break;
 		}
 		return getNextChar() == '/';
@@ -242,7 +238,7 @@ namespace Json
 	{
 		while(current_ != end_)
 		{
-			Char c = getNextChar();
+			char c = getNextChar();
 			if(c == '\r' || c == '\n') break;
 		}
 		return true;
@@ -257,7 +253,7 @@ namespace Json
 	}
 	inline bool Reader::readString()
 	{
-		Char c = 0;
+		char c = 0;
 		while(current_ != end_)
 		{
 			c = getNextChar();
@@ -353,7 +349,7 @@ namespace Json
 		LargestUInt value = 0;
 		while(current < token.end_)
 		{
-			Char c = *current++;
+			char c = *current++;
 			if(c < '0' || c > '9') return addError("'" + std::string(token.start_, token.end_) + "' is not a number.", token);
 			UInt digit(c - '0');
 			if(value >= threshold)
@@ -380,7 +376,7 @@ namespace Json
 		char format[] = "%lf";
 		if(length <= bufferSize)
 		{
-			Char buffer[bufferSize + 1];
+			char buffer[bufferSize + 1];
 			memcpy(buffer, token.start_, length);
 			buffer[length] = 0;
 			count = sscanf(buffer, format, &value);
@@ -408,13 +404,13 @@ namespace Json
 		Location end = token.end_ - 1;
 		while(current != end)
 		{
-			Char c = *current++;
+			char c = *current++;
 			if(c == '"')
 				break;
 			else if(c == '\\')
 			{
 				if(current == end) return addError("Empty escape sequence in std::string", token, current);
-				Char escape = *current++;
+				char escape = *current++;
 				switch(escape)
 				{
 					case '"': decoded += '"'; break;
@@ -468,7 +464,7 @@ namespace Json
 		unicode = 0;
 		for(int index = 0; index < 4; ++index)
 		{
-			Char c = *current++;
+			char c = *current++;
 			unicode *= 16;
 			if(c >= '0' && c <= '9') unicode += c - '0';
 			else if(c >= 'a' && c <= 'f') unicode += c - 'a' + 10;
@@ -504,7 +500,7 @@ namespace Json
 		return recoverFromError(skipUntilToken);
 	}
 	inline Value& Reader::currentValue() { return *(nodes_.top()); }
-	inline Reader::Char Reader::getNextChar()
+	inline char Reader::getNextChar()
 	{
 		if(current_ == end_) return 0;
 		return *current_++;
@@ -516,7 +512,7 @@ namespace Json
 		line = 0;
 		while(current < location && current != end_)
 		{
-			Char c = *current++;
+			char c = *current++;
 			if(c == '\r')
 			{
 				if(*current == '\n') ++current;
@@ -1344,10 +1340,10 @@ namespace Json
 		}
 		return iterator();
 	}
-	inline PathArgument::PathArgument() : key_(), index_(), kind_(kindNone) {}
-	inline PathArgument::PathArgument(ArrayIndex index) : key_(), index_(index), kind_(kindIndex) {}
-	inline PathArgument::PathArgument(const char* key) : key_(key), index_(), kind_(kindKey) {}
-	inline PathArgument::PathArgument(const std::string& key) : key_(key.c_str()), index_(), kind_(kindKey) {}
+	inline PathArgument::PathArgument() : key_(), index_(), kind_(kindNone) { }
+	inline PathArgument::PathArgument(ArrayIndex index) : key_(), index_(index), kind_(kindIndex) { }
+	inline PathArgument::PathArgument(const char* key) : key_(key), index_(), kind_(kindKey) { }
+	inline PathArgument::PathArgument(const std::string& key) : key_(key.c_str()), index_(), kind_(kindKey) { }
 	inline Path::Path(const std::string& path, const PathArgument& a1, const PathArgument& a2, const PathArgument& a3, const PathArgument& a4, const PathArgument& a5)
 	{
 		InArgs in;
@@ -1814,8 +1810,7 @@ namespace Json
 	inline void StyledStreamWriter::writeArrayValue(const Value& value)
 	{
 		unsigned size = value.size();
-		if(size == 0)
-			pushValue("[]");
+		if(size == 0) pushValue("[]");
 		else
 		{
 			bool isArrayMultiLine = isMultineArray(value);

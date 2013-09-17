@@ -41,7 +41,7 @@ namespace ssvuj
 	inline static Key getKey(const ConstIterator& mItr)	{ return as<std::string>(mItr.key()); }
 
 	inline static bool isArray(const Obj& mObj) noexcept	{ return mObj.isArray(); }
-	inline static bool isObj(const Obj& mObj) noexcept		{ return mObj.isObj(); }
+	inline static bool isObj(const Obj& mObj) noexcept		{ return mObj.isObject(); }
 }
 
 #endif

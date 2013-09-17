@@ -6,7 +6,6 @@
 #define SSVUJ_GLOBAL_TYPEDEFS
 
 #include <string>
-#include <SSVJsonCpp/SSVJsonCpp.h>
 #include <SSVUtils/SSVUtils.h>
 
 namespace ssvuj
