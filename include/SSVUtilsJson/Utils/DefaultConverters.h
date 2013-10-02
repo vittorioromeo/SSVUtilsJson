@@ -62,10 +62,25 @@ namespace ssvuj
 		template<typename TKey, typename TValue, template<typename, typename, typename...> class TMap> struct Converter<TMap<TKey, TValue>>
 		{
 			using T = TMap<TKey, TValue>;
-			inline static void fromObj(T& mValue, const Obj& mObj)	{ for(auto itr(mObj.begin()); itr != mObj.end(); ++itr) mValue[itr.key().asString()] = getFromObj<TValue>(*itr); }
-			inline static void toObj(Obj& mObj, const T& mValue)	{ for(const auto& p : mValue) mObj[ssvu::toStr(p.first)] = getToObj<TValue>(p.second); }
+			inline static void fromObj(T& mValue, const Obj& mObj)
+			{
+				for(auto itr(mObj.begin()); itr != mObj.end(); ++itr)
+					mValue[getFromObj<TKey>((*itr)[0])] = getFromObj<TValue>((*itr)[1]);
+			}
+			inline static void toObj(Obj& mObj, const T& mValue)
+			{
+				unsigned int idx{0};
+				for(const auto& p : mValue)
+				{
+					mObj[idx][0] = getToObj<TKey>(p.first);
+					mObj[idx][1] = getToObj<TValue>(p.second);
+					++idx;
+				}
+			}
 		};
 	}
 }
 
 #endif
+
+// TODO: pairs? tuples? friendship? macros?
