@@ -41,6 +41,8 @@ namespace ssvuj
 	// extr and arch serialize a value to a single obj
 	template<typename T> inline static void extr(const Obj& mObj, T& mValue)	{ mValue = as<T>(mObj); }
 	template<typename T> inline static void arch(Obj& mObj, const T& mValue)	{ set<T>(mObj, mValue); }
+	template<typename TEnum, typename TUnderlying> inline static void extrEnum(const Obj& mObj, TEnum& mValue)	{ mValue = TEnum(as<TUnderlying>(mObj)); }
+	template<typename TEnum, typename TUnderlying> inline static void archEnum(Obj& mObj, const TEnum& mValue)	{ set<TUnderlying>(mObj, TUnderlying(mValue)); }
 	template<typename T> inline static T getExtr(const Obj& mObj)				{ T result; extr(mObj, result); return result; }
 	template<typename T> inline static Obj getArch(const T& mValue)				{ Obj result; arch(result, mValue); return result; }
 
