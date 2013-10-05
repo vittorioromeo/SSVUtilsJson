@@ -78,9 +78,15 @@ namespace ssvuj
 				}
 			}
 		};
+		template<typename T1, typename T2> struct Converter<std::pair<T1, T2>>
+		{
+			using T = std::pair<T1, T2>;
+			inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue.first = getFromObj<T1>(mObj[0]); mValue.second = getFromObj<T2>(mObj[1]); }
+			inline static void toObj(Obj& mObj, const T& mValue)	{ mObj[0] = getToObj<T1>(mValue.first); mObj[1] = getToObj<T2>(mValue.second); }
+		};
 	}
 }
 
 #endif
 
-// TODO: pairs? tuples? friendship? macros?
+// TODO: tuples? friendship? macros? docs

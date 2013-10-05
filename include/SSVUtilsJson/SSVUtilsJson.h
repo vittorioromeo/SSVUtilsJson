@@ -13,4 +13,8 @@
 #include "SSVUtilsJson/Utils/Io.h"
 #include "SSVUtilsJson/LinkedValue/LinkedValue.h"
 
+#ifndef SSVU_TEST_DISABLE
+	#include "SSVUtilsJson/Test/Tests.h"
+#endif
+
 #endif
