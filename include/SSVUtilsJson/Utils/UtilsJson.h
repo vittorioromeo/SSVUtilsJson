@@ -7,6 +7,7 @@
 
 #include "SSVUtilsJson/Global/Typedefs.h"
 #include "SSVUtilsJson/Utils/DefaultConverters.h"
+#include "SSVUtilsJson/Utils/TypeChecker.h"
 
 namespace ssvuj
 {
@@ -24,6 +25,8 @@ namespace ssvuj
 	template<typename T> inline static void set(Obj& mObj, const T& mValue)						{ Internal::Converter<T>::toObj(mObj, mValue); }
 	template<typename T> inline static void set(Obj& mObj, const Key& mKey, const T& mValue)	{ set(get(mObj, mKey), mValue); }
 	template<typename T> inline static void set(Obj& mArray, Idx mIdx, const T& mValue)			{ set(get(mArray, mIdx), mValue); }
+
+	template<typename T> inline static bool is(const Obj& mObj)	{ return Internal::isObjType<T>(mObj); }
 
 	template<typename T> inline static T as(const Obj& mObj)										{ return Internal::getFromObj<T>(mObj); }
 	template<typename T> inline static T as(const Obj& mObj, const Key& mKey)						{ return as<T>(get(mObj, mKey)); }
