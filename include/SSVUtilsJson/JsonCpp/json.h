@@ -121,7 +121,7 @@ namespace Json
 			Value(double value);
 			Value(const char* value);
 			Value(const char* beginValue, const char* endValue);
-			Value(const StaticString &value);
+			Value(const StaticString& value);
 			Value(const std::string& value);
 			Value(bool value);
 			Value(const Value& other);
