@@ -16,7 +16,7 @@ namespace ssvuj
 	{
 		inline static void logReadError(const Reader& mReader, const std::string& mFrom)
 		{
-			ssvu::lo("ssvuj::logReadError") << mReader.getFormattedErrorMessages() << std::endl << "From: [" << mFrom << "]" << std::endl;
+			ssvu::lo("ssvuj::logReadError") << mReader.getFormattedErrorMessages() << "\nFrom: [" << mFrom << "]" << std::endl;
 		}
 		inline static bool tryParse(Obj& mObj, Reader& mReader, const std::string& mSrc)
 		{
