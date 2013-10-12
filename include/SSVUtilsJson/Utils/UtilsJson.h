@@ -22,7 +22,7 @@ namespace ssvuj
 	inline static bool has(const Obj& mObj, const Key& mKey)	{ return mObj.isMember(mKey); }
 	inline static bool has(const Obj& mArray, Idx mIdx)			{ return size(mArray) > mIdx; }
 
-	template<typename T> inline static void set(Obj& mObj, const T& mValue)						{ Internal::Converter<T>::toObj(mObj, mValue); }
+	template<typename T> inline static void set(Obj& mObj, const T& mValue)						{ Converter<T>::toObj(mObj, mValue); }
 	template<typename T> inline static void set(Obj& mObj, const Key& mKey, const T& mValue)	{ set(get(mObj, mKey), mValue); }
 	template<typename T> inline static void set(Obj& mArray, Idx mIdx, const T& mValue)			{ set(get(mArray, mIdx), mValue); }
 

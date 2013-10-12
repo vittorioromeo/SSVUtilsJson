@@ -110,7 +110,7 @@ namespace Json
 			};
 
 		public:
-			typedef std::map<CZString, Value> ObjectValues;
+			using ObjectValues = std::map<CZString, Value>;
 			Value(ValueType type = nullValue);
 			Value(int value);
 			Value(UInt value);

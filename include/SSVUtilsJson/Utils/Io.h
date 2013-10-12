@@ -7,6 +7,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <SSVUtils/Log/Log.h>
 #include "SSVUtilsJson/Utils/UtilsJson.h"
 #include "SSVUtilsJson/Utils/DefaultConverters.h"
 
@@ -14,14 +15,11 @@ namespace ssvuj
 {
 	namespace Internal
 	{
-		inline static void logReadError(const Reader& mReader, const std::string& mFrom)
-		{
-			ssvu::lo("ssvuj::logReadError") << mReader.getFormattedErrorMessages() << "\nFrom: [" << mFrom << "]" << std::endl;
-		}
 		inline static bool tryParse(Obj& mObj, Reader& mReader, const std::string& mSrc)
 		{
 			if(mReader.parse(mSrc, mObj, false)) return true;
-			logReadError(mReader, mSrc); return false;
+			ssvu::lo("ssvuj::logReadError") << mReader.getFormattedErrorMessages() << "\nFrom: [" << mSrc << "]" << std::endl;
+			return false;
 		}
 	}
 

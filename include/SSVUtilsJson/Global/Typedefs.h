@@ -6,7 +6,7 @@
 #define SSVUJ_GLOBAL_TYPEDEFS
 
 #include <string>
-#include <SSVUtils/SSVUtils.h>
+#include <SSVUtils/FileSystem/FileSystem.h>
 
 namespace ssvuj
 {

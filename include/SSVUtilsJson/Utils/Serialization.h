@@ -16,25 +16,25 @@ namespace ssvuj
 		template<Idx TIdx, typename TArg> inline static void extrArrayHelper(const Obj& mArray, TArg& mArg) { mArg = as<TArg>(mArray, TIdx); }
 		template<Idx TIdx, typename TArg, typename... TArgs> inline static void extrArrayHelper(const Obj& mArray, TArg& mArg, TArgs&... mArgs)
 		{
-			mArg = as<TArg>(mArray, TIdx); extrArrayHelper<TIdx + 1>(mArray, std::forward<TArgs&>(mArgs)...);
+			extrArrayHelper<TIdx>(mArray, mArg); extrArrayHelper<TIdx + 1>(mArray, std::forward<TArgs&>(mArgs)...);
 		}
 
 		template<Idx TIdx, typename TArg> inline static void archArrayHelper(Obj& mArray, const TArg& mArg) { set(mArray, TIdx, mArg); }
 		template<Idx TIdx, typename TArg, typename... TArgs> inline static void archArrayHelper(Obj& mArray, const TArg& mArg, const TArgs&... mArgs)
 		{
-			set(mArray, TIdx, mArg); archArrayHelper<TIdx + 1>(mArray, std::forward<const TArgs&>(mArgs)...);
+			archArrayHelper<TIdx>(mArray, mArg); archArrayHelper<TIdx + 1>(mArray, std::forward<const TArgs&>(mArgs)...);
 		}
 
 		template<typename TArg> inline static void extrObjHelper(const Obj& mObj, const Key& mKey, TArg& mArg) { mArg = as<TArg>(mObj, mKey); }
 		template<typename TArg, typename... TArgs> inline static void extrObjHelper(const Obj& mObj, const Key& mKey, TArg& mArg, TArgs&... mArgs)
 		{
-			mArg = as<TArg>(mObj, mKey); extrObjHelper(mObj, std::forward<TArgs&>(mArgs)...);
+			extrObjHelper(mObj, mKey, mArg); extrObjHelper(mObj, std::forward<TArgs&>(mArgs)...);
 		}
 
 		template<typename TArg> inline static void archObjHelper(Obj& mObj, const Key& mKey, const TArg& mArg) { set(mObj, mKey, mArg); }
 		template<typename TArg, typename... TArgs> inline static void archObjHelper(Obj& mObj, const Key& mKey, TArg&& mArg, const TArgs&... mArgs)
 		{
-			set(mObj, mKey, mArg); archObjHelper(mObj, std::forward<const TArgs&>(mArgs)...);
+			archObjHelper(mObj, mKey, mArg); archObjHelper(mObj, std::forward<const TArgs&>(mArgs)...);
 		}
 	}
 

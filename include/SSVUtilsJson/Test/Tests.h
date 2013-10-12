@@ -2,6 +2,7 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
+#include <SSVUtils/Test/Test.h>
 #include "SSVUtilsJson/JsonCpp/json.h"
 #include "SSVUtilsJson/JsonCpp/jsoncpp.inl"
 #include "SSVUtilsJson/Utils/UtilsJson.h"
