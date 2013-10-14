@@ -15,11 +15,11 @@ namespace ssvuj
 		template<typename T> inline static bool isObjType(const Obj& mObj) { return TypeChecker<T>::isObj(mObj); }
 
 		template<> struct TypeChecker<Obj>				{ inline static bool isObj(const Obj&)		{ return true; } };
-		template<> struct TypeChecker<char> 			{ inline static bool isObj(const Obj& mObj) { return mObj.isInt(); } };
-		template<> struct TypeChecker<unsigned char> 	{ inline static bool isObj(const Obj& mObj) { return mObj.isUInt(); } };
-		template<> struct TypeChecker<int> 				{ inline static bool isObj(const Obj& mObj) { return mObj.isInt(); } };
+		template<> struct TypeChecker<char>				{ inline static bool isObj(const Obj& mObj) { return mObj.isInt(); } };
+		template<> struct TypeChecker<unsigned char>	{ inline static bool isObj(const Obj& mObj) { return mObj.isUInt(); } };
+		template<> struct TypeChecker<int>				{ inline static bool isObj(const Obj& mObj) { return mObj.isInt(); } };
 		template<> struct TypeChecker<float>			{ inline static bool isObj(const Obj& mObj) { return mObj.isDouble(); } };
-		template<> struct TypeChecker<double> 			{ inline static bool isObj(const Obj& mObj) { return mObj.isDouble(); } };
+		template<> struct TypeChecker<double>			{ inline static bool isObj(const Obj& mObj) { return mObj.isDouble(); } };
 		template<> struct TypeChecker<bool>				{ inline static bool isObj(const Obj& mObj) { return mObj.isBool(); } };
 		template<> struct TypeChecker<std::string>		{ inline static bool isObj(const Obj& mObj) { return mObj.isString(); } };
 		template<> struct TypeChecker<const char*>		{ inline static bool isObj(const Obj& mObj) { return mObj.isString(); } };
