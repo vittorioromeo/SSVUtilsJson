@@ -423,7 +423,7 @@ namespace Json
 					case 't': decoded += '\t'; break;
 					case 'u':
 						{
-							unsigned int unicode;
+							unsigned int unicode{0u};
 							if(!decodeUnicodeCodePoint(token, current, end, unicode)) return false;
 							decoded += codePointToUTF8(unicode);
 						}
