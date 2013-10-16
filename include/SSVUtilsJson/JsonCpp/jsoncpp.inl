@@ -798,13 +798,7 @@ namespace Json
 	inline Value::Value(const std::string& value) : type_(stringValue), allocated_(true), comments_(nullptr)						{ value_.string_ = duplicateStringValue(value.c_str(),(unsigned int)value.size()); }
 	inline Value::Value(const StaticString& value) : type_(stringValue), allocated_(false), comments_(nullptr)						{ value_.string_ = const_cast<char*>(value.c_str()); }
 	inline Value::Value(bool value) : type_(booleanValue), allocated_(false), comments_(nullptr)									{ value_.bool_ = value; }
-
-	inline Value::Value(const Value& other)
-		: type_(other.type_),
-		  allocated_(false)
-
-		  ,
-		  comments_(nullptr)
+	inline Value::Value(const Value& other) : type_(other.type_), allocated_(false), comments_(nullptr)
 	{
 		switch(type_)
 		{

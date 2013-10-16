@@ -36,7 +36,7 @@ namespace Json
 	class FastWriter;
 	class StyledWriter;
 	class Reader;
-	class Features;
+	struct Features;
 	class StaticString;
 	class Path;
 	class PathArgument;
