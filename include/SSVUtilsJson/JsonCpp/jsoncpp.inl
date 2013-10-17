@@ -647,20 +647,8 @@ namespace Json
 		return myDistance;
 
 	}
-	inline bool ValueIteratorBase::isEqual(const SelfType& other) const
-	{
-		if(isNull_)
-		{
-			return other.isNull_;
-		}
-		return current_ == other.current_;
-
-	}
-	inline void ValueIteratorBase::copy(const SelfType& other)
-	{
-		current_ = other.current_;
-
-	}
+	inline bool ValueIteratorBase::isEqual(const SelfType& other) const { return isNull_ ? other.isNull_ : current_ == other.current_; }
+	inline void ValueIteratorBase::copy(const SelfType& other) { current_ = other.current_; }
 	inline Value ValueIteratorBase::key() const
 	{
 		const Value::CZString czstring =(*current_).first;
@@ -807,7 +795,7 @@ namespace Json
 				if(other.value_.string_)
 				{
 					value_.string_ = duplicateStringValue(other.value_.string_);
-					allocated_ = true;
+					allocated_ = static_cast<int>(true);
 				}
 				else value_.string_ = nullptr;
 				break;
