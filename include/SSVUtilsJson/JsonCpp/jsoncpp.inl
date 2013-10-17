@@ -731,7 +731,7 @@ namespace Json
 	inline Value::CZString::CZString(const char* cstr, DuplicationPolicy allocate) : cstr_(allocate == duplicate ? duplicateStringValue(cstr) : cstr), index_(allocate) {}
 	inline Value::CZString::CZString(const CZString& other)
 		: cstr_(other.index_ != noDuplication && other.cstr_ != nullptr ? duplicateStringValue(other.cstr_) : other.cstr_),
-		  index_(other.cstr_ ?(other.index_ == noDuplication ? noDuplication : duplicate) : other.index_) {}
+		  index_(other.cstr_ ? (other.index_ == noDuplication ? noDuplication : duplicate) : other.index_) {}
 	inline Value::CZString::~CZString()
 	{
 		if(cstr_ && index_ == duplicate) releaseStringValue(const_cast<char*>(cstr_));
@@ -741,12 +741,7 @@ namespace Json
 		std::swap(cstr_, other.cstr_);
 		std::swap(index_, other.index_);
 	}
-	inline Value::CZString& Value::CZString::operator=(const CZString& other)
-	{
-		CZString temp(other);
-		swap(temp);
-		return *this;
-	}
+	inline Value::CZString& Value::CZString::operator=(const CZString& other) { CZString temp(other); swap(temp); return *this; }
 	inline bool Value::CZString::operator<(const CZString& other) const
 	{
 		if(cstr_) return strcmp(cstr_, other.cstr_) < 0;
