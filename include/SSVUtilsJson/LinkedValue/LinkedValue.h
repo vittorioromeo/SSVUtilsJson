@@ -27,7 +27,7 @@ namespace ssvuj
 		};
 	}
 
-	template<typename T> class LinkedValue : public Internal::LinkedValueBase
+	template<typename T> class LinkedValue final : public Internal::LinkedValueBase
 	{
 		private:
 			T value;
