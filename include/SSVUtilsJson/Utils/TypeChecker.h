@@ -12,7 +12,7 @@ namespace ssvuj
 	namespace Internal
 	{
 		template<typename T> struct TypeChecker;
-		template<typename T> inline static bool isObjType(const Obj& mObj) { return TypeChecker<T>::isObj(mObj); }
+		template<typename T> inline bool isObjType(const Obj& mObj) { return TypeChecker<T>::isObj(mObj); }
 
 		template<> struct TypeChecker<Obj>				{ inline static bool isObj(const Obj&)		{ return true; } };
 		template<> struct TypeChecker<char>				{ inline static bool isObj(const Obj& mObj) { return mObj.isInt(); } };

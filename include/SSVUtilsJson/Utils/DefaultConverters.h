@@ -15,8 +15,8 @@ namespace ssvuj
 	template<typename T> struct Converter;
 	namespace Internal
 	{
-		template<typename T> inline static T getFromObj(const Obj& mObj) { T result; Converter<T>::fromObj(result, mObj); return result; }
-		template<typename T> inline static Obj getToObj(const T& mValue) { Obj result; Converter<T>::toObj(result, mValue); return result; }
+		template<typename T> inline T getFromObj(const Obj& mObj) { T result; Converter<T>::fromObj(result, mObj); return result; }
+		template<typename T> inline Obj getToObj(const T& mValue) { Obj result; Converter<T>::toObj(result, mValue); return result; }
 		template<typename T> struct CDefaultToObj { inline static void toObj(Obj& mObj, const T& mValue) { mObj = mValue; } };
 	}
 
