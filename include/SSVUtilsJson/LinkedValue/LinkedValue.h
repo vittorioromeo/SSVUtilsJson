@@ -54,8 +54,8 @@ namespace ssvuj
 
 			template<typename T> inline LinkedValue<T>& create(std::string mName) { auto result(new LinkedValue<T>{std::move(mName)}); values.emplace_back(result); return *result; }
 
-			inline void syncFromObj()	{ for(auto& lv : values) lv->syncFrom(obj); }
-			inline void syncToObj()		{ for(const auto& lv : values) lv->syncTo(obj); }
+			inline void syncFromObj()		{ for(auto& lv : values) lv->syncFrom(obj); }
+			inline void syncToObj()	const	{ for(const auto& lv : values) lv->syncTo(obj); }
 
 			inline const Container& getValues() const noexcept { return values; }
 	};
