@@ -715,7 +715,6 @@ namespace Json
 		if(value) free(value);
 	}
 
-	inline Value::CommentInfo::CommentInfo() : comment_(nullptr) {}
 	inline Value::CommentInfo::~CommentInfo()
 	{
 		if(comment_) releaseStringValue(comment_);
@@ -756,7 +755,7 @@ namespace Json
 	inline const char* Value::CZString::c_str() const { return cstr_; }
 	inline bool Value::CZString::isStaticString() const { return index_ == noDuplication; }
 
-	inline Value::Value(ValueType type) : type_(type), allocated_(false), comments_(nullptr)
+	inline Value::Value(ValueType type) : type_(type), allocated_(false)
 	{
 		switch(type)
 		{
@@ -769,19 +768,19 @@ namespace Json
 			default: JSON_ASSERT_UNREACHABLE;
 		}
 	}
-	inline Value::Value(UInt value) : type_(uintValue), allocated_(false), comments_(nullptr)										{ value_.uint_ = value; }
-	inline Value::Value(int value) : type_(intValue), allocated_(false), comments_(nullptr)											{ value_.int_ = value; }
+	inline Value::Value(UInt value) : type_(uintValue), allocated_(false)										{ value_.uint_ = value; }
+	inline Value::Value(int value) : type_(intValue), allocated_(false)											{ value_.int_ = value; }
 #ifdef JSON_HAS_INT64
-	inline Value::Value(Int64 value) : type_(intValue), allocated_(false), comments_(nullptr)										{ value_.int_ = value; }
-	inline Value::Value(UInt64 value) : type_(uintValue), allocated_(false), comments_(nullptr)										{ value_.uint_ = value; }
+	inline Value::Value(Int64 value) : type_(intValue), allocated_(false)										{ value_.int_ = value; }
+	inline Value::Value(UInt64 value) : type_(uintValue), allocated_(false)										{ value_.uint_ = value; }
 #endif
-	inline Value::Value(double value) : type_(realValue), allocated_(false), comments_(nullptr)										{ value_.real_ = value; }
-	inline Value::Value(const char* value) : type_(stringValue), allocated_(true),  comments_(nullptr)								{ value_.string_ = duplicateStringValue(value); }
-	inline Value::Value(const char* beginValue, const char* endValue) : type_(stringValue), allocated_(true), comments_(nullptr)	{ value_.string_ = duplicateStringValue(beginValue,(unsigned int)(endValue - beginValue)); }
-	inline Value::Value(const std::string& value) : type_(stringValue), allocated_(true), comments_(nullptr)						{ value_.string_ = duplicateStringValue(value.c_str(),(unsigned int)value.size()); }
-	inline Value::Value(const StaticString& value) : type_(stringValue), allocated_(false), comments_(nullptr)						{ value_.string_ = const_cast<char*>(value.c_str()); }
-	inline Value::Value(bool value) : type_(booleanValue), allocated_(false), comments_(nullptr)									{ value_.bool_ = value; }
-	inline Value::Value(const Value& other) : type_(other.type_), allocated_(false), comments_(nullptr)
+	inline Value::Value(double value) : type_(realValue), allocated_(false)										{ value_.real_ = value; }
+	inline Value::Value(const char* value) : type_(stringValue), allocated_(true)								{ value_.string_ = duplicateStringValue(value); }
+	inline Value::Value(const char* beginValue, const char* endValue) : type_(stringValue), allocated_(true)	{ value_.string_ = duplicateStringValue(beginValue,(unsigned int)(endValue - beginValue)); }
+	inline Value::Value(const std::string& value) : type_(stringValue), allocated_(true)						{ value_.string_ = duplicateStringValue(value.c_str(),(unsigned int)value.size()); }
+	inline Value::Value(const StaticString& value) : type_(stringValue), allocated_(false)						{ value_.string_ = const_cast<char*>(value.c_str()); }
+	inline Value::Value(bool value) : type_(booleanValue), allocated_(false)									{ value_.bool_ = value; }
+	inline Value::Value(const Value& other) : type_(other.type_), allocated_(false)
 	{
 		switch(type_)
 		{

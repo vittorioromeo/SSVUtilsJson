@@ -204,10 +204,10 @@ namespace Json
 			Value& resolveReference(const char* key, bool isStatic);
 			struct CommentInfo
 			{
-				CommentInfo();
+				inline CommentInfo() = default;
 				~CommentInfo();
 				void setComment(const char* text);
-				char *comment_;
+				char* comment_{nullptr};
 			};
 			union ValueHolder
 			{
@@ -219,8 +219,8 @@ namespace Json
 				ObjectValues *map_;
 			} value_;
 			ValueType type_ : 8;
-			int allocated_ : 1;
-			CommentInfo *comments_;
+			bool allocated_ : 1;
+			CommentInfo* comments_{nullptr};
 	};
 	class PathArgument
 	{
