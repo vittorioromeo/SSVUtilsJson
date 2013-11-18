@@ -1,5 +1,5 @@
 FIND_PATH(SSVUTILSJSON_INCLUDE_DIR
-  NAMES SSVUtilsJson/SSVUtilsJson.h
+  NAMES SSVUtilsJson/SSVUtilsJson.hpp
   PATH_SUFFIXES include/
   PATHS "${PROJECT_SOURCE_DIR}/../SSVUtilsJson/"
   "${PROJECT_SOURCE_DIR}/extlibs/SSVUtilsJson/"
