@@ -344,7 +344,7 @@ namespace Json
 		Location current = token.start_;
 		bool isNegative = *current == '-';
 		if(isNegative) ++current;
-		LargestUInt maxIntegerValue = isNegative ? LargestUInt(-Value::minLargestInt) : Value::maxLargestUInt;
+		LargestUInt maxIntegerValue = isNegative ? LargestUInt(Value::minLargestInt) : Value::maxLargestUInt;
 		LargestUInt threshold = maxIntegerValue / 10;
 		LargestUInt value = 0;
 		while(current < token.end_)
@@ -730,7 +730,7 @@ namespace Json
 	inline Value::CZString::CZString(const char* cstr, DuplicationPolicy allocate) : cstr_(allocate == duplicate ? duplicateStringValue(cstr) : cstr), index_(allocate) {}
 	inline Value::CZString::CZString(const CZString& other)
 		: cstr_(other.index_ != noDuplication && other.cstr_ != nullptr ? duplicateStringValue(other.cstr_) : other.cstr_),
-		  index_(other.cstr_ ? (other.index_ == static_cast<unsigned int>(noDuplication) ? noDuplication : duplicate) : other.index_) {}
+		  index_(other.cstr_ ? (other.index_ == static_cast<unsigned int>(noDuplication) ? static_cast<unsigned int>(noDuplication) : static_cast<unsigned int>(duplicate)) : other.index_) {}
 	inline Value::CZString::~CZString()
 	{
 		if(cstr_ && index_ == duplicate) releaseStringValue(const_cast<char*>(cstr_));
