@@ -373,7 +373,7 @@ namespace Json
 		{
 			return addError("Unable to parse token length", token);
 		}
-		char format[] = "%lf";
+		char format[]{"%lf"};
 		if(length <= bufferSize)
 		{
 			char buffer[bufferSize + 1];
