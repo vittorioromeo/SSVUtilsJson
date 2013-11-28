@@ -11,7 +11,7 @@
 #include "SSVUtilsJson/LinkedValue/LinkedValue.hpp"
 
 #ifndef SSVU_TEST_DISABLE
-	#include "SSVUtilsJson/Test/Tests.hpp"
+	#include "SSVUtilsJson/Tests/Tests.hpp"
 #endif
 
 #endif
