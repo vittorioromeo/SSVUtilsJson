@@ -6,7 +6,7 @@
 #define SSVUJ_LINKEDVALUE
 
 #include <vector>
-#include "SSVUtilsJson/Utils/UtilsJson.hpp"
+#include "SSVUtilsJson/Utils/Utils.hpp"
 #include "SSVUtilsJson/Global/Typedefs.hpp"
 
 namespace ssvuj

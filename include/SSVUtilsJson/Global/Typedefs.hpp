@@ -7,6 +7,7 @@
 
 #include <string>
 #include <SSVUtils/FileSystem/FileSystem.hpp>
+#include "SSVUtilsJson/JsonCpp/JsonCpp.hpp"
 
 namespace ssvuj
 {

@@ -11,8 +11,8 @@
 #include "SSVUtilsJson/Utils/Io.hpp"
 #include "SSVUtilsJson/LinkedValue/LinkedValue.hpp"
 
-#ifndef SSVUJ_TEST_TESTS
-#define SSVUJ_TEST_TESTS
+#ifndef SSVUJ_TESTS
+#define SSVUJ_TESTS
 
 SSVU_TEST("SSVUJ conversion tests")
 {

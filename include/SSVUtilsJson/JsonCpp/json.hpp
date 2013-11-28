@@ -3,8 +3,8 @@
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 // Fork of: http://jsoncpp.sourceforge.net/
 
-#ifndef SSVUJ_JSONCPP
-#define SSVUJ_JSONCPP
+#ifndef SSVUJ_JSONCPP_JSON
+#define SSVUJ_JSONCPP_JSON
 
 #include <string>
 #include <vector>

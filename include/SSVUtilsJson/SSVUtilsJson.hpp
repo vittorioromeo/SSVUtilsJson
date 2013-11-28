@@ -5,12 +5,9 @@
 #ifndef SSVUTILSJSON
 #define SSVUTILSJSON
 
-#include "SSVUtilsJson/JsonCpp/json.hpp"
-#include "SSVUtilsJson/JsonCpp/jsoncpp.inl"
-#include "SSVUtilsJson/Utils/UtilsJson.hpp"
-#include "SSVUtilsJson/Utils/DefaultConverters.hpp"
-#include "SSVUtilsJson/Utils/Serialization.hpp"
-#include "SSVUtilsJson/Utils/Io.hpp"
+#include "SSVUtilsJson/JsonCpp/JsonCpp.hpp"
+#include "SSVUtilsJson/Global/Typedefs.hpp"
+#include "SSVUtilsJson/Utils/Utils.hpp"
 #include "SSVUtilsJson/LinkedValue/LinkedValue.hpp"
 
 #ifndef SSVU_TEST_DISABLE
