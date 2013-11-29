@@ -16,7 +16,7 @@ namespace ssvuj
 	using Idx = unsigned int;
 	using Writer = Json::StyledStreamWriter;
 	using Reader = Json::Reader;
-	using Path = ssvu::FileSystem::Path;
+	using Path = ssvufs::Path;
 	using Iterator = typename Json::Value::iterator;
 	using ConstIterator = typename Json::Value::const_iterator;
 }

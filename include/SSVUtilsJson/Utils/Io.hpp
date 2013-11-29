@@ -24,7 +24,7 @@ namespace ssvuj
 	}
 
 	inline Obj readFromString(const std::string& mStr)	{ Obj result; Reader reader; Internal::tryParse(result, reader, mStr); return result; }
-	inline Obj readFromFile(const Path& mPath)			{ Obj result; Reader reader; Internal::tryParse(result, reader, ssvu::FileSystem::getFileContents(mPath)); return result; }
+	inline Obj readFromFile(const Path& mPath)			{ Obj result; Reader reader; Internal::tryParse(result, reader, ssvufs::getFileContents(mPath)); return result; }
 
 	template<typename T> inline void writeToStream(const Obj& mObj, T& mStream)	{ Writer writer; writer.write(mStream, mObj); mStream.flush(); }
 	inline void writeToString(const Obj& mObj, std::string& mStr)				{ std::ostringstream o; writeToStream(mObj, o); mStr = o.str(); }
