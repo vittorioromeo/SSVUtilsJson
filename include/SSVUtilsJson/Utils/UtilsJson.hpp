@@ -16,8 +16,8 @@ namespace ssvuj
 	inline const Obj& get(const Obj& mObj, const Key& mKey)	{ return mObj[mKey]; }
 	inline const Obj& get(const Obj& mArray, Idx mIdx)		{ return mArray[mIdx]; }
 
-	inline unsigned int size(const Obj& mArray)					{ return mArray.size(); }
-	inline unsigned int size(const Obj& mObj, const Key& mKey)	{ return get(mObj, mKey).size(); }
+	inline std::size_t size(const Obj& mArray)					{ return mArray.size(); }
+	inline std::size_t size(const Obj& mObj, const Key& mKey)	{ return get(mObj, mKey).size(); }
 
 	inline bool has(const Obj& mObj, const Key& mKey)	{ return mObj.isMember(mKey); }
 	inline bool has(const Obj& mArray, Idx mIdx)		{ return size(mArray) > mIdx; }
