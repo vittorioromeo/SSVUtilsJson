@@ -51,6 +51,23 @@ SSVU_TEST("SSVUJ conversion tests")
 }
 SSVU_TEST_END();
 
+SSVU_TEST("SSVUJ utils tests")
+{
+	using namespace std;
+	using namespace ssvu;
+	using namespace ssvuj;
+
+	Obj obj;
+	EXPECT(ssvuj::size(obj) == 0);
+	EXPECT(!ssvuj::has(obj, "member"));
+	EXPECT(ssvuj::as<int>(obj, "member", 1) == 1);
+	EXPECT(!ssvuj::has(obj, "member"));
+
+	ssvuj::set(obj, "member", 10);
+	EXPECT(ssvuj::size(obj) == 1);
+	EXPECT(ssvuj::has(obj, "member"));
+	EXPECT(ssvuj::as<int>(obj, "member", 1) == 10);
+}
+SSVU_TEST_END();
+
 #endif
-
-
