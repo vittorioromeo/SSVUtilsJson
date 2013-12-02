@@ -13,7 +13,11 @@
 
 namespace ssvuj
 {
-	template<typename> struct Converter;
+	template<typename T> struct Converter
+	{
+		inline static void fromObj(T& mValue, const Obj& mObj);
+		inline static void toObj(Obj& mObj, const T& mValue) { mObj = mValue; }
+	};
 
 	namespace Internal
 	{
