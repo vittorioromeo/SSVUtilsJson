@@ -8,11 +8,13 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <tuple>
 #include "SSVUtilsJson/Global/Typedefs.hpp"
 
 namespace ssvuj
 {
-	template<typename T> struct Converter;
+	template<typename> struct Converter;
+
 	namespace Internal
 	{
 		template<typename T> inline T getFromObj(const Obj& mObj) { T result; Converter<T>::fromObj(result, mObj); return result; }
@@ -20,21 +22,19 @@ namespace ssvuj
 		template<typename T> struct CDefaultToObj { inline static void toObj(Obj& mObj, const T& mValue) { mObj = mValue; } };
 	}
 
-	template<typename T> struct Converter
-	{
-		inline static void fromObj(T& mValue, const Obj& mObj);
-		inline static void toObj(Obj& mObj, const T& mValue) { mObj = mValue; }
-	};
+	#define SSVUJ_DEFINE_DTO_CONVERTER(mType) template<> struct Converter<mType> : Internal::CDefaultToObj<mType>
 
-	template<> struct Converter<Obj> : Internal::CDefaultToObj<Obj>						{ using T = Obj;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj; } };
-	template<> struct Converter<char> :Internal:: CDefaultToObj<char>					{ using T = char;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = static_cast<T>(mObj.asInt()); } };
-	template<> struct Converter<unsigned char> : Internal::CDefaultToObj<unsigned char>	{ using T = unsigned char;	inline static void fromObj(T& mValue, const Obj& mObj) { mValue = static_cast<T>(mObj.asInt()); } };
-	template<> struct Converter<int> : Internal::CDefaultToObj<int>						{ using T = int;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asInt(); } };
-	template<> struct Converter<float> : Internal::CDefaultToObj<float>					{ using T = float;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asFloat(); } };
-	template<> struct Converter<double> : Internal::CDefaultToObj<double>				{ using T = double;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asDouble(); } };
-	template<> struct Converter<bool> : Internal::CDefaultToObj<bool>					{ using T = bool;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asBool(); } };
-	template<> struct Converter<std::string> : Internal::CDefaultToObj<std::string>		{ using T = std::string;	inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asString(); } };
-	template<> struct Converter<const char*> : Internal::CDefaultToObj<const char*>		{ using T = const char*;	inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asCString(); } };
+	SSVUJ_DEFINE_DTO_CONVERTER(Obj)				{ using T = Obj;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj; } };
+	SSVUJ_DEFINE_DTO_CONVERTER(char)			{ using T = char;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = static_cast<T>(mObj.asInt()); } };
+	SSVUJ_DEFINE_DTO_CONVERTER(unsigned char)	{ using T = unsigned char;	inline static void fromObj(T& mValue, const Obj& mObj) { mValue = static_cast<T>(mObj.asInt()); } };
+	SSVUJ_DEFINE_DTO_CONVERTER(int)				{ using T = int;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asInt(); } };
+	SSVUJ_DEFINE_DTO_CONVERTER(float)			{ using T = float;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asFloat(); } };
+	SSVUJ_DEFINE_DTO_CONVERTER(double)			{ using T = double;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asDouble(); } };
+	SSVUJ_DEFINE_DTO_CONVERTER(bool)			{ using T = bool;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asBool(); } };
+	SSVUJ_DEFINE_DTO_CONVERTER(std::string)		{ using T = std::string;	inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asString(); } };
+	SSVUJ_DEFINE_DTO_CONVERTER(const char*)		{ using T = const char*;	inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asCString(); } };
+
+	#undef SSVUJ_DEFINE_DTO_CONVERTER
 
 	template<> struct Converter<long>
 	{
@@ -85,8 +85,32 @@ namespace ssvuj
 		inline static void fromObj(T& mValue, const Obj& mObj)	{ mValue.first = Internal::getFromObj<T1>(mObj[0]); mValue.second = Internal::getFromObj<T2>(mObj[1]); }
 		inline static void toObj(Obj& mObj, const T& mValue)	{ mObj[0] = Internal::getToObj<T1>(mValue.first); mObj[1] = Internal::getToObj<T2>(mValue.second); }
 	};
+
+	namespace Internal
+	{
+		template<std::size_t I = 0, typename... TArgs> inline ssvu::EnableIf<I == sizeof...(TArgs), void> setTpl(std::tuple<TArgs...>&, const Obj&) { }
+		template<std::size_t I = 0, typename... TArgs> inline ssvu::EnableIf<I < sizeof...(TArgs), void> setTpl(std::tuple<TArgs...>& mTpl, const Obj& mObj)
+		{
+			std::get<I>(mTpl) = Internal::getFromObj<typename std::tuple_element<I, ssvu::RemoveReference<decltype(mTpl)>>::type>(mObj[Idx(I)]);
+			setTpl<I + 1, TArgs...>(mTpl, mObj);
+		}
+
+		template<std::size_t I = 0, typename... TArgs> inline ssvu::EnableIf<I == sizeof...(TArgs), void> getFromTpl(Obj&, const std::tuple<TArgs...>&) { }
+		template<std::size_t I = 0, typename... TArgs> inline ssvu::EnableIf<I < sizeof...(TArgs), void> getFromTpl(Obj& mObj, const std::tuple<TArgs...>& mTpl)
+		{
+			mObj[Idx(I)] = Internal::getToObj<ssvu::RemoveConst<typename std::tuple_element<I, ssvu::RemoveReference<decltype(mTpl)>>::type>>(std::get<I>(mTpl));
+			getFromTpl<I + 1, TArgs...>(mObj, mTpl);
+		}
+	}
+
+	template<typename... TArgs> struct Converter<std::tuple<TArgs...>>
+	{
+		using T = std::tuple<TArgs...>;
+		inline static void fromObj(T& mValue, const Obj& mObj)	{ Internal::setTpl(mValue, mObj); }
+		inline static void toObj(Obj& mObj, const T& mValue)	{ Internal::getFromTpl(mObj, mValue); }
+	};
 }
 
 #endif
 
-// TODO: tuples? friendship? macros? docs
+// TODO: friendship? docs

@@ -20,8 +20,8 @@ SSVU_TEST("SSVUJ conversion tests")
 	using namespace ssvu;
 	using namespace ssvuj;
 
-	#define EXECTEST		do { string s; writeToString(getArch<Type>(original), s); EXPECT(getExtr<Type>(readFromString(s)) == original); } while(0)
-	#define MAKETEST(T, V)	do { using Type = T; Type original(V); EXECTEST; } while(0)
+	#define EXECTEST		do { string s; writeToString(getArch<Type>(original), s); EXPECT(getExtr<Type>(readFromString(s)) == original); } while(false)
+	#define MAKETEST(T, V)	do { using Type = T; Type original(V); EXECTEST; } while(false)
 
 	MAKETEST(char, 'a');
 	MAKETEST(unsigned char, 'a');
@@ -45,6 +45,8 @@ SSVU_TEST("SSVUJ conversion tests")
 	MAKETEST(decltype(tmap), tmap);
 	std::pair<int,int> tpair{125,231};
 	MAKETEST(decltype(tpair), tpair);
+	std::tuple<int, float, std::string, char> ttpl{1, 5.f, "ciao", 'p'};
+	MAKETEST(decltype(ttpl), ttpl);
 
 	#undef EXECTEST
 	#undef MAKETEST
