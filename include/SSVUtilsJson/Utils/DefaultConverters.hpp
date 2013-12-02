@@ -11,6 +11,8 @@
 #include <tuple>
 #include "SSVUtilsJson/Global/Typedefs.hpp"
 
+#define SSVUJ_CONVERTER_FRIEND template<typename> friend struct ssvuj::Converter
+
 namespace ssvuj
 {
 	template<typename T> struct Converter
@@ -117,4 +119,4 @@ namespace ssvuj
 
 #endif
 
-// TODO: friendship? docs
+// TODO: docs
