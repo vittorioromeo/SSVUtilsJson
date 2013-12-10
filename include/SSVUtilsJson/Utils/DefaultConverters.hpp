@@ -115,6 +115,13 @@ namespace ssvuj
 		inline static void fromObj(T& mValue, const Obj& mObj)	{ Internal::setTpl(mValue, mObj); }
 		inline static void toObj(Obj& mObj, const T& mValue)	{ Internal::getFromTpl(mObj, mValue); }
 	};
+
+	template<typename TItem, std::size_t TN> struct Converter<TItem[TN]>
+	{
+		using T = TItem[TN];
+		inline static void fromObj(T& mValue, const Obj& mObj)	{ for(auto i(0u); i < TN; ++i) mValue[i] = Internal::getFromObj<TItem>(mObj[i]); }
+		inline static void toObj(Obj& mObj, const T& mValue)	{ for(auto i(0u); i < TN; ++i) mObj[i] = Internal::getToObj<TItem>(mValue[i]); }
+	};
 }
 
 #endif

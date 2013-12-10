@@ -48,6 +48,19 @@ SSVU_TEST("SSVUJ conversion tests")
 	std::tuple<int, float, std::string, char> ttpl{1, 5.f, "ciao", 'p'};
 	MAKETEST(decltype(ttpl), ttpl);
 
+	{
+		int array[2]{15, 25};
+		string s;
+		writeToString(getArch<decltype(array)>(array), s);
+
+		int res[2];
+		Converter<decltype(res)>::fromObj(res, readFromString(s));
+
+		EXPECT(res[0] == array[0]);
+		EXPECT(res[1] == array[1]);
+	}
+
+
 	#undef EXECTEST
 	#undef MAKETEST
 }
