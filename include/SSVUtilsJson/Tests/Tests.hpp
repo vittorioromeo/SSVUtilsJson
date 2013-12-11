@@ -20,7 +20,7 @@ SSVU_TEST("SSVUJ conversion tests")
 	using namespace ssvu;
 	using namespace ssvuj;
 
-	#define EXECTEST		do { string s; writeToString(getArch<Type>(original), s); EXPECT(getExtr<Type>(readFromString(s)) == original); } while(false)
+	#define EXECTEST		do { string s; writeToString(getArch<Type>(original), s); EXPECT(getExtr<Type>(getFromString(s)) == original); } while(false)
 	#define MAKETEST(T, V)	do { using Type = T; Type original(V); EXECTEST; } while(false)
 
 	MAKETEST(char, 'a');
@@ -54,7 +54,7 @@ SSVU_TEST("SSVUJ conversion tests")
 		writeToString(getArch<decltype(array)>(array), s);
 
 		int res[2];
-		Converter<decltype(res)>::fromObj(res, readFromString(s));
+		Converter<decltype(res)>::fromObj(res, getFromString(s));
 
 		EXPECT(res[0] == array[0]);
 		EXPECT(res[1] == array[1]);

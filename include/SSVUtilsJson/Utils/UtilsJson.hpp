@@ -64,6 +64,12 @@ namespace ssvuj
 	/// @param mValue Value to set.
 	template<typename T> inline void set(Obj& mArray, Idx mIdx, const T& mValue) { set(get(mArray, mIdx), mValue); }
 
+	/// @brief Sets a value from a JSON Obj.
+	/// @details By default, this does not call the value's constructor.
+	/// @param mValue Value to be set.
+	/// @param mObj Source Obj.
+	template<typename T> inline void setVal(T& mValue, const Obj& mObj) { Converter<T>::fromObj(mValue, mObj); }
+
 	/// @brief Checks the type of a JSON Obj's value.
 	/// @param mObj Obj to check.
 	template<typename T> inline bool is(const Obj& mObj) noexcept { return Internal::isObjType<T>(mObj); }

@@ -23,13 +23,16 @@ namespace ssvuj
 		}
 	}
 
-	inline Obj readFromString(const std::string& mStr)	{ Obj result; Reader reader; Internal::tryParse(result, reader, mStr); return result; }
-	inline Obj readFromFile(const Path& mPath)			{ Obj result; Reader reader; Internal::tryParse(result, reader, ssvufs::getFileContents(mPath)); return result; }
+	inline void readFromString(Obj& mObj, const std::string& mStr)	{ Reader reader; Internal::tryParse(mObj, reader, mStr); }
+	inline void readFromFile(Obj& mObj, const Path& mPath)			{ Reader reader; Internal::tryParse(mObj, reader, ssvufs::getFileContents(mPath)); }
 
-	template<typename T> inline void writeToStream(const Obj& mObj, T& mStream)	{ Writer writer; writer.write(mStream, mObj); mStream.flush(); }
-	inline void writeToString(const Obj& mObj, std::string& mStr)				{ std::ostringstream o; writeToStream(mObj, o); mStr = o.str(); }
-	inline void writeToFile(const Obj& mObj, const Path& mPath)					{ std::ofstream o{mPath}; writeToStream(mObj, o); o.close(); }
-	inline std::string getWriteToString(const Obj& mObj)						{ std::string result; writeToString(mObj, result); return result; }
+	inline Obj getFromString(const std::string& mStr)	{ Obj result; readFromString(result, mStr); return result; }
+	inline Obj getFromFile(const Path& mPath)			{ Obj result; readFromFile(result, mPath); return result; }
+
+	inline void writeToStream(const Obj& mObj, std::ostream& mStream)	{ Writer writer; writer.write(mStream, mObj); mStream.flush(); }
+	inline void writeToString(const Obj& mObj, std::string& mStr)		{ std::ostringstream o; writeToStream(mObj, o); mStr = o.str(); }
+	inline void writeToFile(const Obj& mObj, const Path& mPath)			{ std::ofstream o{mPath}; writeToStream(mObj, o); o.close(); }
+	inline std::string getWriteToString(const Obj& mObj)				{ std::string result; writeToString(mObj, result); return result; }
 }
 
 #endif

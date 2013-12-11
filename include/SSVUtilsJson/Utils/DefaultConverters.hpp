@@ -31,8 +31,8 @@ namespace ssvuj
 	#define SSVUJ_DEFINE_DTO_CONVERTER(mType) template<> struct Converter<mType> : Internal::CDefaultToObj<mType>
 
 	SSVUJ_DEFINE_DTO_CONVERTER(Obj)				{ using T = Obj;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj; } };
-	SSVUJ_DEFINE_DTO_CONVERTER(char)			{ using T = char;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = static_cast<T>(mObj.asInt()); } };
-	SSVUJ_DEFINE_DTO_CONVERTER(unsigned char)	{ using T = unsigned char;	inline static void fromObj(T& mValue, const Obj& mObj) { mValue = static_cast<T>(mObj.asInt()); } };
+	SSVUJ_DEFINE_DTO_CONVERTER(char)			{ using T = char;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = T(mObj.asInt()); } };
+	SSVUJ_DEFINE_DTO_CONVERTER(unsigned char)	{ using T = unsigned char;	inline static void fromObj(T& mValue, const Obj& mObj) { mValue = T(mObj.asInt()); } };
 	SSVUJ_DEFINE_DTO_CONVERTER(int)				{ using T = int;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asInt(); } };
 	SSVUJ_DEFINE_DTO_CONVERTER(float)			{ using T = float;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asFloat(); } };
 	SSVUJ_DEFINE_DTO_CONVERTER(double)			{ using T = double;			inline static void fromObj(T& mValue, const Obj& mObj) { mValue = mObj.asDouble(); } };
