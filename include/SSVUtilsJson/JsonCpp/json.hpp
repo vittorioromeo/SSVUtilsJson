@@ -27,6 +27,10 @@
 
 namespace Json
 {
+	inline bool in(char c, char c1, char c2, char c3, char c4) noexcept				{ return c == c1 || c == c2 || c == c3 || c == c4; }
+	inline bool in(char c, char c1, char c2, char c3, char c4, char c5) noexcept	{ return c == c1 || c == c2 || c == c3 || c == c4 || c == c5; }
+	inline bool isControlCharacter(char ch) noexcept { return ch > 0 && ch <= 0x1F; }
+
 	using UInt = unsigned int;
 	using Int64 = long long int;
 	using UInt64 = unsigned long long int;

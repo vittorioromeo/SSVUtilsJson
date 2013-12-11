@@ -40,7 +40,7 @@ namespace Json
 		}
 		return result;
 	}
-	inline static bool isControlCharacter(char ch) { return ch > 0 && ch <= 0x1F; }
+
 	enum{uintToStringBufferSize = 3 * sizeof(LargestUInt) + 1};
 	typedef char UIntToStringBuffer[uintToStringBufferSize];
 	inline static void uintToString(LargestUInt value, char*& current)
@@ -54,8 +54,7 @@ namespace Json
 		while(value != 0);
 	}
 
-	inline static bool in(char c, char c1, char c2, char c3, char c4) { return c == c1 || c == c2 || c == c3 || c == c4; }
-	inline static bool in(char c, char c1, char c2, char c3, char c4, char c5) { return c == c1 || c == c2 || c == c3 || c == c4 || c == c5; }
+
 	inline static bool containsNewLine(Reader::Location begin, Reader::Location end)
 	{
 		for(; begin < end; ++begin)
@@ -785,14 +784,23 @@ namespace Json
 		switch(type_)
 		{
 			case nullValue: case intValue: case uintValue: case realValue: case booleanValue: value_ = other.value_; break;
-			case stringValue:
-				if(other.value_.string_)
-				{
-					value_.string_ = duplicateStringValue(other.value_.string_);
-					allocated_ = static_cast<int>(true);
-				}
-				else value_.string_ = nullptr;
-				break;
+				case  stringValue:
+					 if  (other.allocated_)
+					 {
+						 if  (other.value_.string_)
+						 {
+							value_.string_ = duplicateStringValue (other.value_.string_);
+							allocated_ = true ;
+						 }
+						 else
+							value_.string_ = 0;
+					 } else
+					 {
+						   value_.string_ = other.value_.string_;
+						   allocated_ = false ;
+					 }
+
+					 break ;
 			case arrayValue: case objectValue: value_.map_ = new ObjectValues(*other.value_.map_); break;
 			default: JSON_ASSERT_UNREACHABLE;
 		}
