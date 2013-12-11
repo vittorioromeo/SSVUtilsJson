@@ -75,13 +75,13 @@ SSVU_TEST("SSVUJ utils tests")
 	Obj obj;
 	EXPECT(ssvuj::size(obj) == 0);
 	EXPECT(!ssvuj::has(obj, "member"));
-	EXPECT(ssvuj::as<int>(obj, "member", 1) == 1);
+	EXPECT(ssvuj::getAs<int>(obj, "member", 1) == 1);
 	EXPECT(!ssvuj::has(obj, "member"));
 
 	ssvuj::set(obj, "member", 10);
 	EXPECT(ssvuj::size(obj) == 1);
 	EXPECT(ssvuj::has(obj, "member"));
-	EXPECT(ssvuj::as<int>(obj, "member", 1) == 10);
+	EXPECT(ssvuj::getAs<int>(obj, "member", 1) == 10);
 }
 SSVU_TEST_END();
 

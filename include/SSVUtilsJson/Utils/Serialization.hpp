@@ -25,7 +25,7 @@ namespace ssvuj
 			archArrayHelper<TIdx>(mArray, mArg); archArrayHelper<TIdx + 1>(mArray, std::forward<const TArgs&>(mArgs)...);
 		}
 
-		template<typename TArg> inline void extrObjHelper(const Obj& mObj, const Key& mKey, TArg& mArg) { mArg = as<TArg>(mObj, mKey); } // TODO:
+		template<typename TArg> inline void extrObjHelper(const Obj& mObj, const Key& mKey, TArg& mArg) { mArg = getAs<TArg>(mObj, mKey); } // TODO:
 		template<typename TArg, typename... TArgs> inline void extrObjHelper(const Obj& mObj, const Key& mKey, TArg& mArg, TArgs&... mArgs)
 		{
 			extrObjHelper(mObj, mKey, mArg); extrObjHelper(mObj, std::forward<TArgs&>(mArgs)...);
@@ -41,7 +41,7 @@ namespace ssvuj
 	// extr and arch serialize a value to a single obj
 	template<typename T> inline void extr(const Obj& mObj, T& mValue)	{ Converter<T>::fromObj(mValue, mObj); } // TODO: equivalent to set?
 	template<typename T> inline void arch(Obj& mObj, const T& mValue)	{ set<T>(mObj, mValue); }
-	template<typename TEnum, typename TUnderlying> inline void extrEnum(const Obj& mObj, TEnum& mValue)	{ mValue = TEnum(as<TUnderlying>(mObj)); }
+	template<typename TEnum, typename TUnderlying> inline void extrEnum(const Obj& mObj, TEnum& mValue)	{ mValue = TEnum(getAs<TUnderlying>(mObj)); }
 	template<typename TEnum, typename TUnderlying> inline void archEnum(Obj& mObj, const TEnum& mValue)	{ set<TUnderlying>(mObj, TUnderlying(mValue)); }
 	template<typename T> inline T getExtr(const Obj& mObj)				{ T result; extr(mObj, result); return result; }
 	template<typename T> inline Obj getArch(const T& mValue)			{ Obj result; arch(result, mValue); return result; }

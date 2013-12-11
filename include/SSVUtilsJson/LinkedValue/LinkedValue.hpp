@@ -38,7 +38,7 @@ namespace ssvuj
 			inline operator T() const noexcept { return value; }
 			inline LinkedValue& operator=(const T& mValue) { value = mValue; return *this; }
 
-			inline void syncFrom(const Obj& mObj) override { value = ssvuj::as<T>(mObj, name); }
+			inline void syncFrom(const Obj& mObj) override { value = ssvuj::getAs<T>(mObj, name); }
 			inline void syncTo(Obj& mObj) const override { set(mObj, name, value); }
 	};
 
