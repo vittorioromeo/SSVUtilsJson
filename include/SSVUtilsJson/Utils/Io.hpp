@@ -8,8 +8,8 @@
 #include <fstream>
 #include <sstream>
 #include <SSVUtils/Log/Log.hpp>
-#include "SSVUtilsJson/Utils/UtilsJson.hpp"
-#include "SSVUtilsJson/Utils/DefaultConverters.hpp"
+#include "SSVUtilsJson/Utils/Main.hpp"
+#include "SSVUtilsJson/Utils/BasicConverters.hpp"
 
 namespace ssvuj
 {

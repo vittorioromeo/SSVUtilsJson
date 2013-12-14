@@ -6,8 +6,8 @@
 #define SSVUJ_LINKEDVALUE
 
 #include <vector>
+#include "SSVUtilsJson/Global/Common.hpp"
 #include "SSVUtilsJson/Utils/Utils.hpp"
-#include "SSVUtilsJson/Global/Typedefs.hpp"
 
 namespace ssvuj
 {
@@ -38,8 +38,8 @@ namespace ssvuj
 			inline operator T() const noexcept { return value; }
 			inline LinkedValue& operator=(const T& mValue) { value = mValue; return *this; }
 
-			inline void syncFrom(const Obj& mObj) override { value = ssvuj::getAs<T>(mObj, name); }
-			inline void syncTo(Obj& mObj) const override { set(mObj, name, value); }
+			inline void syncFrom(const Obj& mObj) override	{ extr(mObj, name, value); }
+			inline void syncTo(Obj& mObj) const override	{ arch(mObj, name, value); }
 	};
 
 	class LinkedValueManager

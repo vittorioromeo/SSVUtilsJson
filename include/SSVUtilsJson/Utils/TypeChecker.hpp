@@ -5,7 +5,7 @@
 #ifndef SSVUJ_UTILS_TYPECHECKER
 #define SSVUJ_UTILS_TYPECHECKER
 
-#include "SSVUtilsJson/Global/Typedefs.hpp"
+#include "SSVUtilsJson/Global/Common.hpp"
 
 namespace ssvuj
 {

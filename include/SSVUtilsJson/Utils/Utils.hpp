@@ -6,9 +6,8 @@
 #define SSVUJ_UTILS
 
 #include "SSVUtilsJson/Utils/TypeChecker.hpp"
-#include "SSVUtilsJson/Utils/UtilsJson.hpp"
-#include "SSVUtilsJson/Utils/DefaultConverters.hpp"
-#include "SSVUtilsJson/Utils/Serialization.hpp"
+#include "SSVUtilsJson/Utils/Main.hpp"
+#include "SSVUtilsJson/Utils/BasicConverters.hpp"
 #include "SSVUtilsJson/Utils/Io.hpp"
 
 #endif

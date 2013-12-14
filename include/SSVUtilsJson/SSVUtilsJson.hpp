@@ -6,7 +6,7 @@
 #define SSVUTILSJSON
 
 #include "SSVUtilsJson/JsonCpp/JsonCpp.hpp"
-#include "SSVUtilsJson/Global/Typedefs.hpp"
+#include "SSVUtilsJson/Global/Common.hpp"
 #include "SSVUtilsJson/Utils/Utils.hpp"
 #include "SSVUtilsJson/LinkedValue/LinkedValue.hpp"
 

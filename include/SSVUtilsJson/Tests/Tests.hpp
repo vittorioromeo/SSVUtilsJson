@@ -5,10 +5,7 @@
 #include <SSVUtils/Test/Test.hpp>
 #include "SSVUtilsJson/JsonCpp/json.hpp"
 #include "SSVUtilsJson/JsonCpp/jsoncpp.inl"
-#include "SSVUtilsJson/Utils/UtilsJson.hpp"
-#include "SSVUtilsJson/Utils/DefaultConverters.hpp"
-#include "SSVUtilsJson/Utils/Serialization.hpp"
-#include "SSVUtilsJson/Utils/Io.hpp"
+#include "SSVUtilsJson/Utils/Utils.hpp"
 #include "SSVUtilsJson/LinkedValue/LinkedValue.hpp"
 
 #ifndef SSVUJ_TESTS
@@ -54,7 +51,7 @@ SSVU_TEST("SSVUJ conversion tests")
 		writeToString(getArch<decltype(array)>(array), s);
 
 		int res[2];
-		Converter<decltype(res)>::fromObj(res, getFromString(s));
+		Converter<decltype(res)>::fromObj(getFromString(s), res);
 
 		EXPECT(res[0] == array[0]);
 		EXPECT(res[1] == array[1]);
@@ -73,15 +70,15 @@ SSVU_TEST("SSVUJ utils tests")
 	using namespace ssvuj;
 
 	Obj obj;
-	EXPECT(ssvuj::size(obj) == 0);
-	EXPECT(!ssvuj::has(obj, "member"));
-	EXPECT(ssvuj::getAs<int>(obj, "member", 1) == 1);
-	EXPECT(!ssvuj::has(obj, "member"));
+	EXPECT(ssvuj::getObjSize(obj) == 0);
+	EXPECT(!ssvuj::hasObj(obj, "member"));
+	EXPECT(ssvuj::getExtr<int>(obj, "member", 1) == 1);
+	EXPECT(!ssvuj::hasObj(obj, "member"));
 
-	ssvuj::set(obj, "member", 10);
-	EXPECT(ssvuj::size(obj) == 1);
-	EXPECT(ssvuj::has(obj, "member"));
-	EXPECT(ssvuj::getAs<int>(obj, "member", 1) == 10);
+	ssvuj::arch(getObj(obj, "member"), 10);
+	EXPECT(ssvuj::getObjSize(obj) == 1);
+	EXPECT(ssvuj::hasObj(obj, "member"));
+	EXPECT(ssvuj::getExtr<int>(obj, "member", 1) == 10);
 }
 SSVU_TEST_END();
 

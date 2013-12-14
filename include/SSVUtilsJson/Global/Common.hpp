@@ -2,8 +2,8 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#ifndef SSVUJ_GLOBAL_TYPEDEFS
-#define SSVUJ_GLOBAL_TYPEDEFS
+#ifndef SSVUJ_GLOBAL_COMMON
+#define SSVUJ_GLOBAL_COMMON
 
 #include <string>
 #include <SSVUtils/FileSystem/FileSystem.hpp>
@@ -11,6 +11,8 @@
 
 namespace ssvuj
 {
+	template<typename T> struct Converter;
+
 	using Obj = Json::Value;
 	using Key = std::string;
 	using Idx = unsigned int;
