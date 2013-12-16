@@ -11,21 +11,20 @@ namespace ssvuj
 {
 	namespace Internal
 	{
-		template<typename T> struct TypeChecker;
-		template<typename T> inline bool isObjType(const Obj& mObj) { return TypeChecker<T>::isObj(mObj); }
+		template<typename T> inline bool isObjType(const Obj& mObj) noexcept;
 
-		template<> struct TypeChecker<Obj>				{ inline static bool isObj(const Obj&) noexcept			{ return true; } };
-		template<> struct TypeChecker<char>				{ inline static bool isObj(const Obj& mObj) noexcept	{ return mObj.isInt(); } };
-		template<> struct TypeChecker<unsigned char>	{ inline static bool isObj(const Obj& mObj) noexcept	{ return mObj.isUInt(); } };
-		template<> struct TypeChecker<int>				{ inline static bool isObj(const Obj& mObj) noexcept	{ return mObj.isInt(); } };
-		template<> struct TypeChecker<float>			{ inline static bool isObj(const Obj& mObj) noexcept	{ return mObj.isDouble(); } };
-		template<> struct TypeChecker<double>			{ inline static bool isObj(const Obj& mObj) noexcept	{ return mObj.isDouble(); } };
-		template<> struct TypeChecker<bool>				{ inline static bool isObj(const Obj& mObj) noexcept	{ return mObj.isBool(); } };
-		template<> struct TypeChecker<std::string>		{ inline static bool isObj(const Obj& mObj) noexcept	{ return mObj.isString(); } };
-		template<> struct TypeChecker<const char*>		{ inline static bool isObj(const Obj& mObj) noexcept	{ return mObj.isString(); } };
-		template<> struct TypeChecker<long>				{ inline static bool isObj(const Obj& mObj) noexcept	{ return mObj.isInt64(); } };
-		template<> struct TypeChecker<unsigned int>		{ inline static bool isObj(const Obj& mObj) noexcept	{ return mObj.isUInt(); } };
-		template<> struct TypeChecker<unsigned long>	{ inline static bool isObj(const Obj& mObj) noexcept	{ return mObj.isUInt64(); } };
+		template<> inline bool isObjType<Obj>(const Obj&) noexcept					{ return true; }
+		template<> inline bool isObjType<char>(const Obj& mObj) noexcept			{ return mObj.isInt(); }
+		template<> inline bool isObjType<unsigned char>(const Obj& mObj) noexcept	{ return mObj.isUInt(); }
+		template<> inline bool isObjType<int>(const Obj& mObj) noexcept				{ return mObj.isInt(); }
+		template<> inline bool isObjType<float>(const Obj& mObj) noexcept			{ return mObj.isDouble(); }
+		template<> inline bool isObjType<double>(const Obj& mObj) noexcept			{ return mObj.isDouble(); }
+		template<> inline bool isObjType<bool>(const Obj& mObj) noexcept			{ return mObj.isBool(); }
+		template<> inline bool isObjType<const char*>(const Obj& mObj) noexcept		{ return mObj.isString(); }
+		template<> inline bool isObjType<std::string>(const Obj& mObj) noexcept		{ return mObj.isString(); }
+		template<> inline bool isObjType<long>(const Obj& mObj) noexcept			{ return mObj.isInt64(); }
+		template<> inline bool isObjType<unsigned int>(const Obj& mObj) noexcept	{ return mObj.isUInt(); }
+		template<> inline bool isObjType<unsigned long>(const Obj& mObj) noexcept	{ return mObj.isUInt64(); }
 	}
 }
 

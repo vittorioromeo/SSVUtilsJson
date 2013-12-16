@@ -11,7 +11,7 @@
 #include <tuple>
 #include "SSVUtilsJson/Global/Common.hpp"
 
-#define SSVUJ_CONVERTER_FRIEND template<typename> friend struct ssvuj::Converter
+#define SSVUJ_CONVERTER_FRIEND() template<typename> friend struct ssvuj::Converter
 
 #define SSVUJ_CNV_OBJ_AUTO(mValue, mVar) #mVar, mValue.mVar
 
