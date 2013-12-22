@@ -309,7 +309,7 @@ namespace Json
 			return true;
 		}
 		int index{0};
-		for(;;)
+		while(true)
 		{
 			Value& value = currentValue()[index++];
 			nodes_.push(&value);
@@ -485,7 +485,7 @@ namespace Json
 	{
 		int errorCount = int(errors_.size());
 		Token skip;
-		for(;;)
+		while(true)
 		{
 			if(!readToken(skip)) errors_.resize(errorCount);
 			if(skip.type_ == skipUntilToken || skip.type_ == tokenEndOfStream) break;
@@ -1577,7 +1577,7 @@ namespace Json
 						writeWithIndent("{");
 						indent();
 						Value::Members::iterator it = members.begin();
-						for(;;)
+						while(true)
 						{
 							const std::string& name = *it;
 							const Value& childValue = value[name];
@@ -1613,7 +1613,7 @@ namespace Json
 				indent();
 				bool hasChildValue = !childValues_.empty();
 				unsigned index = 0;
-				for(;;)
+				while(true)
 				{
 					const Value& childValue = value[index];
 					writeCommentBeforeValue(childValue);
@@ -1769,7 +1769,7 @@ namespace Json
 						writeWithIndent("{");
 						indent();
 						Value::Members::iterator it = members.begin();
-						for(;;)
+						while(true)
 						{
 							const std::string& name = *it;
 							const Value& childValue = value[name];
@@ -1804,7 +1804,7 @@ namespace Json
 				indent();
 				bool hasChildValue = !childValues_.empty();
 				unsigned index = 0;
-				for(;;)
+				while(true)
 				{
 					const Value& childValue = value[index];
 					writeCommentBeforeValue(childValue);
