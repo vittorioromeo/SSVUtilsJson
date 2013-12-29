@@ -34,12 +34,12 @@ namespace ssvuj
 	/// @brief Gets the size of a JSON Obj.
 	/// @param mObj Source Obj.
 	/// @param mKey Key of the target child Obj.
-	inline std::size_t getObjSize(const Obj& mObj, const Key& mKey) noexcept { getObjSize(getObj(mObj, mKey)); }
+	inline std::size_t getObjSize(const Obj& mObj, const Key& mKey) noexcept { return getObjSize(getObj(mObj, mKey)); }
 
 	/// @brief Gets the size of a JSON Obj.
 	/// @param mObj Source Obj.
 	/// @param mIdx Index of the target child Obj.
-	inline std::size_t getObjSize(const Obj& mObj, Idx mIdx) noexcept { getObjSize(getObj(mObj, mIdx)); }
+	inline std::size_t getObjSize(const Obj& mObj, Idx mIdx) noexcept { return getObjSize(getObj(mObj, mIdx)); }
 
 	/// @brief Checks whether a JSON Obj has a certain member.
 	/// @param mObj Obj to check.
