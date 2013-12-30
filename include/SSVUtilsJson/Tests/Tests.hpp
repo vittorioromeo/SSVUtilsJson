@@ -46,6 +46,20 @@ SSVU_TEST("SSVUJ conversion tests")
 	MAKETEST(decltype(ttpl), ttpl);
 
 	{
+		enum testCEnum : int{ssvuj_testCEnum_a,ssvuj_testCEnum_b,ssvuj_testCEnum_c};
+		MAKETEST(testCEnum, testCEnum::ssvuj_testCEnum_a);
+		MAKETEST(testCEnum, testCEnum::ssvuj_testCEnum_b);
+		MAKETEST(testCEnum, testCEnum::ssvuj_testCEnum_c);
+	}
+
+	{
+		enum class enumClass : int{a,b,c};
+		MAKETEST(enumClass, enumClass::a);
+		MAKETEST(enumClass, enumClass::b);
+		MAKETEST(enumClass, enumClass::c);
+	}
+
+	{
 		int array[2]{15, 25};
 		string s;
 		writeToString(getArch<decltype(array)>(array), s);

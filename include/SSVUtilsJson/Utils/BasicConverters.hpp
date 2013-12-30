@@ -27,6 +27,19 @@
 
 namespace ssvuj
 {
+	// Convert enums
+	template<typename T> struct Converter
+	{
+		inline static void fromObj(const Obj& mObj, T& mValue, ssvu::EnableIf<ssvu::isEnum<T>()>* = nullptr)
+		{
+			mValue = T(getExtr<ssvu::Underlying<T>>(mObj));
+		}
+		inline static void toObj(Obj& mObj, const T& mValue, ssvu::EnableIf<ssvu::isEnum<T>()>* = nullptr)
+		{
+			arch<ssvu::Underlying<T>>(mObj, ssvu::Underlying<T>(mValue));
+		}
+	};
+
 	namespace Internal
 	{
 		template<std::size_t I, typename TTpl> using TplArg = typename std::tuple_element<I, ssvu::RemoveConst<ssvu::RemoveReference<TTpl>>>::type;

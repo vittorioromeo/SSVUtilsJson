@@ -28,8 +28,8 @@ namespace ssvuj
 	inline const Obj& getObj(const Obj& mArray, Idx mIdx) noexcept	{ return mArray[mIdx]; }
 
 	/// @brief Gets the size of a JSON Obj.
-	/// @param mObj Source JSON Obj array.
-	inline std::size_t getObjSize(const Obj& mArray) noexcept { return mArray.size(); }
+	/// @param mObj Target JSON Obj.
+	inline std::size_t getObjSize(const Obj& mObj) noexcept { return mObj.size(); }
 
 	/// @brief Gets the size of a JSON Obj.
 	/// @param mObj Source Obj.
@@ -39,7 +39,7 @@ namespace ssvuj
 	/// @brief Gets the size of a JSON Obj.
 	/// @param mObj Source Obj.
 	/// @param mIdx Index of the target child Obj.
-	inline std::size_t getObjSize(const Obj& mObj, Idx mIdx) noexcept { return getObjSize(getObj(mObj, mIdx)); }
+	inline std::size_t getObjSize(const Obj& mArray, Idx mIdx) noexcept { return getObjSize(getObj(mArray, mIdx)); }
 
 	/// @brief Checks whether a JSON Obj has a certain member.
 	/// @param mObj Obj to check.
@@ -164,9 +164,6 @@ namespace ssvuj
 		}
 	}
 
-	template<typename TEnum, typename TUnderlying> inline void extrEnum(const Obj& mObj, TEnum& mValue)	{ mValue = TEnum(getExtr<TUnderlying>(mObj)); }
-	template<typename TEnum, typename TUnderlying> inline void archEnum(Obj& mObj, const TEnum& mValue)	{ arch<TUnderlying>(mObj, TUnderlying(mValue)); }
-
 	// extrArray and archArray serialize some values to a json array
 	template<typename... TArgs> inline void extrArray(const Obj& mArray, TArgs&... mArgs)	{ Internal::extrArrayHelper<0>(mArray, std::forward<TArgs&>(mArgs)...); }
 	template<typename... TArgs> inline void archArray(Obj& mArray, const TArgs&... mArgs)	{ Internal::archArrayHelper<0>(mArray, std::forward<const TArgs&>(mArgs)...); }
@@ -180,9 +177,6 @@ namespace ssvuj
 	// Dispatchers
 	template<typename T> inline void convert(const Obj& mObj, T& mValue)	{ extr(mObj, mValue); }
 	template<typename T> inline void convert(Obj& mObj, const T& mValue)	{ arch(mObj, mValue); }
-
-	template<typename T, typename TUnderlying> inline void convertEnum(const Obj& mObj, T& mValue)	{ extrEnum<T, TUnderlying>(mObj, mValue); }
-	template<typename T, typename TUnderlying> inline void convertEnum(Obj& mObj, const T& mValue)	{ archEnum<T, TUnderlying>(mObj, mValue); }
 
 	template<typename... TArgs> inline void convertArray(const Obj& mObj, TArgs&... mArgs)	{ extrArray(mObj, std::forward<TArgs&>(mArgs)...); }
 	template<typename... TArgs> inline void convertArray(Obj& mObj, const TArgs&... mArgs)	{ archArray(mObj, std::forward<const TArgs&>(mArgs)...); }
