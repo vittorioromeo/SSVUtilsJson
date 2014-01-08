@@ -478,7 +478,7 @@ namespace Json
 		info.token_ = token;
 		info.message_ = message;
 		info.extra_ = extra;
-		errors_.push_back(info);
+		errors_.emplace_back(info);
 		return false;
 	}
 	inline bool Reader::recoverFromError(TokenType skipUntilToken)
@@ -1193,7 +1193,7 @@ namespace Json
 		members.reserve(value_.map_->size());
 		ObjectValues::const_iterator it = value_.map_->begin();
 		ObjectValues::const_iterator itEnd = value_.map_->end();
-		for(; it != itEnd; ++it) members.push_back(std::string((*it).first.c_str()));
+		for(; it != itEnd; ++it) members.emplace_back(std::string((*it).first.c_str()));
 
 		return members;
 	}
@@ -1325,11 +1325,11 @@ namespace Json
 	inline Path::Path(const std::string& path, const PathArgument& a1, const PathArgument& a2, const PathArgument& a3, const PathArgument& a4, const PathArgument& a5)
 	{
 		InArgs in;
-		in.push_back(&a1);
-		in.push_back(&a2);
-		in.push_back(&a3);
-		in.push_back(&a4);
-		in.push_back(&a5);
+		in.emplace_back(&a1);
+		in.emplace_back(&a2);
+		in.emplace_back(&a3);
+		in.emplace_back(&a4);
+		in.emplace_back(&a5);
 		makePath(path, in);
 	}
 	inline void Path::makePath(const std::string& path, const InArgs& in)
@@ -1347,7 +1347,7 @@ namespace Json
 				{
 					ArrayIndex index = 0;
 					for(; current != end && *current >= '0' && *current <= '9'; ++current) index = index * 10 + ArrayIndex(*current - '0');
-					args_.push_back(index);
+					args_.emplace_back(index);
 				}
 				if(current == end || *current++ != ']') invalidPath(path, int(current - path.c_str()));
 			}
@@ -1361,7 +1361,7 @@ namespace Json
 			{
 				const char* beginName = current;
 				while(current != end && !strchr("[.", *current)) ++current;
-				args_.push_back(std::string(beginName, current));
+				args_.emplace_back(std::string(beginName, current));
 			}
 		}
 	}
@@ -1369,7 +1369,7 @@ namespace Json
 	{
 		if(itInArg == in.end()) { }
 		else if((*itInArg)->kind_ != kind) { }
-		else args_.push_back(**itInArg);
+		else args_.emplace_back(**itInArg);
 	}
 	inline void Path::invalidPath(const std::string&, int) { }
 	inline const Value& Path::resolve(const Value& root) const
@@ -1670,7 +1670,7 @@ namespace Json
 	}
 	inline void StyledWriter::pushValue(const std::string& value)
 	{
-		if(addChildValues_) childValues_.push_back(value);
+		if(addChildValues_) childValues_.emplace_back(value);
 		else document_ += value;
 	}
 	inline void StyledWriter::writeIndent()
@@ -1860,7 +1860,7 @@ namespace Json
 	}
 	inline void StyledStreamWriter::pushValue(const std::string& value)
 	{
-		if(addChildValues_) childValues_.push_back(value);
+		if(addChildValues_) childValues_.emplace_back(value);
 		else *document_ << value;
 	}
 	inline void StyledStreamWriter::writeIndent() { *document_ << '\n' << indentString_; }
