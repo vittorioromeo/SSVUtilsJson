@@ -11,7 +11,7 @@
 #ifndef SSVUJ_TESTS
 #define SSVUJ_TESTS
 
-SSVU_TEST("SSVUJ conversion tests")
+SSVU_TEST(SSVUJConversionTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -77,7 +77,7 @@ SSVU_TEST("SSVUJ conversion tests")
 }
 SSVU_TEST_END();
 
-SSVU_TEST("SSVUJ utils tests")
+SSVU_TEST(SSVUJUtilsTests)
 {
 	using namespace std;
 	using namespace ssvu;
