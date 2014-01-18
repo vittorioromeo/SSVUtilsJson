@@ -71,6 +71,12 @@ SSVU_TEST(SSVUJConversionTests)
 		EXPECT(res[1] == array[1]);
 	}
 
+	{
+		auto testObj(ssvuj::getArchObj("test1", 15, "test2", 33.f, "test3", std::string{"sup"}));
+		int test1; float test2; std::string test3;
+		ssvuj::extrObj(testObj, "test1", test1, "test2", test2, "test3", test3);
+		EXPECT(test1 == 15); EXPECT(test2 == 33.f); EXPECT(test3 == "sup");
+	}
 
 	#undef EXECTEST
 	#undef MAKETEST

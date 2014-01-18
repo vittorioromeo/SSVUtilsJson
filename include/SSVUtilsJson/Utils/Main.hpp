@@ -126,10 +126,17 @@ namespace ssvuj
 	/// @param mDefault Default value to use, in case the Obj hasn't got the desired value.
 	template<typename T> inline T getExtr(const Obj& mArray, Idx mIdx, const T& mDefault) { return hasObj(mArray, mIdx) ? getExtr<T>(mArray, mIdx) : mDefault; }
 
-	// TODO: docs
-	template<typename T> inline Obj getArch(const T& mValue)	{ Obj result; arch(result, mValue); return result; }
-	inline Key getKey(const Iterator& mItr) noexcept			{ return getExtr<Key>(mItr.key()); }
-	inline Key getKey(const ConstIterator& mItr) noexcept		{ return getExtr<Key>(mItr.key()); }
+	/// @brief Converts a value to a new JSON Obj instance and returns it.
+	/// @param mValue Value to archive.
+	template<typename T> inline Obj getArch(const T& mValue) { Obj result; arch(result, mValue); return result; }
+
+	/// @brief Gets the key of a JSON Obj from an iterator.
+	/// @param mItr JSON iterator.
+	inline Key getKey(const Iterator& mItr) noexcept { return getExtr<Key>(mItr.key()); }
+
+	/// @brief Gets the key of a JSON Obj from an iterator.
+	/// @param mItr JSON iterator.
+	inline Key getKey(const ConstIterator& mItr) noexcept { return getExtr<Key>(mItr.key()); }
 
 	// Iterator support
 	inline Iterator begin(Obj& mObj) noexcept				{ return mObj.begin(); }
@@ -164,25 +171,63 @@ namespace ssvuj
 		}
 	}
 
-	// extrArray and archArray serialize some values to a json array
-	template<typename... TArgs> inline void extrArray(const Obj& mArray, TArgs&... mArgs)	{ Internal::extrArrayHelper<0>(mArray, std::forward<TArgs&>(mArgs)...); }
-	template<typename... TArgs> inline void archArray(Obj& mArray, const TArgs&... mArgs)	{ Internal::archArrayHelper<0>(mArray, std::forward<const TArgs&>(mArgs)...); }
-	template<typename... TArgs> inline Obj getArchArray(const TArgs&... mArgs)				{ Obj result; archArray(result, std::forward<const TArgs&>(mArgs)...); return result; }
+	/// @brief Extracts a JSON array into value references.
+	/// @param mArray Array to extract.
+	/// @param mArgs References to be assigned after the extraction.
+	template<typename... TArgs> inline void extrArray(const Obj& mArray, TArgs&... mArgs) { Internal::extrArrayHelper<0>(mArray, std::forward<TArgs&>(mArgs)...); }
 
-	// extrObj and archObj serialize some keys/values to an obj
-	template<typename... TArgs> inline void extrObj(const Obj& mObj, TArgs&... mArgs)	{ Internal::extrObjHelper(mObj, std::forward<TArgs&>(mArgs)...); }
-	template<typename... TArgs> inline void archObj(Obj& mObj, const TArgs&... mArgs)	{ Internal::archObjHelper(mObj, std::forward<const TArgs&>(mArgs)...); }
-	template<typename... TArgs> inline Obj getArchObj(const TArgs&... mArgs)			{ Obj result; archObj(result, std::forward<const TArgs&>(mArgs)...); return result; }
+	/// @brief Archives any number of values into a JSON array.
+	/// @param mArray Array to archive the values in.
+	/// @param mArgs Const references to the values to archive.
+	template<typename... TArgs> inline void archArray(Obj& mArray, const TArgs&... mArgs) { Internal::archArrayHelper<0>(mArray, std::forward<const TArgs&>(mArgs)...); }
 
-	// Dispatchers
-	template<typename T> inline void convert(const Obj& mObj, T& mValue)	{ extr(mObj, mValue); }
-	template<typename T> inline void convert(Obj& mObj, const T& mValue)	{ arch(mObj, mValue); }
+	/// @brief Returns a new JSON array instance with any number of values archived in it.
+	/// @param mArgs Const references to the values to archive.
+	template<typename... TArgs> inline Obj getArchArray(const TArgs&... mArgs) { Obj result; archArray(result, std::forward<const TArgs&>(mArgs)...); return result; }
 
-	template<typename... TArgs> inline void convertArray(const Obj& mObj, TArgs&... mArgs)	{ extrArray(mObj, std::forward<TArgs&>(mArgs)...); }
-	template<typename... TArgs> inline void convertArray(Obj& mObj, const TArgs&... mArgs)	{ archArray(mObj, std::forward<const TArgs&>(mArgs)...); }
+	/// @brief Extracts any number of values from a JSON Obj.
+	/// @param mObj Object to extract the values from.
+	/// @param mArgs For every value extracted, pass a key and a reference to the value.
+	template<typename... TArgs> inline void extrObj(const Obj& mObj, TArgs&... mArgs) { Internal::extrObjHelper(mObj, std::forward<TArgs&>(mArgs)...); }
 
-	template<typename... TArgs> inline void convertObj(const Obj& mObj, TArgs&... mArgs)	{ extrObj(mObj, std::forward<TArgs&>(mArgs)...); }
-	template<typename... TArgs> inline void convertObj(Obj& mObj, const TArgs&... mArgs)	{ archObj(mObj, std::forward<const TArgs&>(mArgs)...); }
+	/// @brief Archives any number of values into a JSON Obj.
+	/// @param mObj Object to archive the values in.
+	/// @param mArgs For every value archived, pass a key and a const reference to the value.
+	template<typename... TArgs> inline void archObj(Obj& mObj, const TArgs&... mArgs) { Internal::archObjHelper(mObj, std::forward<const TArgs&>(mArgs)...); }
+
+	/// @brief Returns a new JSON Obj instance with any number of values archived in it.
+	/// @param mArgs For every value archived, pass a key and a const reference to the value.
+	template<typename... TArgs> inline Obj getArchObj(const TArgs&... mArgs) { Obj result; archObj(result, std::forward<const TArgs&>(mArgs)...); return result; }
+
+	/// @brief Archives/extracts a value into/from a JSON Obj, depending from the constness.
+	/// @param mObj Object to extract.
+	/// @param mValue Value to extract.
+	template<typename T> inline void convert(const Obj& mObj, T& mValue) { extr(mObj, mValue); }
+
+	/// @brief Archives/extracts a value into/from a JSON Obj, depending from the constness.
+	/// @param mObj Object to archive.
+	/// @param mValue Value to archive.
+	template<typename T> inline void convert(Obj& mObj, const T& mValue) { arch(mObj, mValue); }
+
+	/// @brief Archives/extracts any number of values into/from a JSON array, depending from the constness.
+	/// @param mObj Object to extract.
+	/// @param mArgs Values to extract.
+	template<typename... TArgs> inline void convertArray(const Obj& mObj, TArgs&... mArgs) { extrArray(mObj, std::forward<TArgs&>(mArgs)...); }
+
+	/// @brief Archives/extracts any number of values into/from a JSON array, depending from the constness.
+	/// @param mObj Object to archive.
+	/// @param mArgs Values to archive.
+	template<typename... TArgs> inline void convertArray(Obj& mObj, const TArgs&... mArgs) { archArray(mObj, std::forward<const TArgs&>(mArgs)...); }
+
+	/// @brief Archives/extracts any number of values into/from a JSON Obj, depending from the constness.
+	/// @param mObj Object to extract.
+	/// @param mArgs For every value extracted, pass a key and a reference to the value.
+	template<typename... TArgs> inline void convertObj(const Obj& mObj, TArgs&... mArgs) { extrObj(mObj, std::forward<TArgs&>(mArgs)...); }
+
+	/// @brief Archives/extracts any number of values into/from a JSON Obj, depending from the constness.
+	/// @param mObj Object to archive.
+	/// @param mArgs For every value archived, pass a key and a const reference to the value.
+	template<typename... TArgs> inline void convertObj(Obj& mObj, const TArgs&... mArgs) { archObj(mObj, std::forward<const TArgs&>(mArgs)...); }
 }
 
 #endif

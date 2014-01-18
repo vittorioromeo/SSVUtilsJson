@@ -20,10 +20,9 @@
 		{ \
 			inline static void fromObj(const Obj& mObjName, mType& mValueName)	{ Converter<mType>::template impl<const Obj&, mType&>(mObjName, mValueName); } \
 			inline static void toObj(Obj& mObjName, const mType& mValueName)	{ Converter<mType>::template impl<Obj&, const mType&>(mObjName, mValueName); } \
-			template<typename TObj, typename TValue> inline static void impl(TObj mObjName, TValue mValueName) \
-			{
+			template<typename TObj, typename TValue> inline static void impl(TObj mObjName, TValue mValueName)
 
-#define SSVUJ_CNV_SIMPLE_END() } }
+#define SSVUJ_CNV_SIMPLE_END() }
 
 namespace ssvuj
 {
@@ -153,5 +152,5 @@ namespace ssvuj
 }
 
 #endif
-
+\
 // TODO: docs
