@@ -17,7 +17,7 @@ SSVU_TEST(SSVUJConversionTests)
 	using namespace ssvu;
 	using namespace ssvuj;
 
-	#define EXECTEST		do { string s; writeToString(getArch<Type>(original), s); EXPECT(getExtr<Type>(getFromString(s)) == original); } while(false)
+	#define EXECTEST		do { string s; writeToString(getArch<Type>(original), s); SSVUT_EXPECT(getExtr<Type>(getFromString(s)) == original); } while(false)
 	#define MAKETEST(T, V)	do { using Type = T; Type original(V); EXECTEST; } while(false)
 
 	MAKETEST(char, 'a');
@@ -67,15 +67,15 @@ SSVU_TEST(SSVUJConversionTests)
 		int res[2];
 		Converter<decltype(res)>::fromObj(getFromString(s), res);
 
-		EXPECT(res[0] == array[0]);
-		EXPECT(res[1] == array[1]);
+		SSVUT_EXPECT(res[0] == array[0]);
+		SSVUT_EXPECT(res[1] == array[1]);
 	}
 
 	{
 		auto testObj(ssvuj::getArchObj("test1", 15, "test2", 33.f, "test3", std::string{"sup"}));
 		int test1; float test2; std::string test3;
 		ssvuj::extrObj(testObj, "test1", test1, "test2", test2, "test3", test3);
-		EXPECT(test1 == 15); EXPECT(test2 == 33.f); EXPECT(test3 == "sup");
+		SSVUT_EXPECT(test1 == 15); SSVUT_EXPECT(test2 == 33.f); SSVUT_EXPECT(test3 == "sup");
 	}
 
 	#undef EXECTEST
@@ -90,15 +90,15 @@ SSVU_TEST(SSVUJUtilsTests)
 	using namespace ssvuj;
 
 	Obj obj;
-	EXPECT(ssvuj::getObjSize(obj) == 0);
-	EXPECT(!ssvuj::hasObj(obj, "member"));
-	EXPECT(ssvuj::getExtr<int>(obj, "member", 1) == 1);
-	EXPECT(!ssvuj::hasObj(obj, "member"));
+	SSVUT_EXPECT(ssvuj::getObjSize(obj) == 0);
+	SSVUT_EXPECT(!ssvuj::hasObj(obj, "member"));
+	SSVUT_EXPECT(ssvuj::getExtr<int>(obj, "member", 1) == 1);
+	SSVUT_EXPECT(!ssvuj::hasObj(obj, "member"));
 
 	ssvuj::arch(getObj(obj, "member"), 10);
-	EXPECT(ssvuj::getObjSize(obj) == 1);
-	EXPECT(ssvuj::hasObj(obj, "member"));
-	EXPECT(ssvuj::getExtr<int>(obj, "member", 1) == 10);
+	SSVUT_EXPECT(ssvuj::getObjSize(obj) == 1);
+	SSVUT_EXPECT(ssvuj::hasObj(obj, "member"));
+	SSVUT_EXPECT(ssvuj::getExtr<int>(obj, "member", 1) == 10);
 }
 SSVU_TEST_END();
 

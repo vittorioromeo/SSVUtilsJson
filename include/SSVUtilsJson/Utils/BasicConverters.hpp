@@ -41,7 +41,7 @@ namespace ssvuj
 
 	namespace Internal
 	{
-		template<std::size_t I, typename TTpl> using TplArg = typename std::tuple_element<I, ssvu::RemoveConst<ssvu::RemoveReference<TTpl>>>::type;
+		template<std::size_t I, typename TTpl> using TplArg = ssvu::TupleElement<I, ssvu::RemoveConst<ssvu::RemoveReference<TTpl>>>;
 
 		template<std::size_t I = 0, typename... TArgs> inline ssvu::EnableIf<I == sizeof...(TArgs), void> toTpl(const Obj&, std::tuple<TArgs...>&) { }
 		template<std::size_t I = 0, typename... TArgs> inline ssvu::EnableIf<I < sizeof...(TArgs), void> toTpl(const Obj& mObj, std::tuple<TArgs...>& mTpl)
