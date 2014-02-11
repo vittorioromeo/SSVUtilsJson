@@ -152,5 +152,5 @@ namespace ssvuj
 }
 
 #endif
-\
+
 // TODO: docs
