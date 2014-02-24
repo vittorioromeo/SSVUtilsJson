@@ -5,7 +5,7 @@
 #ifndef SSVUJ_JSONCPP_INL
 #define SSVUJ_JSONCPP_INL
 
-#define JSON_ASSERT_UNREACHABLE assert(false)
+#define JSON_ASSERT_UNREACHABLE SSVU_ASSERT(false)
 
 namespace Json
 {
@@ -212,10 +212,10 @@ namespace Json
 	}
 	inline void Reader::addComment(Location begin, Location end, CommentPlacement placement)
 	{
-		assert(collectComments_);
+		SSVU_ASSERT(collectComments_);
 		if(placement == commentAfterOnSameLine)
 		{
-			assert(lastValue_ != 0);
+			SSVU_ASSERT(lastValue_ != 0);
 			lastValue_->setComment(std::string(begin, end), placement);
 		}
 		else
@@ -564,8 +564,8 @@ namespace Json
 		public:
 			inline BatchAllocator(unsigned int objectsPerPage = 255) : freeHead_(0), objectsPerPage_(objectsPerPage)
 			{
-				assert(sizeof(AllocatedType) * objectPerAllocation >= sizeof(AllocatedType*));
-				assert(objectsPerPage >= 16);
+				SSVU_ASSERT(sizeof(AllocatedType) * objectPerAllocation >= sizeof(AllocatedType*));
+				SSVU_ASSERT(objectsPerPage >= 16);
 				batches_ = allocateBatch(0);
 				currentBatch_ = batches_;
 			}
@@ -603,7 +603,7 @@ namespace Json
 			}
 			inline void release(AllocatedType* object)
 			{
-				assert(object != 0);
+				SSVU_ASSERT(object != 0);
 				*(AllocatedType**)object = freeHead_;
 				freeHead_ = object;
 			}
@@ -721,7 +721,7 @@ namespace Json
 	inline void Value::CommentInfo::setComment(const char* text)
 	{
 		if(comment_) releaseStringValue(comment_);
-		assert(text != 0);
+		SSVU_ASSERT(text != 0);
 		JSON_ASSERT_MESSAGE(text[0] == '\0' || text[0] == '/', "Comments must start with /");
 		comment_ = duplicateStringValue(text);
 	}
@@ -880,7 +880,7 @@ namespace Json
 	inline bool Value::operator!=(const Value& other) const { return !(*this == other); }
 	inline const char* Value::asCString() const
 	{
-		assert(type_ == stringValue);
+		SSVU_ASSERT(type_ == stringValue);
 		return value_.string_;
 	}
 	inline std::string Value::asString() const
@@ -1078,7 +1078,7 @@ namespace Json
 	inline bool Value::operator!() const { return isNull(); }
 	inline void Value::clear()
 	{
-		assert(type_ == nullValue || type_ == arrayValue || type_ == objectValue);
+		SSVU_ASSERT(type_ == nullValue || type_ == arrayValue || type_ == objectValue);
 		switch(type_)
 		{
 			case arrayValue: case objectValue: value_.map_->clear(); break;
@@ -1087,7 +1087,7 @@ namespace Json
 	}
 	inline void Value::resize(ArrayIndex newSize)
 	{
-		assert(type_ == nullValue || type_ == arrayValue);
+		SSVU_ASSERT(type_ == nullValue || type_ == arrayValue);
 		if(type_ == nullValue) *this = Value(arrayValue);
 		ArrayIndex oldSize = size();
 		if(newSize == 0) clear();
@@ -1095,13 +1095,13 @@ namespace Json
 		else
 		{
 			for(ArrayIndex index = newSize; index < oldSize; ++index) value_.map_->erase(index);
-			assert(size() == newSize);
+			SSVU_ASSERT(size() == newSize);
 		}
 
 	}
 	inline Value& Value::operator[](ArrayIndex index)
 	{
-		assert(type_ == nullValue || type_ == arrayValue);
+		SSVU_ASSERT(type_ == nullValue || type_ == arrayValue);
 		if(type_ == nullValue) *this = Value(arrayValue);
 		CZString key(index);
 		ObjectValues::iterator it = value_.map_->lower_bound(key);
@@ -1111,10 +1111,10 @@ namespace Json
 		return(*it).second;
 
 	}
-	inline Value& Value::operator[](int index) { assert(index >= 0); return(*this)[ArrayIndex(index)]; }
+	inline Value& Value::operator[](int index) { SSVU_ASSERT(index >= 0); return(*this)[ArrayIndex(index)]; }
 	inline const Value& Value::operator[](ArrayIndex index) const
 	{
-		assert(type_ == nullValue || type_ == arrayValue);
+		SSVU_ASSERT(type_ == nullValue || type_ == arrayValue);
 		if(type_ == nullValue) return nullJsonValue;
 		CZString key(index);
 		ObjectValues::const_iterator it = value_.map_->find(key);
@@ -1122,11 +1122,11 @@ namespace Json
 		return(*it).second;
 
 	}
-	inline const Value& Value::operator[](int index) const { assert(index >= 0); return(*this)[ArrayIndex(index)]; }
+	inline const Value& Value::operator[](int index) const { SSVU_ASSERT(index >= 0); return(*this)[ArrayIndex(index)]; }
 	inline Value& Value::operator[](const char* key) { return resolveReference(key, false); }
 	inline Value& Value::resolveReference(const char* key, bool isStatic)
 	{
-		assert(type_ == nullValue || type_ == objectValue);
+		SSVU_ASSERT(type_ == nullValue || type_ == objectValue);
 		if(type_ == nullValue) *this = Value(objectValue);
 		CZString actualKey(key, isStatic ? CZString::noDuplication : CZString::duplicateOnCopy);
 		ObjectValues::iterator it = value_.map_->lower_bound(actualKey);
@@ -1145,7 +1145,7 @@ namespace Json
 	inline bool Value::isValidIndex(ArrayIndex index) const { return index < size(); }
 	inline const Value& Value::operator[](const char* key) const
 	{
-		assert(type_ == nullValue || type_ == objectValue);
+		SSVU_ASSERT(type_ == nullValue || type_ == objectValue);
 		if(type_ == nullValue) return nullJsonValue;
 		CZString actualKey(key, CZString::noDuplication);
 		ObjectValues::const_iterator it = value_.map_->find(actualKey);
@@ -1166,7 +1166,7 @@ namespace Json
 	inline Value Value::get(const std::string& key, const Value& defaultValue) const { return get(key.c_str(), defaultValue); }
 	inline Value Value::removeMember(const char* key)
 	{
-		assert(type_ == nullValue || type_ == objectValue);
+		SSVU_ASSERT(type_ == nullValue || type_ == objectValue);
 		if(type_ == nullValue) return nullJsonValue;
 		CZString actualKey(key, CZString::noDuplication);
 		ObjectValues::iterator it = value_.map_->find(actualKey);
@@ -1187,7 +1187,7 @@ namespace Json
 
 	inline Value::Members Value::getMemberNames() const
 	{
-		assert(type_ == nullValue || type_ == objectValue);
+		SSVU_ASSERT(type_ == nullValue || type_ == objectValue);
 		if(type_ == nullValue) return Value::Members();
 		Members members;
 		members.reserve(value_.map_->size());
@@ -1428,7 +1428,7 @@ namespace Json
 		if(isNegative) value = -value;
 		uintToString(LargestUInt(value), current);
 		if(isNegative) *--current = '-';
-		assert(current >= buffer);
+		SSVU_ASSERT(current >= buffer);
 		return current;
 	}
 	inline std::string valueToString(LargestUInt value)
@@ -1436,7 +1436,7 @@ namespace Json
 		UIntToStringBuffer buffer;
 		char* current = buffer + sizeof(buffer);
 		uintToString(value, current);
-		assert(current >= buffer);
+		SSVU_ASSERT(current >= buffer);
 		return current;
 	}
 #ifdef JSON_HAS_INT64
@@ -1631,7 +1631,7 @@ namespace Json
 			}
 			else
 			{
-				assert(childValues_.size() == size);
+				SSVU_ASSERT(childValues_.size() == size);
 				document_ += "[ ";
 				for(unsigned index = 0; index < size; ++index)
 				{
@@ -1691,7 +1691,7 @@ namespace Json
 	inline void StyledWriter::indent() { indentString_ += std::string(indentSize_, ' '); }
 	inline void StyledWriter::unindent()
 	{
-		assert(int(indentString_.size()) >= indentSize_);
+		SSVU_ASSERT(int(indentString_.size()) >= indentSize_);
 		indentString_.resize(indentString_.size() - indentSize_);
 	}
 	inline void StyledWriter::writeCommentBeforeValue(const Value& root)
@@ -1821,7 +1821,7 @@ namespace Json
 			}
 			else
 			{
-				assert(childValues_.size() == size);
+				SSVU_ASSERT(childValues_.size() == size);
 				*document_ << "[ ";
 				for(unsigned index = 0; index < size; ++index)
 				{
@@ -1868,7 +1868,7 @@ namespace Json
 	inline void StyledStreamWriter::indent() { indentString_ += indentation_; }
 	inline void StyledStreamWriter::unindent()
 	{
-		assert(indentString_.size() >= indentation_.size());
+		SSVU_ASSERT(indentString_.size() >= indentation_.size());
 		indentString_.resize(indentString_.size() - indentation_.size());
 	}
 	inline void StyledStreamWriter::writeCommentBeforeValue(const Value& root)

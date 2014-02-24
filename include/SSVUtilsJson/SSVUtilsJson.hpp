@@ -5,6 +5,7 @@
 #ifndef SSVUTILSJSON
 #define SSVUTILSJSON
 
+#include "SSVUtils/Assert/Assert.hpp"
 #include "SSVUtilsJson/JsonCpp/JsonCpp.hpp"
 #include "SSVUtilsJson/Global/Common.hpp"
 #include "SSVUtilsJson/Utils/Utils.hpp"
