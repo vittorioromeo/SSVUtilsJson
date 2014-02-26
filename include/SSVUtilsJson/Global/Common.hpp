@@ -6,7 +6,7 @@
 #define SSVUJ_GLOBAL_COMMON
 
 #include <string>
-#include <SSVUtils/FileSystem/FileSystem.hpp>
+#include <SSVUtils/Core/Core.hpp>
 #include "SSVUtilsJson/JsonCpp/JsonCpp.hpp"
 
 namespace ssvuj

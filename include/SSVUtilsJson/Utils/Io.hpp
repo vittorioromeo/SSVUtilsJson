@@ -7,7 +7,7 @@
 
 #include <fstream>
 #include <sstream>
-#include <SSVUtils/Log/Log.hpp>
+#include <SSVUtils/Core/Core.hpp>
 #include "SSVUtilsJson/Utils/Main.hpp"
 #include "SSVUtilsJson/Utils/BasicConverters.hpp"
 
