@@ -100,5 +100,4 @@ SSVUT_TEST(SSVUJUtilsTests)
 	SSVUT_EXPECT(ssvuj::getExtr<int>(obj, "member", 1) == 10);
 }
 
-
 #endif
