@@ -11,7 +11,7 @@
 #ifndef SSVUJ_TESTS
 #define SSVUJ_TESTS
 
-SSVU_TEST(SSVUJConversionTests)
+SSVUT_TEST(SSVUJConversionTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -81,9 +81,8 @@ SSVU_TEST(SSVUJConversionTests)
 	#undef EXECTEST
 	#undef MAKETEST
 }
-SSVU_TEST_END();
 
-SSVU_TEST(SSVUJUtilsTests)
+SSVUT_TEST(SSVUJUtilsTests)
 {
 	using namespace std;
 	using namespace ssvu;
@@ -100,6 +99,6 @@ SSVU_TEST(SSVUJUtilsTests)
 	SSVUT_EXPECT(ssvuj::hasObj(obj, "member"));
 	SSVUT_EXPECT(ssvuj::getExtr<int>(obj, "member", 1) == 10);
 }
-SSVU_TEST_END();
+
 
 #endif
