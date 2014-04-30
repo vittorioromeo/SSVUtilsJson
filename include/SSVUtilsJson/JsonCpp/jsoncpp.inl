@@ -9,7 +9,7 @@
 
 namespace Json
 {
-	inline static std::string codePointToUTF8(unsigned int cp)
+	inline std::string codePointToUTF8(unsigned int cp)
 	{
 		std::string result;
 		if(cp <= 0x7f)
@@ -43,7 +43,7 @@ namespace Json
 
 	enum{uintToStringBufferSize = 3 * sizeof(LargestUInt) + 1};
 	typedef char UIntToStringBuffer[uintToStringBufferSize];
-	inline static void uintToString(LargestUInt value, char*& current)
+	inline void uintToString(LargestUInt value, char*& current)
 	{
 		*--current = 0;
 		do
@@ -55,7 +55,7 @@ namespace Json
 	}
 
 
-	inline static bool containsNewLine(Reader::Location begin, Reader::Location end)
+	inline bool containsNewLine(Reader::Location begin, Reader::Location end)
 	{
 		for(; begin < end; ++begin)
 			if(*begin == '\n' || *begin == '\r') return true;
@@ -698,8 +698,8 @@ namespace Json
 #endif
 
 	static const unsigned int unknown =(unsigned)-1;
-	template<typename T, typename U> inline static bool InRange(double d, T min, U max) { return d >= min && d <= max; }
-	inline static char* duplicateStringValue(const char* value, unsigned int length = unknown)
+	template<typename T, typename U> inline bool InRange(double d, T min, U max) { return d >= min && d <= max; }
+	inline char* duplicateStringValue(const char* value, unsigned int length = unknown)
 	{
 		if(length == unknown) length =(unsigned int)strlen(value);
 		if(length >=(unsigned)Value::maxInt) length = Value::maxInt - 1;
@@ -709,7 +709,7 @@ namespace Json
 		newString[length] = 0;
 		return newString;
 	}
-	inline static void releaseStringValue(char* value)
+	inline void releaseStringValue(char* value)
 	{
 		if(value) free(value);
 	}
@@ -1197,7 +1197,7 @@ namespace Json
 
 		return members;
 	}
-	inline static bool IsIntegral(double d) { double integral_part; return modf(d, &integral_part) == 0.0; }
+	inline bool IsIntegral(double d) { double integral_part; return modf(d, &integral_part) == 0.0; }
 	inline bool Value::isNull() const { return type_ == nullValue; }
 	inline bool Value::isBool() const { return type_ == booleanValue; }
 	inline bool Value::isInt() const
@@ -1415,7 +1415,7 @@ namespace Json
 		return *node;
 	}
 
-	inline static bool containsControlCharacter(const char* str)
+	inline bool containsControlCharacter(const char* str)
 	{
 		while(*str) if(isControlCharacter(*(str++))) return true;
 		return false;
