@@ -28,7 +28,7 @@ SSVUT_TEST(SSVUJConversionTests)
 	MAKETEST(bool, false);
 	MAKETEST(bool, true);
 	MAKETEST(std::string, "hello");
-	//MAKETEST(const char*, "goodbye"); // FAILS, but result is correct
+	//MAKETEST(const char*, "goodbye"); // TODO: BUG? : FAILS, but result is correct
 	MAKETEST(long, std::numeric_limits<long>::min());
 	MAKETEST(long, std::numeric_limits<long>::max());
 	MAKETEST(unsigned int, std::numeric_limits<unsigned int>::min());
