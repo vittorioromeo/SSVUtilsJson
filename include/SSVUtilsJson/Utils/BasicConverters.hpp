@@ -11,16 +11,14 @@
 #include <tuple>
 #include "SSVUtilsJson/Global/Common.hpp"
 
-#define SSVUJ_CONVERTER_FRIEND() template<typename> friend struct ssvuj::Converter
+#define SSVUJ_CNV_FRIEND() template<typename> friend struct ssvuj::Converter
 
 #define SSVUJ_CNV_OBJ_AUTO(mValue, mVar) #mVar, mValue.mVar
 
 #define SSVUJ_CNV_SIMPLE(mType, mObjName, mValueName) \
-		struct Converter<mType> \
-		{ \
-			inline static void fromObj(const Obj& mObjName, mType& mValueName)	{ Converter<mType>::template impl<const Obj&, mType&>(mObjName, mValueName); } \
-			inline static void toObj(Obj& mObjName, const mType& mValueName)	{ Converter<mType>::template impl<Obj&, const mType&>(mObjName, mValueName); } \
-			template<typename TObj, typename TValue> inline static void impl(TObj mObjName, TValue mValueName)
+	struct Converter<mType> final : ssvuj::Internal::ConverterSimpleImpl<mType> \
+	{ \
+		template<typename TObj, typename TValue> inline static void impl(TObj mObjName, TValue mValueName)
 
 #define SSVUJ_CNV_SIMPLE_END() }
 
@@ -41,6 +39,17 @@ namespace ssvuj
 
 	namespace Internal
 	{
+		template<typename T> struct ConverterSimpleImpl
+		{
+			inline static void fromObj(const Obj& mObjName, T& mValueName)	{ Converter<T>::template impl<const Obj&, T&>(mObjName, mValueName); }
+			inline static void toObj(Obj& mObjName, const T& mValueName)	{ Converter<T>::template impl<Obj&, const T&>(mObjName, mValueName); }
+		};
+
+		template<typename T> struct ConverterBaseImpl
+		{
+			inline static void toObj(Obj& mObj, const T& mValue) { mObj = mValue; }
+		};
+
 		template<std::size_t I, typename TTpl> using TplArg = ssvu::TupleElement<I, ssvu::RemoveConst<ssvu::RemoveReference<TTpl>>>;
 
 		template<std::size_t I = 0, typename... TArgs> inline ssvu::EnableIf<I == sizeof...(TArgs)> toTpl(const Obj&, std::tuple<TArgs...>&) { }
@@ -56,24 +65,23 @@ namespace ssvuj
 		}
 	}
 
-	#define SSVUJ_CNV_FUNDAMENTAL(mType) \
-		template<> struct Converter<mType> \
+	#define SSVUJ_IMPL_CNV_BASE(mType) \
+		template<> struct Converter<mType> final : ssvuj::Internal::ConverterBaseImpl<mType> \
 		{ \
 			using T = mType; \
-			inline static void toObj(Obj& mObj, const T& mValue) { mObj = mValue; } \
 			inline static void fromObj(const Obj& mObj, T& mValue)
 
-	SSVUJ_CNV_FUNDAMENTAL(Obj)				{ mValue = mObj;				}};
-	SSVUJ_CNV_FUNDAMENTAL(char)				{ mValue = T(mObj.asInt());		}};
-	SSVUJ_CNV_FUNDAMENTAL(unsigned char)	{ mValue = T(mObj.asInt());		}};
-	SSVUJ_CNV_FUNDAMENTAL(int)				{ mValue = mObj.asInt();		}};
-	SSVUJ_CNV_FUNDAMENTAL(float)			{ mValue = mObj.asFloat();		}};
-	SSVUJ_CNV_FUNDAMENTAL(double)			{ mValue = mObj.asDouble();		}};
-	SSVUJ_CNV_FUNDAMENTAL(bool)				{ mValue = mObj.asBool();		}};
-	SSVUJ_CNV_FUNDAMENTAL(std::string)		{ mValue = mObj.asString();		}};
-	SSVUJ_CNV_FUNDAMENTAL(const char*)		{ mValue = mObj.asCString();	}};
+	SSVUJ_IMPL_CNV_BASE(Obj)			{ mValue = mObj;				}};
+	SSVUJ_IMPL_CNV_BASE(char)			{ mValue = T(mObj.asInt());		}};
+	SSVUJ_IMPL_CNV_BASE(unsigned char)	{ mValue = T(mObj.asInt());		}};
+	SSVUJ_IMPL_CNV_BASE(int)			{ mValue = mObj.asInt();		}};
+	SSVUJ_IMPL_CNV_BASE(float)			{ mValue = mObj.asFloat();		}};
+	SSVUJ_IMPL_CNV_BASE(double)			{ mValue = mObj.asDouble();		}};
+	SSVUJ_IMPL_CNV_BASE(bool)			{ mValue = mObj.asBool();		}};
+	SSVUJ_IMPL_CNV_BASE(std::string)	{ mValue = mObj.asString();		}};
+	SSVUJ_IMPL_CNV_BASE(const char*)	{ mValue = mObj.asCString();	}};
 
-	#undef SSVUJ_CNV_FUNDAMENTAL
+	#undef SSVUJ_IMPL_CNV_BASE
 
 	template<> struct Converter<long>
 	{
