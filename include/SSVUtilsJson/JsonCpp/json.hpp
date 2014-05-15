@@ -286,7 +286,7 @@ namespace Json
 			UInt index() const;
 			const char* memberName() const;
 	};
-	class ValueConstIterator : public ValueIteratorBase
+	class ValueConstIterator final : public ValueIteratorBase
 	{
 		friend class Value;
 
@@ -307,7 +307,7 @@ namespace Json
 			inline SelfType& operator++()		{ increment(); return *this; }
 			inline reference operator*() const	{ return deref(); }
 	};
-	class ValueIterator : public ValueIteratorBase
+	class ValueIterator final : public ValueIteratorBase
 	{
 		friend class Value;
 
@@ -394,7 +394,7 @@ namespace Json
 		virtual ~Writer();
 		virtual std::string write(const Value& root) = 0;
 	};
-	class FastWriter : public Writer
+	class FastWriter final : public Writer
 	{
 		public:
 			FastWriter();
@@ -409,7 +409,7 @@ namespace Json
 			bool yamlCompatiblityEnabled_;
 			bool dropNullPlaceholders_;
 	};
-	class StyledWriter: public Writer
+	class StyledWriter final : public Writer
 	{
 		public:
 			StyledWriter();
