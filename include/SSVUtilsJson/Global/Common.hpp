@@ -5,10 +5,6 @@
 #ifndef SSVUJ_GLOBAL_COMMON
 #define SSVUJ_GLOBAL_COMMON
 
-#include <string>
-#include <SSVUtils/Core/Core.hpp>
-#include "SSVUtilsJson/JsonCpp/JsonCpp.hpp"
-
 namespace ssvuj
 {
 	template<typename T> struct Converter;

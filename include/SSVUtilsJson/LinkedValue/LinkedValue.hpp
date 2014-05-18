@@ -5,10 +5,6 @@
 #ifndef SSVUJ_LINKEDVALUE
 #define SSVUJ_LINKEDVALUE
 
-#include <vector>
-#include "SSVUtilsJson/Global/Common.hpp"
-#include "SSVUtilsJson/Utils/Utils.hpp"
-
 namespace ssvuj
 {
 	namespace Internal

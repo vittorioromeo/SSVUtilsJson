@@ -5,21 +5,19 @@
 #ifndef SSVUJ_UTILS_BASICCONVERTERS
 #define SSVUJ_UTILS_BASICCONVERTERS
 
-#include <vector>
-#include <map>
-#include <unordered_map>
-#include <tuple>
-#include "SSVUtilsJson/Global/Common.hpp"
-
+/// @macro Class mixin that allows SSVUJ converters to access the current class's private members.
 #define SSVUJ_CNV_FRIEND() template<typename> friend struct ssvuj::Converter
 
+/// @macro Shortcut to serialize a class member as an object with the same name as the member.
 #define SSVUJ_CNV_OBJ_AUTO(mValue, mVar) #mVar, mValue.mVar
 
+/// @macro Defines a simple converter template specialization to convert classes that do not require special behavior.
 #define SSVUJ_CNV_SIMPLE(mType, mObjName, mValueName) \
 	struct Converter<mType> final : ssvuj::Internal::ConverterSimpleImpl<mType> \
 	{ \
 		template<typename TObj, typename TValue> inline static void impl(TObj mObjName, TValue mValueName)
 
+/// @macro End macro, required after defining a simple converter.
 #define SSVUJ_CNV_SIMPLE_END() }
 
 namespace ssvuj
@@ -160,5 +158,3 @@ namespace ssvuj
 }
 
 #endif
-
-// TODO: docs

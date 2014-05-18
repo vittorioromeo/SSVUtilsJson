@@ -2,14 +2,10 @@
 // License: Academic Free License ("AFL") v. 3.0
 // AFL License page: http://opensource.org/licenses/AFL-3.0
 
-#include <SSVUtils/Test/Test.hpp>
-#include "SSVUtilsJson/JsonCpp/json.hpp"
-#include "SSVUtilsJson/JsonCpp/jsoncpp.inl"
-#include "SSVUtilsJson/Utils/Utils.hpp"
-#include "SSVUtilsJson/LinkedValue/LinkedValue.hpp"
-
 #ifndef SSVUJ_TESTS
 #define SSVUJ_TESTS
+
+#include <SSVUtils/Test/Test.hpp>
 
 SSVUT_TEST(SSVUJConversionTests)
 {

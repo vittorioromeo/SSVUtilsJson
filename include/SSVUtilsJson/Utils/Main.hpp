@@ -5,9 +5,6 @@
 #ifndef SSVUJ_BASIC
 #define SSVUJ_BASIC
 
-#include "SSVUtilsJson/Global/Common.hpp"
-#include "SSVUtilsJson/Utils/TypeChecker.hpp"
-
 namespace ssvuj
 {
 	/// @brief Gets a JSON Obj from another JSON Obj.

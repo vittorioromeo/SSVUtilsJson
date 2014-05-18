@@ -6,21 +6,6 @@
 #ifndef SSVUJ_JSONCPP_JSON
 #define SSVUJ_JSONCPP_JSON
 
-#include <string>
-#include <vector>
-#include <map>
-#include <deque>
-#include <stack>
-#include <cassert>
-#include <utility>
-#include <cstdio>
-#include <cstring>
-#include <stdexcept>
-#include <cmath>
-#include <sstream>
-#include <iomanip>
-#include <cstddef>
-
 #define JSON_FAIL_MESSAGE(message) throw std::runtime_error(message);
 #define JSON_ASSERT_MESSAGE(condition, message) if(!(condition)) { JSON_FAIL_MESSAGE(message) }
 #define JSON_HAS_INT64
