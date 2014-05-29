@@ -41,7 +41,7 @@ namespace ssvuj
 	class LinkedValueManager
 	{
 		private:
-			using Container = ssvu::VectorUptr<Internal::LinkedValueBase>;
+			using Container = ssvu::VecUptr<Internal::LinkedValueBase>;
 			Obj& obj;
 			Container values;
 
