@@ -785,22 +785,22 @@ namespace Json
 		{
 			case nullValue: case intValue: case uintValue: case realValue: case booleanValue: value_ = other.value_; break;
 				case  stringValue:
-					 if  (other.allocated_)
-					 {
-						 if  (other.value_.string_)
-						 {
+					if(other.allocated_)
+					{
+						if(other.value_.string_)
+						{
 							value_.string_ = duplicateStringValue (other.value_.string_);
 							allocated_ = true ;
-						 }
-						 else
+						}
+						else
 							value_.string_ = 0;
-					 } else
-					 {
-						   value_.string_ = other.value_.string_;
-						   allocated_ = false ;
-					 }
+					} else
+					{
+						value_.string_ = other.value_.string_;
+						allocated_ = false ;
+					}
 
-					 break ;
+					break ;
 			case arrayValue: case objectValue: value_.map_ = new ObjectValues(*other.value_.map_); break;
 			default: JSON_ASSERT_UNREACHABLE;
 		}
