@@ -41,14 +41,14 @@ namespace ssvuj
 	class LinkedValueManager
 	{
 		private:
-			using Container = ssvu::VecUptr<Internal::LinkedValueBase>;
+			using Container = ssvu::VecUPtr<Internal::LinkedValueBase>;
 			Obj& obj;
 			Container values;
 
 		public:
 			LinkedValueManager(Obj& mObj) : obj(mObj) { }
 
-			template<typename T> inline LinkedValue<T>& create(std::string mName) { return ssvu::getEmplaceUptr<LinkedValue<T>>(values, std::move(mName)); }
+			template<typename T> inline LinkedValue<T>& create(std::string mName) { return ssvu::getEmplaceUPtr<LinkedValue<T>>(values, std::move(mName)); }
 
 			inline void syncFromObj()		{ for(auto& lv : values) lv->syncFrom(obj); }
 			inline void syncToObj()	const	{ for(const auto& lv : values) lv->syncTo(obj); }
