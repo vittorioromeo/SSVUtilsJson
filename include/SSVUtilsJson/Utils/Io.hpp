@@ -26,7 +26,7 @@ namespace ssvuj
 	inline void writeToStream(const Obj& mObj, std::ostream& mStream)	{ Writer writer; writer.write(mStream, mObj); mStream.flush(); }
 	inline void writeToString(const Obj& mObj, std::string& mStr)		{ std::ostringstream o; writeToStream(mObj, o); mStr = o.str(); }
 	inline void writeToFile(const Obj& mObj, const Path& mPath)			{ std::ofstream o{mPath}; writeToStream(mObj, o); o.close(); }
-	inline std::string getWriteToString(const Obj& mObj)				{ std::string result; writeToString(mObj, result); return result; }
+	inline auto getWriteToString(const Obj& mObj)						{ std::string result; writeToString(mObj, result); return result; }
 }
 
 #endif
