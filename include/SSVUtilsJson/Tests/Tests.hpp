@@ -67,7 +67,7 @@ SSVUT_TEST(SSVUJConversionTests)
 	}
 
 	{
-		auto testObj(ssvuj::getArchObj("test1", 15, "test2", 33.f, "test3", std::string{"sup"}));
+		auto testObj(ssvuj::getArchObj("test1", 15, "test2", 33.f, "test3", "sup"s));
 		int test1; float test2; std::string test3;
 		ssvuj::extrObj(testObj, "test1", test1, "test2", test2, "test3", test3);
 		SSVUT_EXPECT(test1 == 15); SSVUT_EXPECT(test2 == 33.f); SSVUT_EXPECT(test3 == "sup");
