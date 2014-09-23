@@ -94,7 +94,7 @@ namespace Json
 
 				private:
 					void swap(CZString &other);
-					const char* cstr_;
+					const char* cstr_{nullptr};
 					ArrayIndex index_;
 			};
 

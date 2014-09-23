@@ -732,7 +732,7 @@ namespace Json
 		  index_(other.cstr_ ? (other.index_ == static_cast<unsigned int>(noDuplication) ? static_cast<unsigned int>(noDuplication) : static_cast<unsigned int>(duplicate)) : other.index_) {}
 	inline Value::CZString::~CZString()
 	{
-		if(cstr_ && index_ == duplicate) releaseStringValue(const_cast<char*>(cstr_));
+		if(cstr_ != nullptr && index_ == duplicate) releaseStringValue(const_cast<char*>(cstr_));
 	}
 	inline void Value::CZString::swap(CZString& other)
 	{
@@ -742,12 +742,12 @@ namespace Json
 	inline Value::CZString& Value::CZString::operator=(const CZString& other) { CZString temp(other); swap(temp); return *this; }
 	inline bool Value::CZString::operator<(const CZString& other) const
 	{
-		if(cstr_) return strcmp(cstr_, other.cstr_) < 0;
+		if(cstr_ != nullptr) return std::strcmp(cstr_, other.cstr_) < 0;
 		return index_ < other.index_;
 	}
 	inline bool Value::CZString::operator==(const CZString& other) const
 	{
-		if(cstr_) return strcmp(cstr_, other.cstr_) == 0;
+		if(cstr_ != nullptr) return std::strcmp(cstr_, other.cstr_) == 0;
 		return index_ == other.index_;
 	}
 	inline ArrayIndex Value::CZString::index() const { return index_; }
@@ -848,7 +848,7 @@ namespace Json
 			case uintValue: return value_.uint_ < other.value_.uint_;
 			case realValue: return value_.real_ < other.value_.real_;
 			case booleanValue: return value_.bool_ < other.value_.bool_;
-			case stringValue: return(value_.string_ == nullptr && other.value_.string_) ||(other.value_.string_ && value_.string_ && strcmp(value_.string_, other.value_.string_) < 0);
+			case stringValue: return(value_.string_ == nullptr && other.value_.string_) ||(other.value_.string_ && value_.string_ && std::strcmp(value_.string_, other.value_.string_) < 0);
 			case arrayValue: case objectValue:
 				{
 					int delta = int(value_.map_->size() - other.value_.map_->size());
@@ -871,7 +871,7 @@ namespace Json
 			case uintValue: return value_.uint_ == other.value_.uint_;
 			case realValue: return value_.real_ == other.value_.real_;
 			case booleanValue: return value_.bool_ == other.value_.bool_;
-			case stringValue: return(value_.string_ == other.value_.string_) ||(other.value_.string_ && value_.string_ && strcmp(value_.string_, other.value_.string_) == 0);
+			case stringValue: return(value_.string_ == other.value_.string_) ||(other.value_.string_ && value_.string_ && std::strcmp(value_.string_, other.value_.string_) == 0);
 			case arrayValue: case objectValue: return value_.map_->size() == other.value_.map_->size() &&(*value_.map_) ==(*other.value_.map_);
 			default: JSON_ASSERT_UNREACHABLE;
 		}
@@ -1060,7 +1060,7 @@ namespace Json
 			case arrayValue:
 				if(!value_.map_->empty())
 				{
-					ObjectValues::const_iterator itLast = value_.map_->end();
+					auto itLast = value_.map_->end();
 					--itLast;
 					return (*itLast).first.index() + 1;
 				}
@@ -1117,7 +1117,7 @@ namespace Json
 		SSVU_ASSERT(type_ == nullValue || type_ == arrayValue);
 		if(type_ == nullValue) return nullJsonValue;
 		CZString key(index);
-		ObjectValues::const_iterator it = value_.map_->find(key);
+		auto it = value_.map_->find(key);
 		if(it == value_.map_->end()) return nullJsonValue;
 		return(*it).second;
 
@@ -1133,8 +1133,7 @@ namespace Json
 		if(it != value_.map_->end() &&(*it).first == actualKey) return(*it).second;
 		ObjectValues::value_type defaultValue(actualKey, nullJsonValue);
 		it = value_.map_->insert(it, defaultValue);
-		Value& value =(*it).second;
-		return value;
+		return (*it).second;
 
 	}
 	inline Value Value::get(ArrayIndex index, const Value& defaultValue) const
@@ -1148,9 +1147,9 @@ namespace Json
 		SSVU_ASSERT(type_ == nullValue || type_ == objectValue);
 		if(type_ == nullValue) return nullJsonValue;
 		CZString actualKey(key, CZString::noDuplication);
-		ObjectValues::const_iterator it = value_.map_->find(actualKey);
-		if(it == value_.map_->end()) return nullJsonValue;
-		return(*it).second;
+		auto it = value_.map_->find(actualKey);
+		if(it != value_.map_->end()) return it->second;
+		return nullJsonValue;
 
 	}
 	inline Value& Value::operator[](const std::string& key) { return(*this)[key.c_str()]; }
@@ -1191,8 +1190,8 @@ namespace Json
 		if(type_ == nullValue) return Value::Members();
 		Members members;
 		members.reserve(value_.map_->size());
-		ObjectValues::const_iterator it = value_.map_->begin();
-		ObjectValues::const_iterator itEnd = value_.map_->end();
+		auto it = value_.map_->begin();
+		auto itEnd = value_.map_->end();
 		for(; it != itEnd; ++it) members.emplace_back(std::string((*it).first.c_str()));
 
 		return members;
