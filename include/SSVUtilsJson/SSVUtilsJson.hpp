@@ -16,7 +16,3 @@
 #endif
 
 #endif
-
-// TODO: BUG:
-// current jsoncpp impl has bugs: use https://github.com/open-source-parsers/jsoncpp
-// sigh....
