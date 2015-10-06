@@ -12,7 +12,7 @@
 #include "SSVUtilsJson/LinkedValue/LinkedValue.hpp"
 
 #ifndef SSVUT_DISABLE
-	#include "SSVUtilsJson/Tests/Tests.hpp"
+#include "SSVUtilsJson/Tests/Tests.hpp"
 #endif
 
 #endif
